@@ -1,0 +1,34 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'app.reset'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "app.reset"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        // No INTERNET permission: the app never touches the network.
+    }
+
+    buildTypes {
+        debug { minifyEnabled false }
+        release {
+            minifyEnabled false
+            // signed with the debug key in CI so the APK is directly installable
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // none: the app uses only framework APIs (assets are served by a hand-rolled
+    // WebViewClient interceptor), which keeps the APK at ~35 KB.
+}
