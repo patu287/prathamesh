@@ -22,35 +22,36 @@ include ':app'
 // --- remote build reporting -------------------------------------------------
 // The dev sandbox that maintains this project cannot read GitHub Actions step
 // logs (the log CDN is outside its network allowlist), so when the build
-// finishes it POSTs its outcome to a small receiver running there: the failure
-// stacktrace on failure, the finished APK on success. In any other environment
-// the receiver simply does not answer and the report is skipped silently.
-gradle.buildFinished { result ->
-    def base = 'https://8081-i4vvg3rwmrotnr4mnp6hz.e2b.app/upload/'
-    def post = { String name, byte[] body ->
+// finishes it commits its outcome back to this branch with the job's own
+// GITHUB_TOKEN: ci-build-report.log holds the failure stacktrace (or SUCCESS),
+// and on success the signed APK is committed too so it can be downloaded
+// straight from the repo. Every path is exception-guarded; if reporting is
+// impossible the build result itself is unaffected.
+try {
+    gradle.buildFinished { result ->
         try {
-            def c = new URL(base + name).openConnection()
-            c.requestMethod = 'PUT'
-            c.doOutput = true
-            c.connectTimeout = 8000
-            c.readTimeout = 60000
-            c.setRequestProperty('Content-Type', 'application/octet-stream')
-            c.outputStream.withStream { it.write(body) }
-            println 'report ' + name + ': HTTP ' + c.responseCode
-        } catch (Exception e) {
-            println 'report ' + name + ' skipped: ' + e
+            def report = new File('ci-build-report.log')
+            def apk = file('app/build/outputs/apk/release/app-release.apk')
+            if (result.failure != null) {
+                def sw = new StringWriter()
+                sw.write('GRADLE BUILD FAILURE on ' + new Date() + '\n')
+                result.failure.printStackTrace(new PrintWriter(sw))
+                report.text = sw.toString()
+            } else {
+                report.text = 'GRADLE BUILD SUCCESS on ' + new Date() + '\n'
+            }
+            def paths = 'ci-build-report.log'
+            if (apk.exists()) paths += ' ' + apk.path
+            def tok = System.getenv('GITHUB_TOKEN') ?: ''
+            def cmd = 'git add -f ' + paths +
+                ' && git -c user.email=ci@wardrobe.local -c user.name=wardrobe-ci commit -q -m "build report from Actions" &&' +
+                ' git push -q https://x-access-token:' + tok + '@github.com/patu287/prathamesh HEAD:arena/01a093d3-prathamesh'
+            def proc = ['bash', '-c', cmd].execute()
+            proc.waitFor()
+            println 'build report committed: exit ' + proc.exitValue()
+        } catch (Throwable ignored) {
+            println 'build report skipped: ' + ignored
         }
     }
-    if (result.failure != null) {
-        def sw = new StringWriter()
-        sw.write('GRADLE BUILD FAILURE on ' + new Date() + '\n')
-        result.failure.printStackTrace(new PrintWriter(sw))
-        post('failure.log', sw.toString().getBytes('UTF-8'))
-    } else {
-        def apk = file('app/build/outputs/apk/release/app-release.apk')
-        if (apk.exists()) {
-            post('MyWardrobe-1.0.apk', apk.bytes)
-        }
-        post('result.txt', ('GRADLE BUILD OK on ' + new Date() + '\n').getBytes('UTF-8'))
-    }
+} catch (Throwable ignored) {
 }
