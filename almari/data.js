@@ -134,3 +134,70 @@ const SAMPLE_ITEMS = [
   { name: 'Steel Chronograph Watch', slot: 'accessory', type: 'watch', colors: ['silver', 'black'], occasions: ['Office', 'Wedding'], seasons: ['All year'], fabric: 'Other', pattern: 'Solid', brand: 'Casio', price: 4995 },
   { name: 'Brown Leather Belt', slot: 'accessory', type: 'belt', colors: ['brown'], occasions: ['Office', 'Casual'], seasons: ['All year'], fabric: 'Leather', pattern: 'Solid', size: '34', price: 799 }
 ];
+
+/* ══════════════════════════════════════════════════════════════════
+   Feature 2 · Outfits
+   A Look is one item per slot. The `from` field maps a Look slot onto a
+   wardrobe slot, so `layer` draws from the same pool as `top` — that is
+   what makes shirt-under-sweater possible.
+   ══════════════════════════════════════════════════════════════════ */
+
+const LOOK_SLOTS = [
+  { id: 'top',       label: 'Top',         from: 'top',       required: true,  multi: false, hint: 'Shirt, tee, kurta' },
+  { id: 'layer',     label: 'Layer',       from: 'top',       required: false, multi: false, hint: 'A second top — sweater over a shirt' },
+  { id: 'bottom',    label: 'Bottom',      from: 'bottom',    required: true,  multi: false, hint: 'Jeans, chinos, pyjama' },
+  { id: 'outer',     label: 'Outerwear',   from: 'outer',     required: false, multi: false, hint: 'Jacket, blazer, Nehru jacket' },
+  { id: 'foot',      label: 'Footwear',    from: 'foot',      required: true,  multi: false, hint: 'Shoes, sandals, Kolhapuri' },
+  { id: 'accessory', label: 'Accessories', from: 'accessory', required: false, multi: true,  hint: 'Watch, belt, cap — as many as you like' }
+];
+
+const lookSlotById = id => LOOK_SLOTS.find(s => s.id === id) || null;
+
+const LAUNDRY = [
+  { id: 'clean',    label: 'Clean',              short: 'Clean'   },
+  { id: 'worn',     label: 'Worn once',          short: 'Worn'    },
+  { id: 'dirty',    label: 'Dirty',              short: 'Dirty'   },
+  { id: 'cleaning', label: 'At the dry-cleaner', short: 'Cleaner' }
+];
+const LAUNDRY_ORDER = LAUNDRY.map(l => l.id);
+const laundryById = id => LAUNDRY.find(l => l.id === id) || LAUNDRY[0];
+const nextLaundry = id => LAUNDRY_ORDER[(LAUNDRY_ORDER.indexOf(id) + 1) % LAUNDRY_ORDER.length];
+
+/** "Festival Look", or "Kurta + Pyjama" when there is no occasion. */
+function autoLookName(look, items) {
+  const byId = id => (items || []).find(i => i.id === id);
+  const occ = (look.occasions || [])[0];
+  if (occ) return `${occ} look`;
+  const top = byId(look.slots && look.slots.top);
+  const bottom = byId(look.slots && look.slots.bottom);
+  if (top && bottom) return `${typeById(top.type).label} + ${typeById(bottom.type).label}`;
+  if (top) return `${typeById(top.type).label} look`;
+  return 'New look';
+}
+
+/**
+ * How well a candidate goes with what is already picked.
+ * Shared occasions count double — a wedding kurta and wedding shoes are a
+ * real pairing; matching seasons is weaker evidence.
+ */
+function matchScore(candidate, chosen) {
+  const picked = (chosen || []).filter(Boolean);
+  if (!picked.length) return { occ: 0, sea: 0, total: 0 };
+  let occ = 0, sea = 0;
+  picked.forEach(s => {
+    occ += (candidate.occasions || []).filter(o => (s.occasions || []).includes(o)).length;
+    sea += (candidate.seasons || []).filter(x => (s.seasons || []).includes(x)).length;
+  });
+  return { occ, sea, total: occ * 2 + sea };
+}
+
+/** Clean or worn-once — the clothes you would actually put on today. */
+const isWearable = i => !i.laundry || i.laundry === 'clean' || i.laundry === 'worn';
+
+/** tops × bottoms × shoes — how many looks the wardrobe can already make. */
+function combinations(items) {
+  const wearable = items.filter(isWearable);
+  const pool = wearable.length >= 3 ? wearable : items;
+  const n = slot => pool.filter(i => i.slot === slot).length;
+  return { tops: n('top'), bottoms: n('bottom'), shoes: n('foot'), total: n('top') * n('bottom') * n('foot') };
+}

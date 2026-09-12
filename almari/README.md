@@ -43,6 +43,8 @@ office and wedding wear.
 
 ## Data model
 
+**Item**
+
 ```js
 {
   id: 'i…',              // Store.uid()
@@ -56,13 +58,36 @@ office and wedding wear.
   size: 'M', brand: 'Manyavar', fabric: 'Cotton', pattern: 'Solid',
   price: 1299, bought: '2026-08-01',
   notes: 'Dry clean only.',
-  worn: 0, lastWorn: null,       // reserved for feature 3
+  laundry: 'clean',              // clean | worn | dirty | cleaning
+  worn: 0, lastWorn: null,
+  createdAt: 1757…, updatedAt: 1757…
+}
+```
+
+**Look** — references items by id, never by embedding them, so editing a shirt updates every
+look it appears in.
+
+```js
+{
+  id: 'o…',
+  name: 'Office Classic',
+  slots: {
+    top: 'i…', layer: null, bottom: 'i…',
+    outer: null, foot: 'i…', accessory: ['i…', 'i…']
+  },
+  occasions: ['Office'], seasons: ['All year'],
+  rating: 4, notes: 'Monday-to-Thursday rotation.',
+  worn: 0, lastWorn: null,
   createdAt: 1757…, updatedAt: 1757…
 }
 ```
 
 Photos live in IndexedDB rather than localStorage on purpose — localStorage caps out around
-5 MB, which is roughly 60 photos. IndexedDB comfortably holds hundreds.
+5 MB, which is roughly 60 photos. IndexedDB comfortably holds hundreds. Looks are in a second
+IndexedDB table added at schema version 2; opening a version-1 database upgrades it in place.
+
+If IndexedDB is unavailable (`file://` pages), everything falls back to localStorage with
+photos as data URLs. The active backend is shown in the ⋯ menu.
 
 ## Built in v1 — the wardrobe
 
@@ -75,19 +100,57 @@ Photos live in IndexedDB rather than localStorage on purpose — localStorage ca
 - Sort by newest, oldest, name or type
 - JSON export / import for backups, plus a sample wardrobe for demoing
 - Delete and erase use tap-twice-to-confirm instead of native dialogs
+- Laundry status, cycled by tapping the badge on a card
+
+## Built in v2 — Outfits
+
+A **Look** is one item per slot. The builder maps each Look slot onto a wardrobe slot via
+`LOOK_SLOTS.from`, which is what makes the two-axis taxonomy pay off:
+
+| Look slot | Draws from | Required | Notes |
+|---|---|---|---|
+| Top | `top` | yes | shirt, tee, kurta |
+| Layer | `top` | no | a *second* top — sweater over a shirt |
+| Bottom | `bottom` | yes | jeans, chinos, pyjama |
+| Outerwear | `outer` | no | jacket, blazer, Nehru jacket |
+| Footwear | `foot` | yes | shoes, sandals, Kolhapuri |
+| Accessories | `accessory` | no | **multi-select** — watch, belt, cap |
+
+Because `layer` and `top` both draw from the `top` pool, shirt-under-sweater works, while
+kurta + Nehru jacket resolves naturally as `top` + `outer`. An item already used in one slot
+is disabled in the others, so nothing can appear twice.
+
+- **Live collage preview** — the hero piece left, bottom and footwear stacked right, with a
+  `+N` badge for layer/outerwear/accessories
+- **Item picker** with search, sorted by compatibility: pieces sharing an occasion with what
+  you have already chosen float to the top and get a "Matches" badge
+- **Auto-tagging** — occasion and season are inferred as the intersection of the chosen
+  pieces, unless you set them yourself
+- **Shuffle** — builds a valid random look from wearable items, biased toward the active
+  occasion filter, then opens the builder so you can tweak it
+- **Combination counter** — "4 tops × 3 bottoms × 3 shoes = 36 possible looks"
+- **Wear this** — logs the wear on the look *and* every piece in it, and marks them worn
+- **Duplicate**, star rating, notes, and looks that survive item deletion by showing a
+  "Needs top" badge instead of breaking
+
+### Laundry state
+
+Items carry `laundry`: `clean` → `worn` → `dirty` → `cleaning`. Tap the badge on a wardrobe
+card to cycle it, or set it in the item detail sheet.
+
+The picker offers **clean and worn-once** by default — the clothes you would actually put on
+today — and hides dirty and dry-cleaner items behind an "Include dirty" switch. Wearing a
+look moves its pieces to `worn`.
 
 ## Roadmap
 
-**Feature 2 — Outfits.** Build a "Look" from one item per slot, validate the pairing with the
-slot axis, save and rate looks, then a wear calendar.
-
-**Feature 3 — the daily hook.** Laundry state (`clean` / `worn once` / `dirty` / at the
-dry-cleaner) so the builder only offers clean clothes, and a "Wear today" card driven by
-Kolhapur weather + occasion + least-recently-worn.
+**Feature 3 — the daily hook.** A "Wear today" card driven by Kolhapur weather + occasion +
+least-recently-worn, and a wear calendar.
 
 **Later.** Cost-per-wear, neglect alerts ("not worn in 6 months" → donate or sell), wardrobe
 colour palette and "missing piece" suggestions, duplicate detection, festival and monsoon
-modes, tailor/alteration notes, packing lists, multiple closets.
+modes, tailor/alteration notes, packing lists, multiple closets, photo snapshots of saved
+looks.
 
 ## Packaging for Android
 
