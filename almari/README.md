@@ -1,4 +1,4 @@
-# Almari · आलमारी
+# My Wardrobe
 
 A personal wardrobe manager. Catalogue your clothes by category, then build outfits from them.
 
@@ -6,12 +6,13 @@ A personal wardrobe manager. Catalogue your clothes by category, then build outf
 vanilla JS, with photos stored as Blobs in IndexedDB. Nothing ever leaves the device.
 
 ```
-almari/
+my-wardrobe/
 ├── index.html    structure: header, search, category nav, shelf grid, sheets, tab bar
 ├── styles.css    design system (paper + indigo + wooden shelves), mobile-first
-├── data.js       taxonomy, colour palette, helpers, sample wardrobe
+├── data.js       taxonomy, helpers, sample wardrobe
 ├── store.js      IndexedDB storage (localStorage fallback), image compression, backup
-└── app.js        state, filtering, rendering, all UI events
+├── app.js        state, filtering, rendering, all UI events
+└── serve.py      cache-disabled dev server (optional)
 ```
 
 ## Run it
@@ -19,9 +20,9 @@ almari/
 Any static file server works:
 
 ```bash
-cd almari
-python3 -m http.server 5173 --bind 0.0.0.0
-# → http://localhost:5173
+python3 serve.py 8080          # threaded, caching disabled — best for iterating
+# or: python3 -m http.server 8080 --bind 0.0.0.0
+# → http://localhost:8080
 ```
 
 Opening `index.html` directly also works in most browsers.
@@ -52,17 +53,18 @@ office and wedding wear.
   name: 'Indigo Kurta',  // auto-generated from colour + type if left blank
   slot: 'top',
   type: 'kurta',
-  colors:    ['navy'],           // ids from COLORS
   occasions: ['Festival'],
-  seasons:   ['Summer','Monsoon'],
-  size: 'M', brand: 'Manyavar', fabric: 'Cotton', pattern: 'Solid',
-  price: 1299, bought: '2026-08-01',
-  notes: 'Dry clean only.',
   laundry: 'clean',              // clean | worn | dirty | cleaning
   worn: 0, lastWorn: null,
   createdAt: 1757…, updatedAt: 1757…
 }
 ```
+
+The add-item form deliberately collects only five things: **photo, name, category, type,
+occasion** (plus laundry status). Colour, season, size, brand, fabric, pattern, price and
+notes were all removed — every extra field is friction at the exact moment someone is
+standing in front of their cupboard with a phone in one hand. Old backups that still carry
+those fields import cleanly and keep them; the values are simply no longer edited or shown.
 
 **Look** — references items by id, never by embedding them, so editing a shirt updates every
 look it appears in.
@@ -75,8 +77,8 @@ look it appears in.
     top: 'i…', layer: null, bottom: 'i…',
     outer: null, foot: 'i…', accessory: ['i…', 'i…']
   },
-  occasions: ['Office'], seasons: ['All year'],
-  rating: 4, notes: 'Monday-to-Thursday rotation.',
+  occasions: ['Office'],
+  rating: 4,
   worn: 0, lastWorn: null,
   createdAt: 1757…, updatedAt: 1757…
 }
@@ -124,14 +126,17 @@ is disabled in the others, so nothing can appear twice.
   `+N` badge for layer/outerwear/accessories
 - **Item picker** with search, sorted by compatibility: pieces sharing an occasion with what
   you have already chosen float to the top and get a "Matches" badge
-- **Auto-tagging** — occasion and season are inferred as the intersection of the chosen
-  pieces, unless you set them yourself
+- **Auto-tagging** — the occasion is inferred as the intersection of the chosen pieces,
+  unless you set it yourself
 - **Shuffle** — builds a valid random look from wearable items, biased toward the active
   occasion filter, then opens the builder so you can tweak it
 - **Combination counter** — "4 tops × 3 bottoms × 3 shoes = 36 possible looks"
 - **Wear this** — logs the wear on the look *and* every piece in it, and marks them worn
-- **Duplicate**, star rating, notes, and looks that survive item deletion by showing a
+- **Duplicate**, star rating, and looks that survive item deletion by showing a
   "Needs top" badge instead of breaking
+
+The builder collects only **name, pieces, occasion and rating** — season and notes were
+removed to keep it to a few taps.
 
 ### Laundry state
 
@@ -152,9 +157,27 @@ colour palette and "missing piece" suggestions, duplicate detection, festival an
 modes, tailor/alteration notes, packing lists, multiple closets, photo snapshots of saved
 looks.
 
+## Hardening notes
+
+Three things here exist because a preview iframe is a hostile environment, and all three
+would otherwise fail *silently* — which is indistinguishable from a dead click:
+
+- **Photo capture uses `<label for="…">`, never `input.click()`.** A sandboxed iframe can
+  block a scripted file-dialog open; it cannot block a label activating its own control.
+- **Confirmations are in-app tap-twice, never `window.confirm`.** Sandboxed iframes block
+  modals, where `confirm()` returns `false` without asking — so anything guarded by it
+  simply never runs.
+- **Every runtime error is surfaced in a red banner** via `window.onerror` and
+  `unhandledrejection`, and boot is wrapped in try/catch. Stacked sheets also get a
+  z-index derived from their depth, so the picker can never render behind the builder.
+
 ## Packaging for Android
 
 Because there is no build step, the whole folder drops into a WebView shell as-is — the same
 pipeline used in `../android`. Copy the files into `android/app/src/main/assets/` and load
-`index.html`. `capture="environment"` on the photo input opens the camera directly; the
-gallery button is a cloned input without it.
+`index.html`. Two separate file inputs are wired by label: `#photoInput` carries
+`capture="environment"` so it opens the camera directly, `#galleryInput` omits it so the OS
+offers the file picker.
+
+Note the IndexedDB database is still named `almari` internally, after this app's original
+name. Renaming it would orphan every wardrobe already saved on a device, so it stays.

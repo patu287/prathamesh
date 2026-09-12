@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════
-   Almari · store.js
+   My Wardrobe · store.js
    Local-first storage. IndexedDB holds two tables — `items` and `looks`.
    Photos are Blobs, so hundreds fit comfortably. Falls back to
    localStorage where IndexedDB is unavailable (notably file:// pages).
@@ -7,6 +7,8 @@
    ══════════════════════════════════════════════════════════════════ */
 
 const Store = (() => {
+  // The database name stays 'almari' (the app's original name) on purpose —
+  // renaming it would orphan every wardrobe already saved on a device.
   const DB_NAME = 'almari';
   const DB_VERSION = 2;          // v2 adds the `looks` table
   const T_ITEMS = 'items';
@@ -212,7 +214,7 @@ const Store = (() => {
   async function importJSON(text) {
     const data = JSON.parse(text);
     const rawItems = Array.isArray(data) ? data : data.items;
-    if (!Array.isArray(rawItems)) throw new Error('That file does not look like an Almari backup.');
+    if (!Array.isArray(rawItems)) throw new Error('That file does not look like a My Wardrobe backup.');
 
     const items = [];
     for (const r of rawItems) {

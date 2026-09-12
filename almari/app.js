@@ -1,8 +1,21 @@
 /* ══════════════════════════════════════════════════════════════════
-   Almari · app.js
+   My Wardrobe · app.js
    Two views — Wardrobe (items) and Outfits (looks) — sharing one app
    shell, one search box and one storage layer.
    ══════════════════════════════════════════════════════════════════ */
+
+/* Surface every runtime error instead of failing silently. A click handler
+   that throws otherwise looks exactly like a click that does nothing. */
+function showErr(msg) {
+  const bar = document.getElementById('errbar');
+  if (!bar) return;
+  bar.hidden = false;
+  bar.textContent = '⚠ ' + msg;
+  bar.title = 'Tap to dismiss';
+  bar.onclick = () => { bar.hidden = true; };
+}
+window.addEventListener('error', e => showErr(e.message || 'Script error'));
+window.addEventListener('unhandledrejection', e => showErr('Async error: ' + (e.reason && e.reason.message || e.reason)));
 
 const el = id => document.getElementById(id);
 
@@ -35,22 +48,17 @@ const state = {
 let previewURL = null;   // object URL for the form's photo preview
 
 function blankForm() {
-  return {
-    photoBlob: null,
-    name: '', slot: 'top', type: 'shirt',
-    colors: [], occasions: [], seasons: [],
-    laundry: 'clean',
-    size: '', brand: '', fabric: '', pattern: '',
-    price: '', bought: '', notes: ''
-  };
+  return { photoBlob: null, name: '', slot: 'top', type: 'shirt', occasions: [], laundry: 'clean' };
 }
 
 function blankBuilder(seed) {
   const base = {
     slots: { top: null, layer: null, bottom: null, outer: null, foot: null, accessory: [] },
-    name: '', occasions: [], seasons: [], rating: 0, notes: ''
+    name: '', occasions: [], rating: 0
   };
-  return seed ? Object.assign(base, seed, { slots: Object.assign(base.slots, seed.slots || {}) }) : base;
+  return seed
+    ? Object.assign(base, seed, { slots: Object.assign(base.slots, seed.slots || {}) })
+    : base;
 }
 
 const HANGER_SVG = `<svg viewBox="0 0 48 34" aria-hidden="true">
@@ -60,13 +68,37 @@ const HANGER_SVG = `<svg viewBox="0 0 48 34" aria-hidden="true">
 
 const PLUS_SVG = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>`;
 
+/* With colour tagging gone, a photo-less item still needs to be visually
+   distinct on the shelf. The tone is hashed from the name so it is stable
+   across renders and between devices. */
+const TILE_TONES = [
+  'linear-gradient(140deg,#EAE1D2,#D6C6AC)',   // sand
+  'linear-gradient(140deg,#E4E6F2,#C5CAE6)',   // indigo wash
+  'linear-gradient(140deg,#EFE4D3,#DDC8A7)',   // cream
+  'linear-gradient(140deg,#E2EAE2,#C2D3C2)',   // sage
+  'linear-gradient(140deg,#F1E4DD,#DFC4B6)',   // blush
+  'linear-gradient(140deg,#E9E5DB,#CEC7B7)'    // stone
+];
+
+function tileTone(item) {
+  const key = ((item && item.name) || '') + ((item && item.type) || '') + ((item && item.id) || '');
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+  return TILE_TONES[h % TILE_TONES.length];
+}
+
 /* ─────────────────────────  boot  ───────────────────────── */
 (async function init() {
-  buildFormControls();
-  buildBuilderControls();
-  wireEvents();
-  await reload();
-  setView('wardrobe');
+  try {
+    buildFormControls();
+    buildBuilderControls();
+    wireEvents();
+    await reload();
+    setView('wardrobe');
+  } catch (err) {
+    showErr('Startup failed: ' + (err && err.message ? err.message : err));
+    throw err;
+  }
 })();
 
 async function reload() {
@@ -89,12 +121,8 @@ const itemById = id => (id ? state.itemMap.get(id) || null : null);
 function cellInner(item) {
   if (!item) return '';
   const url = Store.photoURL(item);
-  if (url) return `<img src="${url}" alt="${escapeAttr(item.name || autoName(item))}" loading="lazy" />`;
-  const colors = (item.colors || []).map(id => colorById(id)).filter(Boolean);
-  const bg = colors.length
-    ? `background:linear-gradient(140deg, ${colors.map(c => c.hex).join(', ')})`
-    : 'background:linear-gradient(140deg,#E7DECF,#D6C7B1)';
-  return `<span class="tile" style="${bg}" aria-hidden="true">
+  if (url) return `<img src="${url}" alt="${escapeAttr(autoName(item))}" loading="lazy" />`;
+  return `<span class="tile" style="background:${tileTone(item)}" aria-hidden="true">
             <span class="hanger">${HANGER_SVG}</span>
             <span class="tile-label">${escapeHTML(typeById(item.type).label)}</span>
           </span>`;
@@ -146,7 +174,7 @@ function setView(v) {
 
   el('fabLabel').textContent = w ? 'Add' : 'New look';
   el('fab').setAttribute('aria-label', w ? 'Add an item' : 'Build a look');
-  el('search').placeholder = w ? 'Search shirts, colours, brands…' : 'Search looks…';
+  el('search').placeholder = w ? 'Search clothes…' : 'Search looks…';
 
   document.querySelectorAll('.tab').forEach(t => {
     const on = t.dataset.tab === v;
@@ -196,9 +224,9 @@ function visibleItems() {
   const by = {
     new:  (a, b) => (b.createdAt || 0) - (a.createdAt || 0),
     old:  (a, b) => (a.createdAt || 0) - (b.createdAt || 0),
-    name: (a, b) => (a.name || autoName(a)).localeCompare(b.name || autoName(b)),
+    name: (a, b) => autoName(a).localeCompare(autoName(b)),
     type: (a, b) => typeById(a.type).label.localeCompare(typeById(b.type).label) ||
-                    (a.name || '').localeCompare(b.name || '')
+                    autoName(a).localeCompare(autoName(b))
   }[state.sort];
   return list.sort(by);
 }
@@ -226,11 +254,8 @@ function renderGrid() {
 }
 
 function cardHTML(item) {
-  const name = item.name || autoName(item);
+  const name = autoName(item);
   const type = typeById(item.type);
-  const colors = (item.colors || []).map(id => colorById(id)).filter(Boolean);
-  const meta = [type.label, item.size && `Size ${item.size}`].filter(Boolean).join(' · ');
-  const dots = colors.slice(0, 4).map(c => `<i class="dot" style="background:${c.hex}" title="${c.label}"></i>`).join('');
   const tags = (item.occasions || []).slice(0, 2).map(o => `<span class="tag">${escapeHTML(o)}</span>`).join('');
 
   const st = item.laundry && item.laundry !== 'clean' ? item.laundry : null;
@@ -243,8 +268,8 @@ function cardHTML(item) {
     <div class="thumb">${cellInner(item)}${badge}</div>
     <div class="card-body">
       <h3>${escapeHTML(name)}</h3>
-      <p class="card-meta">${escapeHTML(meta)}</p>
-      <div class="card-foot">${dots ? `<span class="dots">${dots}</span>` : ''}${tags}</div>
+      <p class="card-meta">${escapeHTML(type.label)}</p>
+      ${tags ? `<div class="card-foot">${tags}</div>` : ''}
     </div>
   </article>`;
 }
@@ -254,16 +279,12 @@ function openDetail(id) {
   const item = itemById(id);
   if (!item) return;
   state.detailId = id;
-  el('detailTitle').textContent = item.name || autoName(item);
+  el('detailTitle').textContent = autoName(item);
 
-  const colors = (item.colors || []).map(c => colorById(c)).filter(Boolean);
-  const bg = colors.length
-    ? `background:linear-gradient(140deg,${colors.map(c => c.hex).join(',')})`
-    : 'background:linear-gradient(140deg,#E7DECF,#D6C7B1)';
   const url = Store.photoURL(item);
   const hero = url
-    ? `<img class="hero" src="${url}" alt="${escapeAttr(item.name || autoName(item))}" />`
-    : `<div class="hero tile" style="${bg}"><span class="hanger">${HANGER_SVG}</span>
+    ? `<img class="hero" src="${url}" alt="${escapeAttr(autoName(item))}" />`
+    : `<div class="hero tile" style="background:${tileTone(item)}"><span class="hanger">${HANGER_SVG}</span>
          <span class="tile-label">${escapeHTML(typeById(item.type).label)}</span></div>`;
 
   const row = (k, v) => v ? `<div class="drow"><span>${k}</span><b>${escapeHTML(String(v))}</b></div>` : '';
@@ -282,24 +303,14 @@ function openDetail(id) {
     <div class="detail-rows">
       ${row('Category', slotById(item.slot).label)}
       ${row('Type', typeById(item.type).label)}
-      ${row('Size', item.size)}
-      ${row('Brand', item.brand)}
-      ${row('Fabric', item.fabric)}
-      ${row('Pattern', item.pattern)}
-      ${row('Price paid', item.price ? '₹' + Number(item.price).toLocaleString('en-IN') : '')}
-      ${row('Bought on', item.bought ? fmtDate(item.bought) : '')}
       ${row('Added', fmtDate(new Date(item.createdAt || Date.now()).toISOString().slice(0, 10)))}
       ${item.worn ? row('Worn', `${item.worn} time${item.worn === 1 ? '' : 's'}${item.lastWorn ? ' · last ' + fmtDate(new Date(item.lastWorn).toISOString().slice(0, 10)) : ''}`) : ''}
-      ${colors.length ? `<div class="drow"><span>Colours</span><b class="colorline"><span class="dots">${colors.map(c => `<i class="dot" style="background:${c.hex}" title="${c.label}"></i>`).join('')}</span>${escapeHTML(colors.map(c => c.label).join(', '))}</b></div>` : ''}
       ${chipLine(item.occasions) ? `<div class="drow col"><span>Occasions</span><div class="tagrow">${chipLine(item.occasions)}</div></div>` : ''}
-      ${chipLine(item.seasons) ? `<div class="drow col"><span>Seasons</span><div class="tagrow">${chipLine(item.seasons)}</div></div>` : ''}
       ${inLooks.length ? `<div class="drow col"><span>In ${inLooks.length} look${inLooks.length === 1 ? '' : 's'}</span><div class="tagrow">${inLooks.map(l => `<span class="tag">${escapeHTML(l.name || autoLookName(l, state.items))}</span>`).join('')}</div></div>` : ''}
-      ${item.notes ? `<div class="drow col"><span>Notes</span><p class="notes">${escapeHTML(item.notes)}</p></div>` : ''}
     </div>`;
 
-  const del = el('detailDelete');
-  del.textContent = 'Delete';
-  del.classList.remove('armed');
+  el('detailDelete').innerHTML = 'Delete';
+  el('detailDelete').classList.remove('armed');
   openSheet('detail');
 }
 
@@ -310,37 +321,21 @@ async function setLaundry(id, status) {
   item.updatedAt = Date.now();
   await Store.put(item);
   renderAll();
-  if (state.detailId === id) {
-    const rowEl = el('laundryRow');
-    if (rowEl) Array.from(rowEl.children).forEach(b => b.classList.toggle('on', b.dataset.laundry === status));
-  }
-  toast(`${item.name || autoName(item)} → ${laundryById(status).label}`);
+  toast(`${autoName(item)} → ${laundryById(status).label}`);
 }
 
 /* ─────────────────────  add / edit item  ────────────────── */
 function buildFormControls() {
   el('fSlot').innerHTML = SLOTS.map(s =>
-    `<button type="button" class="seg" data-slot="${s.id}" role="radio" aria-checked="false">${s.short}</button>`).join('');
+    `<button type="button" class="seg" data-fslot="${s.id}" role="radio" aria-checked="false">${s.short}</button>`).join('');
 
   el('fLaundry').innerHTML = LAUNDRY.map(l =>
     `<button type="button" class="seg" data-flaundry="${l.id}" role="radio" aria-checked="false" title="${l.label}">${l.short}</button>`).join('');
 
-  el('fColors').innerHTML = COLORS.map(c =>
-    `<button type="button" class="swatch" data-color="${c.id}" style="--sw:${c.hex}" title="${c.label}" aria-label="${c.label}">
-       <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M3 8.4l3.2 3.2L13 4.8"/></svg>
-     </button>`).join('');
-
   el('fOccasions').innerHTML = OCCASIONS.map(o => `<button type="button" class="chip" data-occ="${o}">${o}</button>`).join('');
-  el('fSeasons').innerHTML = SEASONS.map(s => `<button type="button" class="chip" data-sea="${s}">${s}</button>`).join('');
-  fillSelect('fFabric', FABRICS, 'Not specified');
-  fillSelect('fPattern', PATTERNS, 'Not specified');
+
   renderFormTypes();
   syncFormUI();
-}
-
-function fillSelect(id, values, placeholder) {
-  el(id).innerHTML = `<option value="">${placeholder}</option>` +
-    values.map(v => `<option value="${v}">${v}</option>`).join('');
 }
 
 function renderFormTypes() {
@@ -352,21 +347,11 @@ function renderFormTypes() {
 
 function syncFormUI() {
   const f = state.form;
-  markGroup('fSlot', b => b.dataset.slot === f.slot);
-  markGroup('fLaundry', b => b.dataset.flaundry === f.laundry);
-  renderFormTypes();
-  markGroup('fColors', b => f.colors.includes(b.dataset.color));
-  markGroup('fOccasions', b => f.occasions.includes(b.dataset.occ));
-  markGroup('fSeasons', b => f.seasons.includes(b.dataset.sea));
-
   el('fName').value = f.name;
-  el('fSize').value = f.size;
-  el('fBrand').value = f.brand;
-  el('fFabric').value = f.fabric;
-  el('fPattern').value = f.pattern;
-  el('fPrice').value = f.price;
-  el('fBought').value = f.bought;
-  el('fNotes').value = f.notes;
+  markGroup('fSlot', b => b.dataset.fslot === f.slot);
+  markGroup('fLaundry', b => b.dataset.flaundry === f.laundry);
+  markGroup('fOccasions', b => f.occasions.includes(b.dataset.occ));
+  renderFormTypes();
 
   const img = el('photoPreview');
   if (previewURL) { URL.revokeObjectURL(previewURL); previewURL = null; }
@@ -387,10 +372,12 @@ function syncFormUI() {
 }
 
 function markGroup(id, pred) {
-  Array.from(el(id).children).forEach(b => {
+  const box = el(id);
+  if (!box) return;
+  Array.from(box.children).forEach(b => {
     const on = pred(b);
     b.classList.toggle('on', on);
-    if (b.hasAttribute('role') && b.getAttribute('role') === 'radio') b.setAttribute('aria-checked', on);
+    if (b.getAttribute('role') === 'radio') b.setAttribute('aria-checked', on);
   });
 }
 
@@ -399,26 +386,21 @@ function openAdd() {
   state.form = blankForm();
   syncFormUI();
   openSheet('form');
-  setTimeout(() => el('fName').focus({ preventScroll: true }), 260);
+  setTimeout(() => { const n = el('fName'); if (n) n.focus({ preventScroll: true }); }, 260);
 }
 
 function openEdit(id) {
   const item = itemById(id);
   if (!item) return;
   state.editingId = id;
-  state.form = Object.assign(blankForm(), {
+  state.form = {
     photoBlob: item.photoBlob || null,
     name: item.name || '',
     slot: item.slot || 'top',
     type: item.type || 'shirt',
-    colors: (item.colors || []).slice(),
     occasions: (item.occasions || []).slice(),
-    seasons: (item.seasons || []).slice(),
-    laundry: item.laundry || 'clean',
-    size: item.size || '', brand: item.brand || '',
-    fabric: item.fabric || '', pattern: item.pattern || '',
-    price: item.price || '', bought: item.bought || '', notes: item.notes || ''
-  });
+    laundry: item.laundry || 'clean'
+  };
   syncFormUI();
   closeSheet('detail');
   openSheet('form');
@@ -429,28 +411,20 @@ async function saveForm() {
   if (!f.slot || !f.type) return toast('Pick a category and type');
 
   const base = state.editingId ? itemById(state.editingId) : null;
-  const item = {
+  // Object.assign onto `base` keeps any legacy fields from older backups intact.
+  const item = Object.assign({}, base || {}, {
     id: base ? base.id : Store.uid('i'),
     photoBlob: f.photoBlob || null,
-    name: (el('fName').value || '').trim(),
+    name: el('fName').value.trim(),
     slot: f.slot,
     type: f.type,
-    colors: f.colors.slice(),
     occasions: f.occasions.slice(),
-    seasons: f.seasons.slice(),
     laundry: f.laundry || 'clean',
-    size: el('fSize').value.trim(),
-    brand: el('fBrand').value.trim(),
-    fabric: el('fFabric').value,
-    pattern: el('fPattern').value,
-    price: el('fPrice').value ? Number(el('fPrice').value) : null,
-    bought: el('fBought').value || '',
-    notes: el('fNotes').value.trim(),
     worn: base ? (base.worn || 0) : 0,
     lastWorn: base ? (base.lastWorn || null) : null,
     createdAt: base ? base.createdAt : Date.now(),
     updatedAt: Date.now()
-  };
+  });
   if (!item.name) item.name = autoName(item);
 
   try {
@@ -475,8 +449,6 @@ function flashCard(id) {
 }
 
 /* ─────────────────────  photo capture  ──────────────────── */
-let galleryInput = null;
-
 async function handlePhotoFile(file) {
   if (!file) return;
   const drop = el('photoDrop');
@@ -484,6 +456,7 @@ async function handlePhotoFile(file) {
   try {
     state.form.photoBlob = await Store.compressImage(file);
     syncFormUI();
+    toast('Photo added');
   } catch (err) {
     toast(err && err.message ? err.message : 'Could not read that photo');
   } finally {
@@ -502,15 +475,13 @@ function lookItemIds(look) {
   }, []);
 }
 
-function lookItems(look) {
-  return lookItemIds(look).map(itemById).filter(Boolean);
-}
+const lookItems = look => lookItemIds(look).map(itemById).filter(Boolean);
 
 function renderLookOccasions() {
   const wrap = el('lookOccasions');
   const used = new Set();
   state.looks.forEach(l => (l.occasions || []).forEach(o => used.add(o)));
-  OCCASIONS.forEach(o => { if (state.lookOccasion === o) used.add(o); });
+  if (state.lookOccasion !== 'all') used.add(state.lookOccasion);
 
   if (!used.size) { wrap.innerHTML = ''; return; }
   wrap.innerHTML = `<button class="chip ${state.lookOccasion === 'all' ? 'on' : ''}" data-locc="">All occasions</button>` +
@@ -525,9 +496,9 @@ function visibleLooks() {
   const list = state.looks.filter(look => {
     if (state.lookOccasion !== 'all' && !(look.occasions || []).includes(state.lookOccasion)) return false;
     if (!q) return true;
-    const words = [look.name, autoLookName(look, state.items), (look.notes || ''),
-      (look.occasions || []).join(' '), (look.seasons || []).join(' '),
-      lookItems(look).map(i => i.name || autoName(i)).join(' ')];
+    const words = [look.name, autoLookName(look, state.items),
+      (look.occasions || []).join(' '),
+      lookItems(look).map(i => autoName(i)).join(' ')];
     return words.filter(Boolean).join(' ').toLowerCase().includes(q);
   });
   const by = {
@@ -619,14 +590,11 @@ function lookCardHTML(look) {
 /* ───────────────────────  builder  ──────────────────────── */
 function buildBuilderControls() {
   el('lOccasions').innerHTML = OCCASIONS.map(o => `<button type="button" class="chip" data-locc2="${o}">${o}</button>`).join('');
-  el('lSeasons').innerHTML = SEASONS.map(s => `<button type="button" class="chip" data-lsea="${s}">${s}</button>`).join('');
   el('lStars').innerHTML = [1, 2, 3, 4, 5].map(i =>
     `<button type="button" data-star="${i}" role="radio" aria-checked="false" aria-label="${i} star${i === 1 ? '' : 's'}">★</button>`).join('');
 }
 
-function requiredMissing(slots) {
-  return LOOK_SLOTS.filter(sl => sl.required && !slots[sl.id]).map(sl => sl.label);
-}
+const requiredMissing = slots => LOOK_SLOTS.filter(sl => sl.required && !(slots || {})[sl.id]).map(sl => sl.label);
 
 function openBuilder(look) {
   state.editingLookId = look ? look.id : null;
@@ -637,8 +605,9 @@ function openBuilder(look) {
           bottom: look.slots.bottom || null, outer: look.slots.outer || null,
           foot: look.slots.foot || null, accessory: (look.slots.accessory || []).slice()
         },
-        name: look.name || '', occasions: (look.occasions || []).slice(),
-        seasons: (look.seasons || []).slice(), rating: look.rating || 0, notes: look.notes || ''
+        name: look.name || '',
+        occasions: (look.occasions || []).slice(),
+        rating: look.rating || 0
       })
     : blankBuilder();
   el('builderTitle').textContent = look ? 'Edit look' : 'Build a look';
@@ -650,9 +619,7 @@ function openBuilder(look) {
 function syncBuilderUI() {
   const b = state.builder;
   el('lName').value = b.name;
-  el('lNotes').value = b.notes;
   markGroup('lOccasions', x => b.occasions.includes(x.dataset.locc2));
-  markGroup('lSeasons', x => b.seasons.includes(x.dataset.lsea));
 
   Array.from(el('lStars').children).forEach(x => {
     const on = Number(x.dataset.star) <= (b.rating || 0);
@@ -687,8 +654,8 @@ function renderBuilderSlots() {
           <span class="slotrow-act">Add</span>
         </div>
         ${chosen.length ? `<div class="acc-chips">${chosen.map(it => `
-          <span class="acc-chip">${cellInner(it)}${escapeHTML(it.name || autoName(it))}
-            <button type="button" data-unacc="${it.id}" aria-label="Remove ${escapeAttr(it.name || autoName(it))}">&times;</button>
+          <span class="acc-chip">${cellInner(it)}${escapeHTML(autoName(it))}
+            <button type="button" data-unacc="${it.id}" aria-label="Remove ${escapeAttr(autoName(it))}">&times;</button>
           </span>`).join('')}</div>` : ''}`;
     }
 
@@ -704,12 +671,49 @@ function renderBuilderSlots() {
       <span class="slotrow-thumb">${cellInner(item)}</span>
       <span class="slotrow-text">
         <b>${sl.label}</b>
-        <em>${escapeHTML(item.name || autoName(item))}</em>
+        <em>${escapeHTML(autoName(item))}</em>
         ${item.laundry && item.laundry !== 'clean' ? `<small>${laundryById(item.laundry).label}</small>` : ''}
       </span>
       <button type="button" class="x" data-clearslot="${sl.id}" aria-label="Remove ${sl.label}">&times;</button>
     </div>`;
   }).join('');
+
+  wireBuilderRows();
+}
+
+/* Listeners are bound straight onto the fresh nodes rather than delegated.
+   innerHTML replaced them, so the old listeners go with the old nodes. */
+function wireBuilderRows() {
+  const box = el('builderSlots');
+
+  box.querySelectorAll('[data-clearslot]').forEach(btn => {
+    btn.addEventListener('click', ev => {
+      ev.stopPropagation();
+      state.builder.slots[btn.dataset.clearslot] = null;
+      syncBuilderUI();
+    });
+  });
+
+  box.querySelectorAll('[data-unacc]').forEach(btn => {
+    btn.addEventListener('click', ev => {
+      ev.stopPropagation();
+      const arr = state.builder.slots.accessory || [];
+      const i = arr.indexOf(btn.dataset.unacc);
+      if (i >= 0) arr.splice(i, 1);
+      syncBuilderUI();
+    });
+  });
+
+  box.querySelectorAll('[data-slotrow]').forEach(row => {
+    const go = () => openPicker(row.dataset.slotrow);
+    row.addEventListener('click', ev => {
+      if (ev.target.closest('[data-clearslot]') || ev.target.closest('[data-unacc]')) return;
+      go();
+    });
+    row.addEventListener('keydown', ev => {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); go(); }
+    });
+  });
 }
 
 async function saveLook() {
@@ -718,24 +722,21 @@ async function saveLook() {
   if (missing.length) return toast(`Still need: ${missing.join(', ')}`);
 
   const base = state.editingLookId ? state.looks.find(l => l.id === state.editingLookId) : null;
-  const look = {
+  const look = Object.assign({}, base || {}, {
     id: base ? base.id : Store.uid('o'),
-    name: (el('lName').value || '').trim(),
+    name: el('lName').value.trim(),
     slots: {
       top: b.slots.top, layer: b.slots.layer, bottom: b.slots.bottom,
       outer: b.slots.outer, foot: b.slots.foot,
       accessory: (b.slots.accessory || []).slice()
     },
     occasions: b.occasions.slice(),
-    seasons: b.seasons.slice(),
     rating: b.rating || 0,
-    notes: el('lNotes').value.trim(),
     worn: base ? (base.worn || 0) : 0,
     lastWorn: base ? (base.lastWorn || null) : null,
-    photoBlob: null,
     createdAt: base ? base.createdAt : Date.now(),
     updatedAt: Date.now()
-  };
+  });
   if (!look.name) look.name = autoLookName(look, state.items);
 
   try {
@@ -784,11 +785,20 @@ function takenIds(exceptSlot) {
 
 function openPicker(slotId) {
   const sl = lookSlotById(slotId);
-  if (!sl) return;
+  if (!sl) return showErr('Unknown slot: ' + slotId);
+
+  if (!state.items.length) {
+    toast('Add some clothes first');
+    setView('wardrobe');
+    return openAdd();
+  }
+
   state.pickerFor = slotId;
   state.pickerQuery = '';
   el('pickerSearch').value = '';
-  el('pickerTitle').textContent = sl.multi ? 'Add an accessory' : `Choose ${sl.label === 'Outerwear' ? 'outerwear' : 'a ' + sl.label.toLowerCase()}`;
+  el('pickerTitle').textContent = sl.multi
+    ? 'Add an accessory'
+    : `Choose ${sl.label === 'Outerwear' ? 'outerwear' : 'a ' + sl.label.toLowerCase()}`;
   el('pickerShowAll').checked = state.pickerShowAll;
   el('pickerClear').textContent = sl.required ? 'Cancel' : 'Leave this empty';
   renderPicker();
@@ -814,17 +824,18 @@ function renderPicker() {
   pool = pool.slice().sort((a, b) => {
     const d = matchScore(b, seeds).total - matchScore(a, seeds).total;
     if (d) return d;
-    return (a.name || autoName(a)).localeCompare(b.name || autoName(b));
+    return autoName(a).localeCompare(autoName(b));
   });
 
   if (!pool.length) {
     grid.innerHTML = '';
     grid.hidden = true;
     empty.hidden = false;
+    el('pickerEmptyTitle').textContent = all.length ? 'None available' : 'Nothing to pick';
     el('pickerEmptyMsg').textContent = !all.length
-      ? `You have no ${sl.label.toLowerCase()} in the wardrobe yet.`
+      ? `You have no ${sl.label.toLowerCase()} in the wardrobe yet. Add one and it will appear here.`
       : (q ? `Nothing matches “${q}”.`
-           : `All your ${sl.label.toLowerCase()} are dirty or at the cleaner. Flip the switch above to pick one anyway.`);
+           : `All your ${sl.label.toLowerCase()} are dirty or at the cleaner. Flip “Include dirty” above to pick one anyway.`);
     return;
   }
   empty.hidden = true;
@@ -835,17 +846,22 @@ function renderPicker() {
     const isOn = chosenNow.includes(item.id);
     const score = matchScore(item, seeds);
     const st = item.laundry && item.laundry !== 'clean' ? item.laundry : null;
-    return `<button type="button" class="pick ${isOn ? 'on' : ''} ${isTaken && !sl.multi ? 'dim' : ''}"
-        data-pick="${item.id}" ${isTaken && !sl.multi ? 'disabled' : ''} style="animation-delay:${Math.min(i * 12, 220)}ms"
-        title="${escapeAttr(item.name || autoName(item))}">
+    const blocked = isTaken && !sl.multi;
+    return `<button type="button" class="pick ${isOn ? 'on' : ''} ${blocked ? 'dim' : ''}"
+        data-pick="${item.id}" ${blocked ? 'disabled' : ''} style="animation-delay:${Math.min(i * 12, 220)}ms"
+        title="${escapeAttr(autoName(item))}">
       <span class="pthumb">${cellInner(item)}
         ${score.occ > 0 && !isOn ? '<span class="match">Matches</span>' : ''}
-        ${isTaken && !sl.multi ? '<span class="taken">Used</span>' : ''}
+        ${blocked ? '<span class="taken">Used</span>' : ''}
         ${st ? `<i class="stat-dot ${st}" title="${laundryById(st).label}"></i>` : ''}
       </span>
-      <span class="pname">${escapeHTML(item.name || autoName(item))}</span>
+      <span class="pname">${escapeHTML(autoName(item))}</span>
     </button>`;
   }).join('');
+
+  grid.querySelectorAll('[data-pick]').forEach(btn => {
+    btn.addEventListener('click', () => { if (!btn.disabled) choosePick(btn.dataset.pick); });
+  });
 }
 
 function choosePick(itemId) {
@@ -865,18 +881,15 @@ function choosePick(itemId) {
   closeSheet('picker');
 }
 
-/** Guess occasion/season for the look from the pieces chosen so far. */
+/** Guess the occasion for the look from the pieces chosen so far. */
 function autoFillLookTags() {
   const b = state.builder;
-  if (b.occasions.length || b.seasons.length) return;   // respect what the user set
+  if (b.occasions.length) return;                 // respect what the user set
   const chosen = builderChosenItems(null);
   if (chosen.length < 2) return;
-  const inter = key => chosen.reduce((acc, it) =>
-    acc.filter(v => (it[key] || []).includes(v)), (chosen[0][key] || []).slice());
-  const occ = inter('occasions');
-  const sea = inter('seasons');
-  if (occ.length) b.occasions = occ.slice(0, 2);
-  if (sea.length) b.seasons = sea.slice(0, 2);
+  const shared = chosen.reduce((acc, it) =>
+    acc.filter(v => (it.occasions || []).includes(v)), (chosen[0].occasions || []).slice());
+  if (shared.length) b.occasions = shared.slice(0, 2);
 }
 
 /* ─────────────────────  look detail  ────────────────────── */
@@ -892,8 +905,8 @@ function openLookDetail(id) {
 
   const pieces = LOOK_SLOTS.map(sl => {
     if (sl.multi) {
-      const list = (look.slots.accessory || []).map(itemById).filter(Boolean);
-      return list.map(it => pieceHTML(sl.label, it)).join('');
+      return (look.slots.accessory || []).map(itemById).filter(Boolean)
+        .map(it => pieceHTML(sl.label, it)).join('');
     }
     const it = itemById(look.slots[sl.id]);
     if (!it) return sl.required
@@ -907,27 +920,28 @@ function openLookDetail(id) {
     <div class="builder-preview">${collageHTML(look.slots)}</div>
     <div class="detail-rows">
       ${chipLine(look.occasions) ? `<div class="drow col"><span>Occasions</span><div class="tagrow">${chipLine(look.occasions)}</div></div>` : ''}
-      ${chipLine(look.seasons) ? `<div class="drow col"><span>Seasons</span><div class="tagrow">${chipLine(look.seasons)}</div></div>` : ''}
       ${row('Rating', look.rating ? starsHTML(look.rating) : '')}
       ${row('Worn', look.worn ? `${look.worn} time${look.worn === 1 ? '' : 's'}` : '')}
       ${row('Last worn', look.lastWorn ? fmtDate(new Date(look.lastWorn).toISOString().slice(0, 10)) : '')}
-      ${look.notes ? `<div class="drow col"><span>Notes</span><p class="notes">${escapeHTML(look.notes)}</p></div>` : ''}
     </div>
     <div class="field" style="margin-top:18px">
       <span class="field-label">Pieces</span>
       <div class="piece-list">${pieces}</div>
     </div>`;
 
-  const del = el('lookDelete');
-  del.textContent = 'Delete';
-  del.classList.remove('armed');
+  el('lookBody').querySelectorAll('[data-piece]').forEach(btn => {
+    btn.addEventListener('click', () => openDetail(btn.dataset.piece));   // stacks on top
+  });
+
+  el('lookDelete').innerHTML = 'Delete';
+  el('lookDelete').classList.remove('armed');
   openSheet('look');
 }
 
 function pieceHTML(label, item) {
   return `<button type="button" class="piece" data-piece="${item.id}">
     <span class="slotrow-thumb">${cellInner(item)}</span>
-    <span class="piece-text"><b>${escapeHTML(label)}</b><em>${escapeHTML(item.name || autoName(item))}</em></span>
+    <span class="piece-text"><b>${escapeHTML(label)}</b><em>${escapeHTML(autoName(item))}</em></span>
     <span class="go" aria-hidden="true">›</span>
   </button>`;
 }
@@ -992,7 +1006,6 @@ function shuffleLook() {
     return m.length ? m : arr;
   };
   const rand = arr => arr[Math.floor(Math.random() * arr.length)];
-  /** Pick the candidate that goes best with what is already chosen. */
   const best = (arr, seeds) => {
     const scored = arr.map(i => ({ i, s: matchScore(i, seeds).total }));
     const good = scored.filter(x => x.s > 0);
@@ -1010,15 +1023,15 @@ function shuffleLook() {
   const accessory = accPool.slice(0, 6).filter(() => Math.random() < 0.45).slice(0, 2);
 
   const chosen = [top, bottom, foot].concat(outer ? [outer] : [], accessory);
-  const inter = key => chosen.reduce((acc, it) => acc.filter(v => (it[key] || []).includes(v)), (chosen[0][key] || []).slice());
+  const shared = chosen.reduce((acc, it) =>
+    acc.filter(v => (it.occasions || []).includes(v)), (chosen[0].occasions || []).slice());
 
   state.editingLookId = null;
   state.builder = blankBuilder({
     slots: { top: top.id, layer: null, bottom: bottom.id, outer: outer ? outer.id : null, foot: foot.id, accessory },
     name: '',
-    occasions: (occ ? [occ] : inter('occasions').slice(0, 2)),
-    seasons: inter('seasons').slice(0, 2),
-    rating: 0, notes: ''
+    occasions: (occ ? [occ] : shared.slice(0, 2)),
+    rating: 0
   });
   el('builderTitle').textContent = 'Shuffled look';
   el('builderSave').textContent = 'Save look';
@@ -1033,6 +1046,14 @@ const sheetStack = [];
 function openSheet(key) {
   const sheet = el(key + 'Sheet');
   const scrim = el(key + 'Scrim');
+  if (!sheet || !scrim) return showErr('Missing sheet: ' + key);
+
+  // Stacked sheets (the picker opens over the builder) must each sit above
+  // the one below — a flat z-index would let the lower sheet paint on top.
+  const depth = sheetStack.includes(key) ? sheetStack.indexOf(key) : sheetStack.length;
+  scrim.style.zIndex = String(60 + depth * 10);
+  sheet.style.zIndex = String(61 + depth * 10);
+
   sheet.hidden = false;
   scrim.hidden = false;
   document.body.classList.add('locked');
@@ -1046,6 +1067,7 @@ function openSheet(key) {
 function closeSheet(key) {
   const sheet = el(key + 'Sheet');
   const scrim = el(key + 'Scrim');
+  if (!sheet || !scrim) return;
   sheet.classList.remove('open');
   scrim.classList.remove('open');
   const i = sheetStack.indexOf(key);
@@ -1065,6 +1087,7 @@ function closeTopSheet() {
 let toastTimer = null;
 function toast(msg) {
   const t = el('toast');
+  if (!t) return;
   t.textContent = msg;
   t.hidden = false;
   requestAnimationFrame(() => t.classList.add('show'));
@@ -1187,9 +1210,9 @@ function wireEvents() {
   el('formSave').addEventListener('click', saveForm);
 
   el('fSlot').addEventListener('click', e => {
-    const b = e.target.closest('[data-slot]');
+    const b = e.target.closest('[data-fslot]');
     if (!b) return;
-    state.form.slot = b.dataset.slot;
+    state.form.slot = b.dataset.fslot;
     syncFormUI();
   });
   el('fLaundry').addEventListener('click', e => {
@@ -1204,36 +1227,18 @@ function wireEvents() {
     state.form.type = b.dataset.ftype;
     renderFormTypes();
   });
-  el('fColors').addEventListener('click', e => {
-    const b = e.target.closest('[data-color]');
-    if (!b) return;
-    toggleIn(state.form.colors, b.dataset.color);
-    b.classList.toggle('on');
-  });
   el('fOccasions').addEventListener('click', e => {
     const b = e.target.closest('[data-occ]');
     if (!b) return;
     toggleIn(state.form.occasions, b.dataset.occ);
     b.classList.toggle('on');
   });
-  el('fSeasons').addEventListener('click', e => {
-    const b = e.target.closest('[data-sea]');
-    if (!b) return;
-    toggleIn(state.form.seasons, b.dataset.sea);
-    b.classList.toggle('on');
-  });
 
-  /* photo */
-  const photoInput = el('photoInput');
-  galleryInput = photoInput.cloneNode(true);
-  galleryInput.removeAttribute('capture');
-  galleryInput.id = 'galleryInput';
-  document.body.appendChild(galleryInput);
-
-  photoInput.addEventListener('change', e => { handlePhotoFile(e.target.files[0]); e.target.value = ''; });
-  galleryInput.addEventListener('change', e => { handlePhotoFile(e.target.files[0]); e.target.value = ''; });
-  el('photoDrop').addEventListener('click', () => photoInput.click());
-  el('photoPick').addEventListener('click', () => galleryInput.click());
+  /* Photo inputs are triggered by <label for> in the markup — no script.
+     A sandboxed preview iframe can block a programmatic input.click(),
+     but it cannot block a label activating its own control. */
+  el('photoInput').addEventListener('change', e => { handlePhotoFile(e.target.files[0]); e.target.value = ''; });
+  el('galleryInput').addEventListener('change', e => { handlePhotoFile(e.target.files[0]); e.target.value = ''; });
   el('photoRemove').addEventListener('click', () => { state.form.photoBlob = null; syncFormUI(); });
 
   /* ── item detail sheet ── */
@@ -1246,12 +1251,13 @@ function wireEvents() {
   });
   el('detailDelete').addEventListener('click', async () => {
     const btn = el('detailDelete');
-    if (!btn.classList.contains('armed')) return armButton(btn, 'Delete', 'Tap again to delete');
     const id = state.detailId;
-    await Store.remove(id);
-    closeSheet('detail');
-    await reload();
-    toast('Item deleted');
+    await tapTwice(btn, 'Tap again to delete', 'Delete', async () => {
+      await Store.remove(id);
+      closeSheet('detail');
+      await reload();
+      toast('Item deleted');
+    });
   });
 
   /* ── builder sheet ── */
@@ -1260,42 +1266,10 @@ function wireEvents() {
   el('builderScrim').addEventListener('click', () => closeSheet('builder'));
   el('builderSave').addEventListener('click', saveLook);
 
-  el('builderSlots').addEventListener('click', e => {
-    const clear = e.target.closest('[data-clearslot]');
-    if (clear) {
-      e.stopPropagation();
-      state.builder.slots[clear.dataset.clearslot] = null;
-      syncBuilderUI();
-      return;
-    }
-    const unacc = e.target.closest('[data-unacc]');
-    if (unacc) {
-      e.stopPropagation();
-      const arr = state.builder.slots.accessory || [];
-      const i = arr.indexOf(unacc.dataset.unacc);
-      if (i >= 0) arr.splice(i, 1);
-      syncBuilderUI();
-      return;
-    }
-    const row = e.target.closest('[data-slotrow]');
-    if (row) openPicker(row.dataset.slotrow);
-  });
-  el('builderSlots').addEventListener('keydown', e => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    const row = e.target.closest('[data-slotrow]');
-    if (row && e.target === row) { e.preventDefault(); openPicker(row.dataset.slotrow); }
-  });
-
   el('lOccasions').addEventListener('click', e => {
     const b = e.target.closest('[data-locc2]');
     if (!b) return;
     toggleIn(state.builder.occasions, b.dataset.locc2);
-    b.classList.toggle('on');
-  });
-  el('lSeasons').addEventListener('click', e => {
-    const b = e.target.closest('[data-lsea]');
-    if (!b) return;
-    toggleIn(state.builder.seasons, b.dataset.lsea);
     b.classList.toggle('on');
   });
   el('lStars').addEventListener('click', e => {
@@ -1311,10 +1285,6 @@ function wireEvents() {
   el('pickerScrim').addEventListener('click', () => closeSheet('picker'));
   el('pickerSearch').addEventListener('input', e => { state.pickerQuery = e.target.value; renderPicker(); });
   el('pickerShowAll').addEventListener('change', e => { state.pickerShowAll = e.target.checked; renderPicker(); });
-  el('pickerGrid').addEventListener('click', e => {
-    const b = e.target.closest('[data-pick]');
-    if (b && !b.disabled) choosePick(b.dataset.pick);
-  });
   el('pickerClear').addEventListener('click', () => {
     const sl = lookSlotById(state.pickerFor);
     if (sl && !sl.required) {
@@ -1333,42 +1303,42 @@ function wireEvents() {
     closeSheet('look');
     if (look) setTimeout(() => openBuilder(look), 200);
   });
-  el('lookBody').addEventListener('click', e => {
-    const p = e.target.closest('[data-piece]');
-    if (p) openDetail(p.dataset.piece);        // stacks on top of the look sheet
-  });
   el('lookWear').addEventListener('click', () => wearLook(state.lookDetailId));
   el('lookDuplicate').addEventListener('click', () => duplicateLook(state.lookDetailId));
   el('lookDelete').addEventListener('click', async () => {
     const btn = el('lookDelete');
-    if (!btn.classList.contains('armed')) return armButton(btn, 'Delete', 'Tap again to delete');
-    await Store.removeLook(state.lookDetailId);
-    closeSheet('look');
-    await reload();
-    toast('Look deleted');
+    const id = state.lookDetailId;
+    await tapTwice(btn, 'Tap again', 'Delete', async () => {
+      await Store.removeLook(id);
+      closeSheet('look');
+      await reload();
+      toast('Look deleted');
+    });
   });
 
   /* ── menu sheet ── */
   el('menuBtn').addEventListener('click', () => { renderHeader(); openSheet('menu'); });
   el('menuClose').addEventListener('click', () => closeSheet('menu'));
   el('menuScrim').addEventListener('click', () => closeSheet('menu'));
-  el('mSample').addEventListener('click', loadSamples);
   el('mExport').addEventListener('click', doExport);
   el('mImport').addEventListener('click', () => el('importInput').click());
-  el('mReset').addEventListener('click', async () => {
-    const btn = el('mReset');
-    if (!btn.classList.contains('armed')) {
-      btn.classList.add('armed');
-      btn.querySelector('span').textContent = 'Tap again to erase';
-      setTimeout(() => { btn.classList.remove('armed'); btn.querySelector('span').textContent = 'Erase everything'; }, 3200);
-      return;
-    }
-    await Store.replaceAll([]);
-    await Store.replaceAllLooks([]);
-    closeSheet('menu');
-    await reload();
-    toast('Wardrobe and looks erased');
-  });
+
+  const SAMPLE_HTML = '<span>Load sample clothes</span><em>Demo data, no photos</em>';
+  el('mSample').addEventListener('click', () => tapTwice(el('mSample'),
+    '<span>Tap again to load</span><em>Replaces your current items and looks</em>',
+    SAMPLE_HTML, loadSamples));
+
+  const RESET_HTML = '<span>Erase everything</span><em>Cannot be undone</em>';
+  el('mReset').addEventListener('click', () => tapTwice(el('mReset'),
+    '<span>Tap again to erase</span><em>All items and looks will be gone</em>',
+    RESET_HTML, async () => {
+      await Store.replaceAll([]);
+      await Store.replaceAllLooks([]);
+      closeSheet('menu');
+      await reload();
+      toast('Wardrobe and looks erased');
+    }));
+
   el('importInput').addEventListener('change', async e => {
     const file = e.target.files[0];
     e.target.value = '';
@@ -1385,15 +1355,30 @@ function wireEvents() {
 }
 
 /* ─────────────────────  menu actions  ───────────────────── */
-function armButton(btn, label, armedLabel) {
-  btn.classList.add('armed');
-  btn.textContent = armedLabel;
-  setTimeout(() => { btn.classList.remove('armed'); btn.textContent = label; }, 3200);
+/**
+ * In-app tap-twice confirmation. `window.confirm` is blocked outright in a
+ * sandboxed preview iframe, where it silently returns false — so anything
+ * guarded by it simply never happens.
+ */
+function tapTwice(node, armedHTML, normalHTML, onConfirm) {
+  if (node.dataset.armed === '1') {
+    delete node.dataset.armed;
+    clearTimeout(node._armTimer);
+    node.classList.remove('armed');
+    node.innerHTML = normalHTML;
+    return onConfirm();
+  }
+  node.dataset.armed = '1';
+  node.classList.add('armed');
+  node.innerHTML = armedHTML;
+  node._armTimer = setTimeout(() => {
+    delete node.dataset.armed;
+    node.classList.remove('armed');
+    node.innerHTML = normalHTML;
+  }, 3200);
 }
 
 async function loadSamples() {
-  if ((state.items.length || state.looks.length) &&
-      !window.confirm('Replace your current wardrobe and looks with the sample data?')) return;
   const seed = Store.seedSamples();
   await Store.replaceAll(seed.items);
   await Store.replaceAllLooks(seed.looks);
@@ -1409,7 +1394,7 @@ async function doExport() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `almari-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `my-wardrobe-backup-${new Date().toISOString().slice(0, 10)}.json`;
     document.body.appendChild(a);
     a.click();
     a.remove();

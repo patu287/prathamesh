@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════
-   Almari · styles.css
+   My Wardrobe · styles.css
    Warm paper + indigo textile + wooden shelves. No web fonts, no
    network requests — works offline and inside a WebView.
    ══════════════════════════════════════════════════════════════════ */
@@ -947,3 +947,26 @@ input::placeholder, textarea::placeholder { color: var(--ink-3); }
 
 .pick:disabled { cursor: not-allowed; }
 .pick:disabled:hover { transform: none; box-shadow: none; }
+
+/* ══════════════════════════════════════════════════════════════════
+   v3 · rename + label-driven photo inputs + error surface
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Photo capture is driven by <label for="..."> rather than input.click(),
+   because a sandboxed preview iframe blocks the scripted version. Labels
+   are not buttons, so they need the affordances buttons get for free. */
+label.photo-drop, label.btn { cursor: pointer; -webkit-user-select: none; user-select: none; }
+label.btn { text-align: center; }
+
+/* fatal-error banner — a throwing handler otherwise looks like a dead click */
+.errbar {
+  position: sticky; top: 0; z-index: 200;
+  margin: 0; padding: 11px 16px;
+  background: #8E2A25; color: #FFF2F0;
+  font-size: 13px; font-weight: 600; line-height: 1.4;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+
+/* the brand mark now holds a hanger glyph instead of a letter */
+.mark svg { stroke: #FFF6E6; stroke-width: 2.6; }
