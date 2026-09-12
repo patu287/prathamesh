@@ -12,3 +12,6 @@ wardrobe-android/.gradle/
 wardrobe-android/build/
 wardrobe-android/app/build/
 wardrobe-android/local.properties
+
+# build self-reports delivered to the dev sandbox (APK + failure logs)
+wardrobe-android/release/
