@@ -37,15 +37,38 @@ const Store = (() => {
 
   function tx(db, mode) { return db.transaction(OBJ, mode).objectStore(OBJ); }
 
-  /* ---- localStorage fallback ---- */
+  /* ---- localStorage fallback ----
+     Used when IndexedDB is blocked (notably file:// pages). A Blob cannot be
+     JSON-serialised — it stringifies to "{}" and every photo would silently
+     vanish — so photos are stored as data URLs on this path instead. */
   function lsRead() {
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }
-    catch (err) { return []; }
+    try {
+      const raw = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+      return raw.map(r => {
+        const it = Object.assign({}, r);
+        if (it.photo && !it.photoBlob) {
+          try { it.photoBlob = dataURLToBlob(it.photo); }
+          catch (err) { it.photoBlob = null; }
+        }
+        delete it.photo;
+        return it;
+      });
+    } catch (err) { return []; }
   }
-  function lsWrite(items) {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(items)); return true; }
-    catch (err) {
-      throw new Error('Storage is full. Try removing a few photos or shorter notes.');
+
+  async function lsWrite(items) {
+    const rows = [];
+    for (const it of items) {
+      const copy = Object.assign({}, it);
+      if (copy.photoBlob) copy.photo = await blobToDataURL(copy.photoBlob);
+      delete copy.photoBlob;
+      rows.push(copy);
+    }
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(rows));
+      return true;
+    } catch (err) {
+      throw new Error('Storage is full. This browser has no IndexedDB, so photo space is limited — serve the app over http (see README).');
     }
   }
 
@@ -66,7 +89,7 @@ const Store = (() => {
       const items = lsRead();
       const i = items.findIndex(x => x.id === item.id);
       if (i >= 0) items[i] = item; else items.push(item);
-      lsWrite(items);
+      await lsWrite(items);
       return item;
     }
     return new Promise((resolve, reject) => {
@@ -79,7 +102,7 @@ const Store = (() => {
   async function remove(id) {
     forgetPhoto(id);
     const db = await openDB();
-    if (!db) { lsWrite(lsRead().filter(x => x.id !== id)); return; }
+    if (!db) { await lsWrite(lsRead().filter(x => x.id !== id)); return; }
     return new Promise((resolve) => {
       const req = tx(db, 'readwrite').delete(id);
       req.onsuccess = req.onerror = () => resolve();
@@ -89,7 +112,7 @@ const Store = (() => {
   /** Replace the whole wardrobe (used by import + sample seeding). */
   async function replaceAll(items) {
     const db = await openDB();
-    if (!db) { lsWrite(items); return; }
+    if (!db) { await lsWrite(items); return; }
     return new Promise((resolve, reject) => {
       const t = db.transaction(OBJ, 'readwrite');
       t.objectStore(OBJ).clear();

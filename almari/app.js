@@ -64,6 +64,14 @@ function renderHeader() {
     const bottoms = state.items.filter(i => i.slot === 'bottom').length;
     el('countLine').textContent = `${n} item${n === 1 ? '' : 's'} · ${tops} tops · ${bottoms} bottoms`;
   }
+  const sl = el('storageLine');
+  if (sl) {
+    const backend = Store.backend();
+    sl.textContent = backend === 'IndexedDB'
+      ? 'Storage: IndexedDB (unlimited photos)'
+      : 'Storage: localStorage (photo space limited — serve over http)';
+  }
+
   const stats = el('menuStats');
   if (stats) {
     const rows = SLOTS.map(s => `<div class="stat"><b>${state.items.filter(i => i.slot === s.id).length}</b><span>${s.label}</span></div>`).join('');
