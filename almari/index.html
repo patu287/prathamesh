@@ -3,9 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#2E3A7D" />
+<meta name="theme-color" content="#131110" />
 <title>My Wardrobe — your clothes, organised</title>
 <meta name="description" content="My Wardrobe is a personal clothes manager. Catalogue by category, then build outfits from what you own." />
+<script>
+  /* Set the theme before first paint, otherwise dusk users get a white flash. */
+  (function () {
+    var t = 'dusk';
+    try { t = localStorage.getItem('mywardrobe.theme') === 'light' ? 'light' : 'dusk'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -178,7 +186,7 @@
           <img id="photoPreview" alt="" hidden />
         </label>
         <div class="photo-side">
-          <label class="btn ghost sm picker-label" for="galleryInput">Choose from gallery</label>
+          <label class="btn ghost sm" for="galleryInput">Choose from gallery</label>
           <button type="button" class="btn ghost sm danger" id="photoRemove" hidden>Remove photo</button>
           <p class="hint">Photos stay on your device.</p>
         </div>
@@ -338,6 +346,13 @@
     <button class="icon-btn" id="menuClose" aria-label="Close">&times;</button>
   </header>
   <div class="sheet-body">
+    <div class="menu-row">
+      <span class="menu-row-text"><span>Appearance</span><em>How the app looks</em></span>
+      <div class="segmented mini" id="themeSeg" role="radiogroup" aria-label="Theme">
+        <button type="button" data-theme-pick="dusk" role="radio">Dusk</button>
+        <button type="button" data-theme-pick="light" role="radio">Light</button>
+      </div>
+    </div>
     <div class="stats" id="menuStats"></div>
     <button class="menu-item" id="mSample"><span>Load sample clothes</span><em>Demo data, no photos</em></button>
     <button class="menu-item" id="mExport"><span>Export backup</span><em>Items and looks, one .json file</em></button>

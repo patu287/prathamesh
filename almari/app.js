@@ -70,26 +70,41 @@ const PLUS_SVG = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="t
 
 /* With colour tagging gone, a photo-less item still needs to be visually
    distinct on the shelf. The tone is hashed from the name so it is stable
-   across renders and between devices. */
-const TILE_TONES = [
-  'linear-gradient(140deg,#EAE1D2,#D6C6AC)',   // sand
-  'linear-gradient(140deg,#E4E6F2,#C5CAE6)',   // indigo wash
-  'linear-gradient(140deg,#EFE4D3,#DDC8A7)',   // cream
-  'linear-gradient(140deg,#E2EAE2,#C2D3C2)',   // sage
-  'linear-gradient(140deg,#F1E4DD,#DFC4B6)',   // blush
-  'linear-gradient(140deg,#E9E5DB,#CEC7B7)'    // stone
-];
+   across renders, and it resolves to a CSS variable so both themes supply
+   their own six tones. */
+const TILE_TONE_COUNT = 6;
 
 function tileTone(item) {
   const key = ((item && item.name) || '') + ((item && item.type) || '') + ((item && item.id) || '');
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-  return TILE_TONES[h % TILE_TONES.length];
+  return 'var(--tone-' + ((h % TILE_TONE_COUNT) + 1) + ')';
+}
+
+/* ─────────────────────────  theme  ───────────────────────── */
+const THEME_KEY = 'mywardrobe.theme';
+const THEME_META = { dusk: '#131110', light: '#FAF8F5' };
+
+const currentTheme = () => document.documentElement.getAttribute('data-theme') || 'dusk';
+
+function applyTheme(t) {
+  const theme = t === 'light' ? 'light' : 'dusk';
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem(THEME_KEY, theme); } catch (err) { /* private mode */ }
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', THEME_META[theme]);
+  const seg = el('themeSeg');
+  if (seg) Array.from(seg.children).forEach(b => {
+    const on = b.dataset.themePick === theme;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-checked', on);
+  });
 }
 
 /* ─────────────────────────  boot  ───────────────────────── */
 (async function init() {
   try {
+    applyTheme(currentTheme());
     buildFormControls();
     buildBuilderControls();
     wireEvents();
@@ -1317,6 +1332,10 @@ function wireEvents() {
   });
 
   /* ── menu sheet ── */
+  el('themeSeg').addEventListener('click', e => {
+    const b = e.target.closest('[data-theme-pick]');
+    if (b) applyTheme(b.dataset.themePick);
+  });
   el('menuBtn').addEventListener('click', () => { renderHeader(); openSheet('menu'); });
   el('menuClose').addEventListener('click', () => closeSheet('menu'));
   el('menuScrim').addEventListener('click', () => closeSheet('menu'));
