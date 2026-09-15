@@ -1,0 +1,47 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'app.wardrobe'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "app.wardrobe"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        // No permissions: not even INTERNET. Photos are picked through
+        // ACTION_GET_CONTENT, which needs none.
+    }
+
+    signingConfigs {
+        // A stable committed key, so a new build installs *over* the previous
+        // one instead of failing with a signature mismatch. Throwaway sideload
+        // key — not a Play Store upload key.
+        release {
+            storeFile file("../keys/wardrobe.keystore")
+            storePassword "wardrobe"
+            keyAlias "wardrobe"
+            keyPassword "wardrobe"
+            storeType "PKCS12"
+        }
+    }
+
+    buildTypes {
+        debug { minifyEnabled false }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // none: framework APIs only. Assets are served by a hand-rolled
+    // WebViewClient interceptor, which keeps the APK tiny.
+}

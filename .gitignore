@@ -6,3 +6,12 @@ android/.gradle/
 android/build/
 android/app/build/
 android/local.properties
+
+# My Wardrobe Android build output (the committed keystore IS tracked on purpose)
+wardrobe-android/.gradle/
+wardrobe-android/build/
+wardrobe-android/app/build/
+wardrobe-android/local.properties
+
+# build self-reports delivered to the dev sandbox (APK + failure logs)
+wardrobe-android/release/

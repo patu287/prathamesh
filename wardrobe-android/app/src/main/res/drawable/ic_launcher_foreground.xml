@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clothes hanger, drawn inside the 66dp adaptive-icon safe zone of a
+     108dp canvas. Stroke-based so it stays crisp at every density. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- hook -->
+    <path
+        android:pathData="M58.4,37.2 a5.6,5.6 0 1,0 -4.4,9.1"
+        android:strokeColor="@color/gold"
+        android:strokeWidth="4.6"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <!-- stem -->
+    <path
+        android:pathData="M54,46.3 L54,50.2"
+        android:strokeColor="@color/gold"
+        android:strokeWidth="4.6"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <!-- shoulders + bottom bar -->
+    <path
+        android:pathData="M54,50.2 L31.5,65.4 Q29.6,66.7 31.5,67.4 L76.5,67.4 Q78.4,66.7 76.5,65.4 Z"
+        android:strokeColor="@color/gold"
+        android:strokeWidth="4.6"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+</vector>
