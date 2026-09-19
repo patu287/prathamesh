@@ -49,17 +49,15 @@
             </intent-filter>
         </activity>
 
-        <!-- The camera app writes the captured photo into our cache directory
-             through this provider, which is what keeps the app free of the
-             CAMERA and storage permissions. -->
+        <!-- The camera app writes the captured photo into the app's private
+             storage through this provider, which is what keeps the app free of
+             the CAMERA and storage permissions. It is ours rather than androidx's
+             FileProvider so that the app depends on nothing outside the
+             framework — and can therefore be built without Maven at all. -->
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:name=".CaptureProvider"
+            android:authorities="app.notes.capture"
             android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+            android:grantUriPermissions="true" />
     </application>
 </manifest>

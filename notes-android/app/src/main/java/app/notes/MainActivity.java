@@ -1,12 +1,12 @@
 package app.notes;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,8 +24,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import androidx.core.content.FileProvider;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,16 +36,18 @@ import java.io.OutputStream;
  * rather than file:// . Every request to that host is answered locally from the APK's
  * assets, which (a) never touches the network and (b) gives the page a real, stable
  * web origin so IndexedDB, localStorage and the Web Crypto API work — a file:// page
- * gets none of those, and its data is evicted like a cache.
+ * gets none of those, and its data is treated as a cache and evicted.
  *
- * Three things here exist because each one fails SILENTLY without them, and a silent
- * failure in a journal app looks exactly like a dead button:
+ * Three things here exist because without them each fails SILENTLY, and a silent
+ * failure in a journal app is indistinguishable from a dead button:
  *
- *   onShowFileChooser   an <input type="file"> does nothing at all when tapped
- *   onPermissionRequest  getUserMedia is refused with no prompt and no error, so the
- *                        record button would simply never start
+ *   onShowFileChooser    an <input type="file"> does nothing at all when tapped
+ *   onPermissionRequest  getUserMedia is refused with no prompt and no error
  *   the NotesNative bridge  <a download> is ignored for blob: URLs, so the backup
  *                        export would appear to work and write nothing
+ *
+ * No third-party code: everything below is framework API, so the APK is a few tens
+ * of kilobytes and can be built without Gradle at all (see tools/build-apk.sh).
  */
 public class MainActivity extends Activity {
 
@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        clearStaleCapture();
 
         web = new WebView(this);
         web.setLayoutParams(new ViewGroup.LayoutParams(
@@ -124,15 +125,15 @@ public class MainActivity extends Activity {
             public boolean onShowFileChooser(WebView webView,
                                              ValueCallback<Uri[]> callback,
                                              FileChooserParams params) {
-                // A pending callback must always be answered, or the page's file
-                // input stays locked and every later tap is ignored.
+                // A pending callback must always be answered, or the page's file input
+                // stays locked and every later tap is ignored too.
                 if (filePathCallback != null) {
                     filePathCallback.onReceiveValue(null);
                 }
                 filePathCallback = callback;
 
                 // capture="environment" on the input means "take a photo now"; without
-                // it the user is choosing something they already have.
+                // it, the user is choosing something they already have.
                 if (params.isCaptureEnabled() && capturePhoto()) {
                     return true;
                 }
@@ -142,24 +143,26 @@ public class MainActivity extends Activity {
             /**
              * Never called on a plain file:// page — and when it is missing, or when the
              * app has not been granted RECORD_AUDIO, getUserMedia fails with no prompt,
-             * no error and no retry. So: ask for the Android permission here, hold the
-             * web request open while the dialog is up, then answer it honestly.
+             * no error and no retry. So the Android permission is requested here, with
+             * the web request held open until the dialog is answered honestly.
              */
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
-                runOnUiThread(() -> {
-                    if (!hasAudio(request)) {
-                        request.deny();
-                        return;
-                    }
-                    if (checkSelfPermission(Manifest.permission.RECORD_AUDIO)
-                            == PackageManager.PERMISSION_GRANTED) {
-                        request.grant(new String[]{ PermissionRequest.RESOURCE_AUDIO_CAPTURE });
-                    } else {
-                        pendingWebRequest = request;
-                        requestPermissions(
-                                new String[]{ Manifest.permission.RECORD_AUDIO },
-                                REQ_AUDIO_PERMISSION);
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        if (!wantsAudio(request)) {
+                            request.deny();
+                            return;
+                        }
+                        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            request.grant(new String[]{ PermissionRequest.RESOURCE_AUDIO_CAPTURE });
+                        } else {
+                            pendingWebRequest = request;
+                            requestPermissions(
+                                    new String[]{ android.Manifest.permission.RECORD_AUDIO },
+                                    REQ_AUDIO_PERMISSION);
+                        }
                     }
                 });
             }
@@ -175,7 +178,7 @@ public class MainActivity extends Activity {
             public boolean onConsoleMessage(ConsoleMessage m) {
                 // Keeps the app's own error banner and logcat in agreement, which is the
                 // only way to debug a WebView you are not holding.
-                Log.i("Notes", m.message() + " @" + m.lineNumber());
+                Log.i("Notes", m.message() + " @ " + m.lineNumber());
                 return true;
             }
         });
@@ -202,26 +205,25 @@ public class MainActivity extends Activity {
         }
     }
 
-    private static boolean hasAudio(PermissionRequest request) {
+    private static boolean wantsAudio(PermissionRequest request) {
         for (String r : request.getResources()) {
             if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(r)) return true;
         }
         return false;
     }
 
-    /* ── camera ─────────────────────────────────────────────────────────────
-       Try the real camera app, and fall back to the file picker if anything at
-       all goes wrong. A journal is not the place to show someone a crash
-       because a phone has no camera app. */
+    /* ── camera ──────────────────────────────────────────────────────────────
+       The camera app is handed a content:// URI from our own provider
+       (CaptureProvider), so it can write a full-resolution photo without the app
+       declaring CAMERA or any storage permission — and without a FileProvider,
+       which would mean depending on androidx. If anything about that fails, fall
+       back to the file picker: a journal is not the place to show someone a crash
+       because their phone has no camera app. */
     private boolean capturePhoto() {
         try {
-            File dir = new File(getCacheDir(), "captures");
-            if (!dir.exists() && !dir.mkdirs()) return false;
-            File out = new File(dir, "capture-" + System.currentTimeMillis() + ".jpg");
-            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", out);
-
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+            Uri uri = Uri.parse("content://" + CaptureProvider.AUTHORITY + "/" + CaptureProvider.NAME);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     | Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pendingCameraUri = uri;
@@ -235,7 +237,7 @@ public class MainActivity extends Activity {
     }
 
     /** Honour the page's accept attribute, so the picker opens where it should. */
-    private String chooseExisting(WebChromeClient.FileChooserParams params) {
+    private boolean chooseExisting(WebChromeClient.FileChooserParams params) {
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -243,9 +245,13 @@ public class MainActivity extends Activity {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,
                     params.getMode() == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE);
             startActivityForResult(Intent.createChooser(intent, "Choose a file"), REQ_FILE_CHOOSER);
-        } catch (ActivityNotFoundException | SecurityException e) {
+        } catch (ActivityNotFoundException e) {
             filePathCallback = null;
             toast("No app available to pick a file.");
+            return false;
+        } catch (SecurityException e) {
+            filePathCallback = null;
+            toast("Not allowed to pick a file on this device.");
             return false;
         }
         return true;
@@ -257,17 +263,17 @@ public class MainActivity extends Activity {
             for (String a : accept) {
                 if (a == null) continue;
                 String t = a.trim().toLowerCase();
-                if (t.isEmpty()) continue;
+                if (t.length() == 0) continue;
                 if (t.startsWith("image/") || t.equals(".jpg") || t.equals(".jpeg") || t.equals(".png")) {
                     return "image/*";
                 }
                 if (t.startsWith("audio/") || t.equals(".webm") || t.equals(".m4a")) {
                     return "audio/*";
                 }
-                if (t.contains("zip") || t.equals(".zip")) {
+                if (t.indexOf("zip") >= 0 || t.equals(".zip")) {
                     return "application/zip";
                 }
-                if (t.contains("json") || t.equals(".json")) {
+                if (t.indexOf("json") >= 0 || t.equals(".json")) {
                     return "application/json";
                 }
             }
@@ -322,44 +328,44 @@ public class MainActivity extends Activity {
                 toast("Microphone permission is needed to record a voice note.");
             }
         } catch (Throwable ignored) {
-            // the request can be cancelled while the dialog is up
+            // the web request can be cancelled while the system dialog is up
         }
         pendingWebRequest = null;
     }
 
-    /* ── saving a backup ────────────────────────────────────────────────────
-       The web app hands us the finished .zip as base64. We ask the system where
-       to put it (SAF), so no storage permission is needed on any Android
-       version and the user decides whether it lands in Downloads, Drive or a
-       folder of their own. */
+    /* ── saving a backup ─────────────────────────────────────────────────────
+       The web app hands us the finished .zip as base64. The system save dialog
+       decides where it goes, so no storage permission is needed on any Android
+       version and the user picks the folder themselves. */
     private class NotesBridge {
         @JavascriptInterface
-        public void saveFile(String filename, String base64) {
+        public boolean available() {
+            return true;
+        }
+
+        @JavascriptInterface
+        public void saveFile(final String filename, final String base64) {
             try {
                 pendingSaveData = Base64.decode(base64, Base64.DEFAULT);
-                final String name = filename == null || filename.isEmpty()
+                final String name = (filename == null || filename.length() == 0)
                         ? "notes-backup.zip" : filename;
-                runOnUiThread(() -> {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("application/zip");
-                        intent.putExtra(Intent.EXTRA_TITLE, name);
-                        startActivityForResult(intent, REQ_SAVE_DOCUMENT);
-                    } catch (Throwable t) {
-                        pendingSaveData = null;
-                        toast("Could not open a save dialog: " + t.getMessage());
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("application/zip");
+                            intent.putExtra(Intent.EXTRA_TITLE, name);
+                            startActivityForResult(intent, REQ_SAVE_DOCUMENT);
+                        } catch (Throwable t) {
+                            pendingSaveData = null;
+                            toast("Could not open a save dialog: " + t.getMessage());
+                        }
                     }
                 });
             } catch (Throwable t) {
                 toast("Could not prepare the backup: " + t.getMessage());
             }
-        }
-
-        /** True when running inside the app, so the page knows not to try a download. */
-        @JavascriptInterface
-        public boolean available() {
-            return true;
         }
     }
 
@@ -370,18 +376,42 @@ public class MainActivity extends Activity {
             toast("Backup not saved.");
             return;
         }
-        try (OutputStream out = getContentResolver().openOutputStream(data.getData())) {
+        try {
+            OutputStream out = getContentResolver().openOutputStream(data.getData());
             if (out == null) throw new IOException("no output stream");
-            out.write(bytes);
-            out.flush();
+            try {
+                out.write(bytes);
+                out.flush();
+            } finally {
+                out.close();
+            }
             toast("Backup saved (" + (bytes.length / 1024) + " KB).");
         } catch (Throwable t) {
             toast("Could not write the backup: " + t.getMessage());
         }
     }
 
+    /** The one capture file is overwritten each time; drop it if the app was killed
+        between a capture and the page reading it, so nothing accumulates. */
+    private void clearStaleCapture() {
+        try {
+            File dir = new File(getFilesDir(), "captures");
+            File[] files = dir.listFiles();
+            if (files == null) return;
+            long cutoff = System.currentTimeMillis() - 24L * 60L * 60L * 1000L;
+            for (File f : files) {
+                if (f.lastModified() < cutoff) f.delete();
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
     private void toast(final String message) {
-        runOnUiThread(() -> Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show());
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private static String mimeOf(String name) {

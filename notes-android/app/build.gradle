@@ -44,8 +44,8 @@ android {
 }
 
 dependencies {
-    // One dependency, for FileProvider only — the camera app needs a content://
-    // URI to write the photo into, and a file:// URI throws FileUriExposedException
-    // on every Android version this app supports.
-    implementation 'androidx.core:core:1.13.1'
+    // None. Everything is framework API, including the capture provider that a
+    // file:// URI cannot replace (FileUriExposedException, API 24+). A zero
+    // dependency graph means the app can be built two ways: with Gradle and the
+    // Android SDK, or with tools/build-apk.sh and no SDK at all.
 }
