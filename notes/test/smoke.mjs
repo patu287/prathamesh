@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════
-   Rojni · smoke test
+   Notes · smoke test
    Runs data.js + store.js in a bare Node context with no DOM and no
    IndexedDB — which means everything goes through the localStorage
    fallback. That is deliberate: it is the path that silently corrupts
@@ -199,7 +199,7 @@ await testAsync('export → import restores the journal byte-for-byte', async ()
 
   const out = await Store.exportBackup();
   assert.ok(out.blob.size > 7000, 'the zip should contain the media, not just the manifest');
-  assert.match(out.filename, /^rojni-backup-\d{4}-\d{2}-\d{2}\.zip$/);
+  assert.match(out.filename, /^notes-backup-\d{4}-\d{2}-\d{2}\.zip$/);
   assert.deepEqual(out.counts, { entries: 1, media: 2, keypoints: 1 });
 
   const zip = new Uint8Array(await out.blob.arrayBuffer());
@@ -231,7 +231,7 @@ await testAsync('importing junk fails with a sentence a human can act on', async
   await assert.rejects(
     () => Store.importBackup(junk.buffer.slice(junk.byteOffset, junk.byteOffset + junk.byteLength)),
     (err) => {
-      assert.match(err.message, /Rojni backup/);
+      assert.match(err.message, /Notes backup/);
       return true;
     });
 });

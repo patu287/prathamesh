@@ -1,8 +1,8 @@
 {
-  "name": "rojni-test",
+  "name": "notes-test",
   "private": true,
   "type": "module",
-  "description": "Tests for Rojni. Kept out of the app folder on purpose: the app itself has no dependencies and no build step, and it should stay that way.",
+  "description": "Tests for Notes. Kept out of the app folder on purpose: the app itself has no dependencies and no build step, and it should stay that way.",
   "scripts": {
     "test": "node smoke.mjs && node dom.mjs",
     "smoke": "node smoke.mjs",

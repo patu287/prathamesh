@@ -1,9 +1,9 @@
 /* ══════════════════════════════════════════════════════════════════
-   Rojni · data.js
+   Notes · data.js
    Aspects, prompts, date helpers, small utilities. No dependencies.
    ══════════════════════════════════════════════════════════════════ */
 
-const APP = { name: 'Rojni', tagline: 'रोजनी · the day, kept', version: '1.0' };
+const APP = { name: 'Notes', tagline: 'the day, kept', version: '1.0' };
 
 /* ── Aspects ────────────────────────────────────────────────────────
    EDIT THIS LIST to your own life. Everything else in the app is a

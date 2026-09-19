@@ -1,4 +1,4 @@
-# Rojni · रोजनी — the day, kept
+# Notes — the day, kept
 
 A private, offline, local-first journal. Write the day, record the days you can't
 write, keep photos, and distil the few **key points** that matter across the aspects
@@ -9,18 +9,27 @@ calls at runtime. Same architecture as [`../almari`](../almari): plain HTML/CSS/
 JS, no build step, IndexedDB for records and media Blobs. It drops into a WebView shell
 as-is, the same way [`../android`](../android) wraps the Reset app.
 
-> The folder is `journal/`; the app is called Rojni (रोजनी, "daily"), by the same logic
-> that puts "My Wardrobe" in `almari/`. Renaming is a one-line decision — but the
-> IndexedDB database is named `rojni` internally, so renaming *that* later would orphan
-> every journal already on a device.
+> The app is called **Notes**; the folder is `notes/`, the Android shell is
+> `notes-android/`, and the APK lands in `notes/release/`.
+>
+> The IndexedDB database is still named `rojni` internally — this app's original name —
+> exactly the way `almari`'s database is still called `almari`. Renaming the thing that
+> holds your data would orphan every entry already on a device, so only the parts a human
+> reads were renamed. Backups exported under the old name still import; the format is
+> identical and both labels are accepted.
 
 ## Run it
 
 ```bash
-cd journal
+cd notes
 python3 serve.py 8090          # threaded, cache-disabled — best for iterating
 # → http://localhost:8090
 ```
+
+Fonts are bundled in `fonts/` (SIL OFL) rather than fetched from a CDN, because the
+Android build has no `INTERNET` permission — a Google Fonts link could only ever fail
+there. Side effect: the app now makes **no external requests at all**, in any context,
+which is what the rest of this file already claimed.
 
 Serve it over http; don't open the file directly. On `file://` there is no IndexedDB
 (media falls back to localStorage and fills up almost immediately) and no
@@ -29,7 +38,7 @@ Serve it over http; don't open the file directly. On `file://` there is no Index
 ### Tests
 
 ```bash
-cd journal/test && npm install && npm test
+cd notes/test && npm install && npm test
 ```
 
 Two suites, kept out of the app folder because the app itself has no dependencies and
@@ -48,8 +57,8 @@ have caught that — only a restart could.
 The ZIP writer is also verified by an external tool, not just by its own reader:
 
 ```bash
-unzip -t rojni-backup-2026-09-19.zip     # → No errors detected
-unzip -l rojni-backup-2026-09-19.zip     # → journal.json, media/m1.jpg, media/m2.webm
+unzip -t notes-backup-2026-09-19.zip     # → No errors detected
+unzip -l notes-backup-2026-09-19.zip     # → journal.json, media/m1.jpg, media/m2.webm
 ```
 
 ---
@@ -111,26 +120,26 @@ unzip -l rojni-backup-2026-09-19.zip     # → journal.json, media/m1.jpg, media
   bad news.
 - **PIN gate** (off by default). The UI says plainly that it is a *gate, not a lockbox*: it
   stops someone who picks up your unlocked phone and nothing more.
+- **Android app** — [`notes-android/`](../notes-android): a single-WebView shell that serves
+  the page from `https://appassets.androidplatform.net` (intercepted locally, never the
+  network), holds **exactly one permission** — the microphone, so voice notes exist — and
+  declares no `INTERNET` at all. See its README for the three things that fail *silently*
+  in a WebView without explicit handling: file choosers, microphone grants, and
+  `<a download>` on a blob URL.
 
 ## What's not built
 
 Honest list, roughly in the order I'd do them:
 
-1. **Android WebView shell.** The app drops into the existing pipeline unchanged, but the
-   shell does not exist yet: package name, `MainActivity` with
-   `WebChromeClient.onPermissionRequest` granting `RESOURCE_AUDIO_CAPTURE`, `RECORD_AUDIO`
-   and `CAMERA` permissions, a committed throwaway signing key, and a CI workflow. Note
-   this app *cannot* repeat the Reset app's proud "zero permissions" — the mic and camera
-   need declaring, and that is a tradeoff to state on the tin rather than hide.
-2. **Encryption.** AES-GCM + passphrase. Deliberately not rushed into v1: lose the
+1. **Encryption.** AES-GCM + passphrase. Deliberately not rushed into v1: lose the
    passphrase and the journal is gone forever, which is a real commitment, not a checkbox.
-3. **Audio transcription.** Reliable on-device STT does not exist in a WebView without a
+2. **Audio transcription.** Reliable on-device STT does not exist in a WebView without a
    backend. The v1 answer is the honest one — audio *and* text on the same entry. Cloud
    transcription would mean uploading your journal, which breaks the entire premise.
-4. **People tags** (`Mom`, `Rahul`). Journals are mostly about people. A third axis, so it
+3. **People tags** (`Mom`, `Rahul`). Journals are mostly about people. A third axis, so it
    earns its place after v1 rather than crowding it.
-5. **Native quick capture** and an Android share-sheet target.
-6. Cost-per-attention charts, chapters, printable year book. Fun, not load-bearing.
+4. **Native quick capture** and an Android share-sheet target.
+5. Cost-per-attention charts, chapters, printable year book. Fun, not load-bearing.
 
 ---
 
@@ -308,3 +317,4 @@ Added for this app, because both fail quietly by nature: `navigator.storage.pers
 | Voice or writing first | **Write-first.** The `+` opens the editor; the mic is one tap away inside it |
 | Privacy lock | **PIN gate**, labelled honestly as a gate rather than encryption. Encryption is a deliberate v1.5 |
 | Aspects | The eight defaults above, to be edited in `data.js` — the app opens onto domains that have to be *yours* or the second feature is dead on arrival |
+| Packaging | An installable APK in `notes/release/Notes-1.0.apk`, built from `notes-android/` by `notes-apk.yml` |

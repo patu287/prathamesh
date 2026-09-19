@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dev server for Rojni — threaded, cache-disabled, binds 0.0.0.0.
+"""Dev server for Notes — threaded, cache-disabled, binds 0.0.0.0.
 
     python3 serve.py [port]        # default 8090
 
@@ -40,7 +40,7 @@ def main():
     handler = partial(Handler, directory=HERE)
     httpd = ThreadingHTTPServer(('0.0.0.0', port), handler)
     httpd.daemon_threads = True
-    print('Rojni dev server on http://0.0.0.0:%d  (root: %s)' % (port, HERE), flush=True)
+    print('Notes dev server on http://0.0.0.0:%d  (root: %s)' % (port, HERE), flush=True)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

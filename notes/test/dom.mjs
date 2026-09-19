@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════
-   Rojni · end-to-end test — drives the real app in a real DOM against a
+   Notes · end-to-end test — drives the real app in a real DOM against a
    real IndexedDB, exactly the way a thumb would.
 
    It found a genuine data-loss bug the first time it ran: a key point
@@ -18,7 +18,7 @@ import { JSDOM, VirtualConsole } from 'jsdom';
 import { indexedDB, IDBKeyRange } from 'fake-indexeddb';
 import { webcrypto, randomFillSync } from 'node:crypto';
 
-const ORIGIN = process.env.ROJNI_URL || 'http://127.0.0.1:8090';
+const ORIGIN = process.env.NOTES_URL || 'http://127.0.0.1:8090';
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 let passed = 0, failed = 0;
@@ -30,10 +30,10 @@ const step = (name, ok, extra = '') => {
 const problems = [];
 const vc = new VirtualConsole();
 vc.on('jsdomError', e => {
-  /* jsdom has no network here, so the Google Fonts <link> always fails to load.
-     That is a resource failure, not a script error — and a script error is
-     exactly what this test exists to catch, so the two must not be conflated. */
-  if (e.type === 'resource loading') return;
+  /* Nothing is fetched any more — fonts are bundled — so a resource failure is
+     no longer expected. Report it rather than swallowing it, but keep it
+     distinct from a script error, which is what this test exists to catch. */
+  if (e.type === 'resource loading') { problems.push('RESOURCE: ' + (e.detail?.message || e.message)); return; }
   const m = e.detail?.message || e.message || String(e.detail);
   if (!/scrollTo|Not implemented/.test(m)) problems.push(`JSDOM ${e.type || ''}: ${m}`);
 });

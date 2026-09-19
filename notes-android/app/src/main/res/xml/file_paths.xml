@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Only the capture cache is exposed, and only so the camera app can write a
+     single photo into it. Nothing else in the app's storage is reachable. -->
+<paths>
+    <cache-path name="captures" path="captures/" />
+</paths>

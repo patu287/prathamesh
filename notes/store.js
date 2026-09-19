@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════
-   Rojni · store.js
+   Notes · store.js
    Local-first storage. IndexedDB holds five tables; audio and photos
    are Blobs, so a decade of them fits comfortably. Nothing is ever
    uploaded anywhere. Falls back to localStorage (text only, media as
@@ -14,6 +14,12 @@
    ══════════════════════════════════════════════════════════════════ */
 
 const Store = (() => {
+  /* The database name stays 'rojni' (this app's original name) on purpose.
+     Renaming it would orphan every journal already saved on a device — the
+     same reason ../almari's database is still called 'almari'. Everything a
+     human reads says Notes; only the persisted identity keeps the old name. */
+  const BACKUP_APP = 'notes';
+  const LEGACY_APPS = ['rojni'];
   const DB_NAME = 'rojni';
   const DB_VERSION = 1;
   const T_ENTRIES = 'entries', T_MEDIA = 'media', T_KEYS = 'keypoints',
@@ -423,7 +429,7 @@ const Store = (() => {
     for (let i = bytes.length - 22; i >= 0 && i > bytes.length - 66000; i--) {
       if (view.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
     }
-    if (eocd < 0) throw new Error('That does not look like a Rojni backup (.zip).');
+    if (eocd < 0) throw new Error('That does not look like a Notes backup (.zip).');
     const count = view.getUint16(eocd + 10, true);
     let p = view.getUint32(eocd + 16, true);
     const out = [];
@@ -440,7 +446,7 @@ const Store = (() => {
       const lNameLen = view.getUint16(localAt + 26, true);
       const lExtraLen = view.getUint16(localAt + 28, true);
       const dataAt = localAt + 30 + lNameLen + lExtraLen;
-      if (method !== 0) throw new Error(`"${name}" is compressed. Re-export from Rojni, or unzip and import journal.json.`);
+      if (method !== 0) throw new Error(`"${name}" is compressed. Re-export from Notes, or unzip and import journal.json.`);
       out.push({ name, bytes: bytes.subarray(dataAt, dataAt + size) });
       p += 46 + nameLen + extraLen + commentLen;
     }
@@ -469,7 +475,7 @@ const Store = (() => {
     }
 
     const manifest = {
-      app: 'rojni', version: APP.version, exportedAt: new Date().toISOString(),
+      app: BACKUP_APP, version: APP.version, exportedAt: new Date().toISOString(),
       counts: { entries: entries.length, media: media.length, keypoints: keypoints.length },
       entries, keypoints, aspects,
       media: mediaIndex,
@@ -480,7 +486,7 @@ const Store = (() => {
     const stamp = todayKey();
     return {
       blob: makeZip(files),
-      filename: `rojni-backup-${stamp}.zip`,
+      filename: `notes-backup-${stamp}.zip`,
       counts: manifest.counts,
       bytes: files.reduce((n, f) => n + f.bytes.length, 0)
     };
@@ -492,7 +498,11 @@ const Store = (() => {
     const manifestFile = files.find(f => /(^|\/)journal\.json$/.test(f.name));
     if (!manifestFile) throw new Error('The backup has no journal.json inside it.');
     const manifest = JSON.parse(new TextDecoder().decode(manifestFile.bytes));
-    if (manifest.app !== 'rojni') throw new Error('That file was not made by Rojni.');
+    /* 'rojni' is accepted so backups exported before the app was renamed
+       still import — the format is identical, only the label changed. */
+    if (![BACKUP_APP].concat(LEGACY_APPS).includes(manifest.app)) {
+      throw new Error('That file was not made by Notes.');
+    }
 
     const byName = new Map(files.map(f => [f.name, f]));
     const media = (manifest.media || []).map(m => {

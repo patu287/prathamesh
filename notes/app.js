@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════
-   Rojni · app.js
+   Notes · app.js
    State, rendering, every UI event. No framework, no build step.
 
    The one loop this app exists to serve:
@@ -52,7 +52,7 @@ const UrlCache = (() => {
 
 function fail(err) {
   const banner = $('#errorBanner');
-  banner.textContent = `Rojni hit an error — this is a bug, not something you did:\n\n${err && err.stack ? err.stack : err}`;
+  banner.textContent = `Notes hit an error — this is a bug, not something you did:\n\n${err && err.stack ? err.stack : err}`;
   banner.classList.remove('hidden');
 }
 window.onerror = (msg, src, line, col, err) => fail(err || `${msg} (${src}:${line}:${col})`);
@@ -1107,24 +1107,53 @@ async function renderSettings() {
   $('#lastBackup').textContent = S.meta.lastBackup ? `Last backup: ${relTime(S.meta.lastBackup)}` : 'No backup taken yet.';
   $('#pinToggle').checked = !!S.meta.pin;
   $('#pinSetRow').classList.toggle('hidden', !S.meta.pin);
-  $('#backendText').textContent = `Storage backend: ${Store.usingFallback ? 'localStorage fallback (media space is very limited — serve over http)' : 'IndexedDB'}. ${S.entries.length} entries · ${S.keypoints.length} key points · ${S.media.length} media files.`;
+  $('#backendText').textContent = `Storage backend: ${Store.usingFallback ? 'localStorage fallback (media space is very limited — serve over http)' : 'IndexedDB'}${nativeShell() ? ', inside the Android app' : ''}. ${S.entries.length} entries · ${S.keypoints.length} key points · ${S.media.length} media files.`;
+}
+
+/* ── the Android bridge ───────────────────────────────────────────
+   Inside the app's WebView, `<a download>` is silently ignored for blob:
+   URLs — the export would look like it worked and write nothing. So when
+   the shell is present, the finished bytes are handed to it instead and it
+   asks the user where to put the file. Blob bytes are converted in chunks
+   because String.fromCharCode.apply on a few megabytes overflows the stack. */
+function nativeShell() {
+  const n = window.NotesNative;
+  try { return (n && typeof n.available === 'function' && n.available()) ? n : null; }
+  catch (err) { return null; }
+}
+function blobToBase64(blob) {
+  return blob.arrayBuffer().then(buf => {
+    const bytes = new Uint8Array(buf);
+    let out = '';
+    const CHUNK = 0x8000;
+    for (let i = 0; i < bytes.length; i += CHUNK) {
+      out += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+    }
+    return btoa(out);
+  });
 }
 
 async function doExport() {
   try {
     toast('Building your backup…');
     const out = await Store.exportBackup();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(out.blob);
-    a.download = out.filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+    const shell = nativeShell();
+    if (shell) {
+      shell.saveFile(out.filename, await blobToBase64(out.blob));
+      toast('Backup ready — choose where to save it.');
+    } else {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(out.blob);
+      a.download = out.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+    }
     S.meta.lastBackup = Date.now();
     await Store.put(Store.T.META, { key: 'lastBackup', value: S.meta.lastBackup });
     renderSettings();
-    toast(`Backup ready: ${out.counts.entries} entries, ${out.counts.media} media files (${fmtSize(out.bytes)}).`);
+    toast(`Backup: ${out.counts.entries} entries, ${out.counts.media} media files (${fmtSize(out.bytes)}).`);
   } catch (err) {
     fail(err);
     toast('The export failed — see the red bar for the reason.');

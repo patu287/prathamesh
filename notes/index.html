@@ -4,10 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#f6f2e9" />
-<title>Rojni — the day, kept</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Notes</title>
+<!-- Fonts are bundled in ./fonts, not fetched. The app declares no INTERNET
+     permission in the APK, so a Google Fonts link could only ever fail there —
+     and "no network calls at runtime" should be literally true. -->
+<link rel="preload" href="fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/newsreader-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -19,7 +21,7 @@
 <!-- ── PIN gate ─────────────────────────────────────────────────── -->
 <section id="gate" class="gate hidden">
   <div class="gate-card">
-    <div class="gate-mark">रो</div>
+    <div class="gate-mark">N</div>
     <h1 id="gateTitle">Enter your PIN</h1>
     <p id="gateSub" class="muted">A gate, not a lockbox — it keeps a passer-by out, not a technician.</p>
     <div id="pinDots" class="pin-dots"></div>
@@ -33,7 +35,7 @@
 
   <header class="topbar">
     <div class="topbar-left">
-      <div class="brand">रोजनी</div>
+      <div class="brand">Notes</div>
       <div class="topbar-sub" id="topbarSub">the day, kept</div>
     </div>
     <div class="topbar-actions">
@@ -268,7 +270,7 @@
 
       <div class="panel">
         <div class="panel-head"><b>About</b></div>
-        <p class="muted small">Rojni 1.0 · no account, no server, no analytics, no network calls. Everything lives on this device.</p>
+        <p class="muted small">Notes 1.0 · no account, no server, no analytics, no network calls. Everything lives on this device.</p>
         <p class="muted tiny" id="backendText"></p>
       </div>
     </div>
