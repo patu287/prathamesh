@@ -22,7 +22,8 @@ as-is, the same way [`../android`](../android) wraps the Reset app.
 
 ```bash
 cd notes
-python3 serve.py 8090          # threaded, cache-disabled — best for iterating
+python3 serve.py 8090           # threaded, HTTP/1.1, cache-disabled — best for iterating
+python3 serve.py 8081 release   # the built artifacts: Notes.html and the APK
 # → http://localhost:8090
 ```
 
@@ -31,9 +32,28 @@ Android build has no `INTERNET` permission — a Google Fonts link could only ev
 there. Side effect: the app now makes **no external requests at all**, in any context,
 which is what the rest of this file already claimed.
 
-Serve it over http; don't open the file directly. On `file://` there is no IndexedDB
-(media falls back to localStorage and fills up almost immediately) and no
-`navigator.mediaDevices` — the mic button then does nothing at all, silently.
+Serve it over http when you mean to record. On `file://` there is no IndexedDB (media
+falls back to localStorage and fills up almost immediately) and no
+`navigator.mediaDevices` — the mic button then does nothing at all, silently. Where a
+browser blocks storage *entirely*, the app now keeps working in memory and says so in
+Settings rather than failing to open; that was a real boot failure until the single-file
+test below caught it.
+
+### One file
+
+```bash
+python3 tools/build-single.py    # → release/Notes.html   (~380 KB)
+```
+
+Folds the whole app into one self-contained HTML file: the stylesheet, `data.js`,
+`store.js`, `app.js` and all eight woff2 fonts are inlined, so the result has **no
+subresources and makes no network requests at all**. Nothing is minified — the file stays
+readable. The script refuses to write if any `src`/`href`/`@import`/`url(fonts/…)` escapes
+inlining, and refuses if any of the shipped JavaScript so much as mentions a URL.
+
+That file is what you open from a phone's Downloads folder. Text and photos work; audio
+recording needs a real origin, so serve the folder (or use the APK) when you want to talk
+instead of type.
 
 ### Tests
 
@@ -41,13 +61,14 @@ Serve it over http; don't open the file directly. On `file://` there is no Index
 cd notes/test && npm install && npm test
 ```
 
-Two suites, kept out of the app folder because the app itself has no dependencies and
+Three suites, kept out of the app folder because the app itself has no dependencies and
 should stay that way:
 
 | Suite | What it covers |
 |---|---|
 | `test/smoke.mjs` | Pure logic in a bare Node context with **no DOM and no IndexedDB** — so everything runs through the localStorage fallback, the path that silently corrupts because a Blob JSON-serialises to `{}`. Includes the backup round trip, verified byte-for-byte. |
-| `test/dom.mjs` | Drives the real app in jsdom against a real IndexedDB: writes an entry, promotes a sentence to a key point, files it under an aspect, runs the weekly review, searches, then **restarts the app and checks the journal is still there**. |
+| `test/dom.mjs` | Drives the real app in jsdom against a real IndexedDB: writes an entry, promotes a sentence to a key point, files it under an aspect, runs the weekly review, searches, then **restarts the app and checks the journal is still there**. Point it at the built artifact with `NOTES_PAGE=/release/Notes.html` to run the same 37 checks against the single file. |
+| `test/single.mjs` | Builds `release/Notes.html`, asserts it is genuinely self-contained, then opens it the way a phone would — as a **local file, with no IndexedDB and no network** — and checks the app still boots and tells the truth about storage. |
 
 `test/dom.mjs` paid for itself immediately. It found a data-loss bug on its first run:
 a key point promoted from a sentence was pushed to memory but never written to storage,

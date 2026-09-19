@@ -89,7 +89,7 @@ function toast(msg, kind = '') {
 
 /* ── boot ───────────────────────────────────────────────────────── */
 async function boot() {
-  const first = !localStorage.getItem('rojni.seen');
+  const first = !Store.lsGet('rojni.seen');
   const all = await Store.readAll();
   S.entries = all.entries;
   S.media = all.media;
@@ -105,7 +105,7 @@ async function boot() {
 
   await applyTheme();
   if (S.meta.pin) { showGate(); } else { startApp(); }
-  if (first) localStorage.setItem('rojni.seen', '1');
+  if (first) Store.lsSet('rojni.seen', '1');
 }
 
 function startApp() {
@@ -626,7 +626,7 @@ function bindAudioPlayers() {
     const bars = wave ? [...wave.children] : [];
     const posKey = 'rojni.pos.' + id;
     a.addEventListener('loadedmetadata', () => {
-      const saved = Number(localStorage.getItem(posKey) || 0);
+      const saved = Number(Store.lsGet(posKey) || 0);
       /* MediaRecorder blobs frequently report duration: Infinity, so trust the
          duration we timed ourselves and only use the element's if it's sane. */
       if (saved > 1 && isFinite(a.duration) && saved < a.duration - 2) a.currentTime = saved;
@@ -637,7 +637,7 @@ function bindAudioPlayers() {
         bars.forEach((bar, i) => bar.classList.toggle('on', i / bars.length <= pct));
       }
       if (Math.round(a.currentTime) % 3 === 0) {
-        try { localStorage.setItem(posKey, String(Math.floor(a.currentTime))); } catch (e) {}
+        Store.lsSet(posKey, String(Math.floor(a.currentTime)));
       }
     });
   });
@@ -1107,7 +1107,10 @@ async function renderSettings() {
   $('#lastBackup').textContent = S.meta.lastBackup ? `Last backup: ${relTime(S.meta.lastBackup)}` : 'No backup taken yet.';
   $('#pinToggle').checked = !!S.meta.pin;
   $('#pinSetRow').classList.toggle('hidden', !S.meta.pin);
-  $('#backendText').textContent = `Storage backend: ${Store.usingFallback ? 'localStorage fallback (media space is very limited — serve over http)' : 'IndexedDB'}${nativeShell() ? ', inside the Android app' : ''}. ${S.entries.length} entries · ${S.keypoints.length} key points · ${S.media.length} media files.`;
+  $('#backendText').textContent = `Storage backend: ${
+    Store.ephemeral ? 'blocked by this browser — nothing will survive a reload (open the file over http, or allow local storage)'
+    : Store.usingFallback ? 'localStorage fallback (media space is very limited — serve over http)'
+    : 'IndexedDB'}${nativeShell() ? ', inside the Android app' : ''}. ${S.entries.length} entries · ${S.keypoints.length} key points · ${S.media.length} media files.`;
 }
 
 /* ── the Android bridge ───────────────────────────────────────────

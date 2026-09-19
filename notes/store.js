@@ -28,6 +28,37 @@ const Store = (() => {
 
   let dbPromise = null;
   let useLS = false;
+  let useMemory = false;
+
+  /* localStorage is not guaranteed. Some browsers withhold it entirely on
+     file:// (opaque origin) or throw a SecurityError where third-party storage
+     is blocked. Reading it through here means the worst case is a session that
+     forgets, never a journal that refuses to open. */
+  const mem = new Map();
+  const lsGet = key => {
+    try { return localStorage.getItem(key); }
+    catch (err) { useMemory = true; return mem.has(key) ? mem.get(key) : null; }
+  };
+  /* Returns 'ok' | 'memory' | 'full'. A browser that blocks storage outright is
+     not an error the writing should stop for: the session keeps working in
+     memory and the settings panel says plainly that it will not survive a
+     reload. A *full* store is different — that is worth interrupting for. */
+  const lsSet = (key, value) => {
+    try { localStorage.setItem(key, value); return 'ok'; }
+    catch (err) {
+      const quota = err && (err.name === 'QuotaExceededError'
+                        || err.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+                        || err.code === 22 || err.code === 1014);
+      if (quota) return 'full';
+      useMemory = true;
+      mem.set(key, value);
+      return 'memory';
+    }
+  };
+  const lsRemove = key => {
+    try { localStorage.removeItem(key); } catch (err) { useMemory = true; }
+    mem.delete(key);
+  };
   const LS = {
     [T_ENTRIES]: 'rojni.entries.v1', [T_MEDIA]: 'rojni.media.v1',
     [T_KEYS]: 'rojni.keys.v1', [T_ASPECTS]: 'rojni.aspects.v1', [T_META]: 'rojni.meta.v1'
@@ -79,7 +110,7 @@ const Store = (() => {
 
   async function lsRead(table) {
     try {
-      const raw = JSON.parse(localStorage.getItem(LS[table]) || '[]');
+      const raw = JSON.parse(lsGet(LS[table]) || '[]');
       if (table !== T_MEDIA) return raw;
       return raw.map(r => {
         const m = Object.assign({}, r);
@@ -102,12 +133,16 @@ const Store = (() => {
         rows.push(copy);
       }
     }
+    let payload;
     try {
-      localStorage.setItem(LS[table], JSON.stringify(rows));
-      return true;
+      payload = JSON.stringify(rows);
     } catch (err) {
+      throw new Error('That entry could not be saved — it held something storage cannot represent.');
+    }
+    if (lsSet(LS[table], payload) === 'full') {
       throw new Error('Storage is full — this browser has no IndexedDB, so audio and photo space is very limited. Serve the app over http (see README) for full storage.');
     }
+    return true;
   }
 
   /* ── generic table ops ────────────────────────────────────────── */
@@ -166,7 +201,7 @@ const Store = (() => {
 
   async function clearAll() {
     const db = await openDB();
-    if (!db) { Object.values(LS).forEach(k => localStorage.removeItem(k)); return; }
+    if (!db) { Object.values(LS).forEach(lsRemove); return; }
     await Promise.all(TABLES.map(t => new Promise((resolve) => {
       const tx = db.transaction(t, 'readwrite');
       tx.objectStore(t).clear();
@@ -552,7 +587,9 @@ const Store = (() => {
     exportBackup, importBackup,
     hashPin, makeSalt,
     blobToDataURL, dataURLToBlob,
+    lsGet, lsSet,                       // for the few non-table flags (seen, playback position)
     get usingFallback() { return useLS; },
+    get ephemeral() { return useMemory; },
     T: { ENTRIES: T_ENTRIES, MEDIA: T_MEDIA, KEYS: T_KEYS, ASPECTS: T_ASPECTS, META: T_META }
   };
 })();

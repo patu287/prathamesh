@@ -47,12 +47,24 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; }
+html { -webkit-text-size-adjust: 100%; }   /* iOS must not inflate text on rotate */
 body {
   margin: 0; background: var(--paper); color: var(--ink);
   font-family: var(--sans); font-size: 15px; line-height: 1.55;
   -webkit-font-smoothing: antialiased; overscroll-behavior-y: none;
 }
-.hidden { display: none !important; }
+/* Anything tappable opts out of the 300 ms double-tap-zoom wait. Without this a
+   tab or a chip feels broken on a phone, which is the only place this runs. */
+button, input, textarea, select, label, a, summary, [role="button"] {
+  touch-action: manipulation;
+}
+.hidden {
+  display: none !important;
+  /* Belt and braces for "a closed overlay must never swallow a tap": if any
+     engine ever lets a later display rule win the cascade, taps still pass
+     through instead of landing on an invisible full-screen sheet. */
+  pointer-events: none !important;
+}
 .muted { color: var(--muted); }
 .small { font-size: 12.5px; }
 .tiny { font-size: 11px; }
@@ -418,7 +430,7 @@ input, textarea, select { font: inherit; color: inherit; }
 .search-wrap { margin-bottom: 12px; }
 .search-wrap input {
   width: 100%; border: 1px solid var(--line-2); background: var(--paper-2);
-  border-radius: 12px; padding: 12px 14px; font-size: 15px;
+  border-radius: 12px; padding: 12px 14px; font-size: 16px;
 }
 .search-wrap input:focus { outline: none; border-color: var(--indigo-2); }
 
@@ -436,9 +448,9 @@ input, textarea, select { font: inherit; color: inherit; }
 .field .eyebrow { display: block; margin-bottom: 5px; }
 .field input[type="text"], .field input:not([type]), #keyText, #aspectName, #aspectGlyph, .field textarea {
   width: 100%; border: 1px solid var(--line-2); background: var(--paper-2);
-  border-radius: 10px; padding: 10px 12px; font-size: 14.5px; font-family: var(--serif);
+  border-radius: 10px; padding: 10px 12px; font-size: 16px; font-family: var(--serif);
 }
-#aspectName, #aspectGlyph { font-family: var(--sans); font-size: 14px; }
+#aspectName, #aspectGlyph { font-family: var(--sans); font-size: 16px; }
 #keyText { font-family: var(--serif); font-size: 16px; resize: vertical; line-height: 1.5; }
 .check { display: flex; align-items: center; gap: 9px; font-size: 13.5px; margin: 4px 0; }
 .check input { width: 17px; height: 17px; accent-color: var(--indigo); }

@@ -19,6 +19,10 @@ import { indexedDB, IDBKeyRange } from 'fake-indexeddb';
 import { webcrypto, randomFillSync } from 'node:crypto';
 
 const ORIGIN = process.env.NOTES_URL || 'http://127.0.0.1:8090';
+/* Which page to drive. Default is the app as authored; point it at
+   /release/Notes.html to run this exact suite against the built single file —
+   the artifact's scripts are inline, so it needs no subresources to load. */
+const PAGE = process.env.NOTES_PAGE || '/index.html';
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 let passed = 0, failed = 0;
@@ -42,7 +46,7 @@ vc.on('error', (...a) => problems.push('CONSOLE.ERROR: ' + a.join(' ')));
 /* fake-indexeddb is a module singleton, so a second JSDOM sees the same
    database — which is how the restart test below works. */
 async function launch() {
-  const dom = await JSDOM.fromURL(`${ORIGIN}/index.html`, {
+  const dom = await JSDOM.fromURL(`${ORIGIN}${PAGE}`, {
     runScripts: 'dangerously', resources: 'usable', pretendToBeVisual: true, virtualConsole: vc,
     beforeParse(w) {
       w.indexedDB = indexedDB;
@@ -68,6 +72,14 @@ const w = dom.window, d = w.document;
 const $ = s => d.querySelector(s);
 const tab = name => [...d.querySelectorAll('.tab')].find(t => t.dataset.view === name);
 const type = (el, text) => { el.value = text; el.dispatchEvent(new w.Event('input', { bubbles: true })); };
+/* What the user can read. Assertions about copy must not look at <script> text:
+   in the built single file the app's own source is inlined into <body>, so a raw
+   body.textContent would "find" words that are only in comments. */
+const uiText = () => {
+  const c = d.body.cloneNode(true);
+  c.querySelectorAll('script, style').forEach(n => n.remove());
+  return c.textContent;
+};
 const now = new Date();
 const longToday = `${['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()]}, ${now.getDate()} ${
   ['January','February','March','April','May','June','July','August','September','October','November','December'][now.getMonth()]} ${now.getFullYear()}`;
@@ -77,7 +89,9 @@ console.log('\nboot');
 step('no error banner', $('#errorBanner').classList.contains('hidden'), $('#errorBanner').textContent.slice(0, 160));
 step('app visible, PIN gate not shown (it is opt-in)', !$('#app').classList.contains('hidden') && $('#gate').classList.contains('hidden'));
 step('eight aspects seeded', d.querySelectorAll('.aspect-card').length === 8, `${d.querySelectorAll('.aspect-card').length}`);
-step('consistency grid, and no streak counter anywhere', d.querySelectorAll('#todayGrid i').length === 60 && !/\bstreak\b/i.test(d.body.textContent));
+step('consistency grid, and no streak counter anywhere',
+     d.querySelectorAll('#todayGrid i').length === 60 && !/\bstreak\b/i.test(uiText()),
+     `${d.querySelectorAll('#todayGrid i').length} dots`);
 step('date heading reads as a journal, in local time', $('#todayDate').textContent.includes(longToday), $('#todayDate').textContent.slice(0, 34));
 step('a prompt is offered', $('#promptText').textContent.length > 10);
 step('the empty state invites one honest line', /one honest line/.test($('#todayEntries').textContent));
@@ -199,6 +213,47 @@ step('reopening restores the aspect link, not a loose end', (() => {
   return /touched today/.test(card.textContent);
 })());
 dom2.window.close();
+
+/* ── overlays: a closed sheet must not swallow taps ───────────────────
+   The rule is not "the sheet is invisible" — an invisible full-screen layer
+   still eats every tap. It has to leave the hit-testing tree.
+
+   This checks the mechanism rather than a computed display, deliberately:
+   jsdom's getComputedStyle ignores !important when the important rule is
+   declared *before* a more specific one (verified: `.hidden` sits at the top
+   of styles.css, `.sheet.modal` 200 lines below), while browsers honour
+   importance over both order and specificity. Asserting the computed value
+   here would test jsdom's bug instead of the app. */
+console.log('\noverlays (a closed sheet must not swallow taps)');
+const dom3 = await launch();
+const d3 = dom3.window.document;
+const w3 = dom3.window;
+const $$ = s => d3.querySelector(s);
+const OVERLAYS = ['#gate', '#sheetEntry', '#sheetKey', '#sheetAspect', '#sheetReview',
+                  '#sheetRecord', '#sheetSettings', '#viewer'];
+const closed = sel => { const el = $$(sel); return !el || el.classList.contains('hidden'); };
+step('every overlay starts closed', OVERLAYS.every(closed),
+     OVERLAYS.filter(s => !closed(s)).join(' ') || 'all closed');
+
+const cssText = [...d3.querySelectorAll('style')].map(s => s.textContent).join('\n')
+  + [...d3.styleSheets].map(sh => { try { return [...sh.cssRules].map(r => r.cssText).join('\n'); } catch (e) { return ''; } }).join('\n');
+const hiddenRule = (cssText.match(/\.hidden\s*\{[^}]*\}/) || [''])[0];
+step('.hidden removes the element from painting AND hit-testing',
+     /display:\s*none\s*!important/.test(hiddenRule) &&
+     /pointer-events:\s*none\s*!important/.test(hiddenRule),
+     hiddenRule.replace(/\s+/g, ' ').slice(0, 84));
+
+$$('#composeBtn').click();
+await wait(400);
+const openNow = $$('#sheetEntry');
+step('the editor, once opened, is not hidden', !openNow.classList.contains('hidden'));
+
+$$('#sheetEntry [data-close]').click();          // "Cancel" — the app's own path
+await wait(400);
+step('after Cancel the overlay is closed again, not a transparent lid',
+     openNow.classList.contains('hidden'));
+step('and no other overlay was left open by the round trip', OVERLAYS.every(closed));
+dom3.window.close();
 
 console.log(`\npage errors: ${problems.length ? '\n  ' + problems.join('\n  ') : 'none'}`);
 console.log(`\n${passed} passed, ${failed} failed\n`);
