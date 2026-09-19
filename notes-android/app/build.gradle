@@ -1,0 +1,51 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'app.notes'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "app.notes"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        // One permission, and only one: the microphone, so voice notes exist.
+        // No INTERNET — the app cannot phone home even if it wanted to.
+    }
+
+    signingConfigs {
+        // A stable committed key, so a later build installs *over* the previous
+        // one instead of failing with a signature mismatch. Uninstalling to fix
+        // a signature would take the journal with it, which is the one outcome
+        // this app must never produce. Throwaway sideload key — not a Play
+        // Store upload key.
+        release {
+            storeFile file("../keys/notes.keystore")
+            storePassword "notes"
+            keyAlias "notes"
+            keyPassword "notes"
+            storeType "PKCS12"
+        }
+    }
+
+    buildTypes {
+        debug { minifyEnabled false }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // None. Everything is framework API, including the capture provider that a
+    // file:// URI cannot replace (FileUriExposedException, API 24+). A zero
+    // dependency graph means the app can be built two ways: with Gradle and the
+    // Android SDK, or with tools/build-apk.sh and no SDK at all.
+}

@@ -1,0 +1,98 @@
+# NOTE: this file lives here, not in .github/workflows/, because the GitHub account that
+# maintains this repo lacks the `workflows` permission — pushing .github/workflows/ is
+# rejected with "refusing to allow a GitHub App to create or update workflow".
+#
+# To activate it, copy this file to .github/workflows/notes-apk.yml **through the GitHub
+# web UI** (Add file -> Create new file), which works where `git push` does not.
+#
+# It is the Gradle path and needs no special runner: ubuntu-latest has both the Android
+# SDK and access to dl.google.com. tools/build-apk.sh is the SDK-free path that produced
+# the committed APK.
+name: Build Notes APK
+
+# Builds notes-android/ into an installable APK.
+#
+# Two deliberate choices here, both learned from the My Wardrobe build:
+#
+#  1. The APK is committed back to the branch, not only uploaded as an artifact.
+#     The dev sandbox that maintains this repo cannot read Actions step logs or
+#     artifact endpoints (their CDN is outside its network allowlist), so the
+#     only reliable channel for "what did the build produce" is the git branch
+#     itself. build-log.txt travels with it, so a failure is diagnosable
+#     without needing the log view.
+#  2. No continue-on-error and no swallowed failures: if the build fails, the
+#     run fails loudly.
+on:
+  push:
+    branches: ['arena/**']
+    paths: ['notes-android/**', 'notes/**', '.github/workflows/notes-apk.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write      # needed to commit the APK back
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v5
+      with: {distribution: temurin, java-version: '17'}
+
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with: {gradle-version: '8.7'}
+
+    - name: Sync the web app into the APK assets
+      run: |
+        mkdir -p notes-android/app/src/main/assets/fonts
+        for f in index.html styles.css app.js data.js store.js; do
+          cp "notes/$f" notes-android/app/src/main/assets/
+        done
+        cp notes/fonts/*.woff2 notes-android/app/src/main/assets/fonts/
+        ls -lh notes-android/app/src/main/assets notes-android/app/src/main/assets/fonts
+
+    - name: Build the APK
+      id: build
+      working-directory: notes-android
+      run: |
+        set -o pipefail
+        gradle assembleRelease --no-daemon --stacktrace 2>&1 | tee ../build-log.txt
+
+    - name: Show the tail of the log
+      if: always()
+      run: tail -60 build-log.txt || true
+
+    - name: Publish the APK and the log back to the branch
+      if: always()
+      run: |
+        set -e
+        git config user.name  "notes-ci"
+        git config user.email "ci@notes.local"
+        mkdir -p notes/release
+        if [ -f notes-android/app/build/outputs/apk/release/app-release.apk ]; then
+          cp notes-android/app/build/outputs/apk/release/app-release.apk notes/release/Notes-1.0.apk
+          { echo "BUILD SUCCEEDED $(date -u +%FT%TZ)"; echo;
+            grep -E '^BUILD|^Note:|^warning:' build-log.txt | tail -20; } > notes/release/build-log.txt
+        else
+          { echo "BUILD FAILED $(date -u +%FT%TZ)"; echo;
+            echo "--- last 120 lines ---"; tail -120 build-log.txt; } > notes/release/build-log.txt
+        fi
+        git add -f notes/release
+        git commit -q -m "CI: Notes APK build result" || echo "nothing to commit"
+        git push origin HEAD:${{ github.ref_name }}
+      continue-on-error: true
+
+    - name: Upload the APK as an artifact too
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: notes-apk
+        path: notes-android/app/build/outputs/apk/release/app-release.apk
+        if-no-files-found: warn
+
+    - name: Fail the run if the build failed
+      if: steps.build.outcome != 'success'
+      run: exit 1
