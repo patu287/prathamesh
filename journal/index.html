@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f6f2e9" />
+<title>Rojni — the day, kept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Every runtime error is surfaced here. A silent failure in an iframe is
+     indistinguishable from a dead button, so nothing is allowed to be silent. -->
+<div id="errorBanner" class="error-banner hidden"></div>
+
+<!-- ── PIN gate ─────────────────────────────────────────────────── -->
+<section id="gate" class="gate hidden">
+  <div class="gate-card">
+    <div class="gate-mark">रो</div>
+    <h1 id="gateTitle">Enter your PIN</h1>
+    <p id="gateSub" class="muted">A gate, not a lockbox — it keeps a passer-by out, not a technician.</p>
+    <div id="pinDots" class="pin-dots"></div>
+    <div id="keypad" class="keypad"></div>
+    <button id="gateForget" class="text-btn muted small">Forgot the PIN?</button>
+  </div>
+</section>
+
+<!-- ── App ──────────────────────────────────────────────────────── -->
+<div id="app" class="app hidden">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand">रोजनी</div>
+      <div class="topbar-sub" id="topbarSub">the day, kept</div>
+    </div>
+    <div class="topbar-actions">
+      <button id="reviewBtn" class="icon-btn" title="Weekly review">≋</button>
+      <button id="settingsBtn" class="icon-btn" title="Settings">⋯</button>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- TODAY -->
+    <section id="viewToday" class="view">
+      <div id="todayDate" class="day-heading"></div>
+      <div id="todayGrid" class="consistency"></div>
+      <div id="onThisDay"></div>
+      <div id="todayEntries" class="entries"></div>
+      <div class="prompt-card" id="promptCard">
+        <span class="eyebrow">If you don't know what to write</span>
+        <p id="promptText"></p>
+        <div class="row">
+          <button id="promptUse" class="primary">Write on this</button>
+          <button id="promptShuffle" class="ghost">Another</button>
+        </div>
+      </div>
+      <div id="bigRockNote"></div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section id="viewTimeline" class="view hidden">
+      <div class="section-head">
+        <h2>Timeline</h2>
+        <span class="muted small" id="timelineCount"></span>
+      </div>
+      <div class="chips" id="timelineFilters"></div>
+      <div id="timeline" class="entries"></div>
+      <div class="row center">
+        <button id="loadMore" class="ghost hidden">Load older entries</button>
+        <button id="randomPage" class="ghost">✧ Open a random old page</button>
+      </div>
+    </section>
+
+    <!-- ASPECTS -->
+    <section id="viewAspects" class="view hidden">
+      <div class="section-head">
+        <h2>Your aspects</h2>
+        <button id="addAspect" class="text-btn">+ Add</button>
+      </div>
+      <div id="aspectGrid" class="aspect-grid"></div>
+      <div id="aspectDetail"></div>
+    </section>
+
+    <!-- SEARCH -->
+    <section id="viewSearch" class="view hidden">
+      <div class="section-head"><h2>Search</h2></div>
+      <div class="search-wrap">
+        <input id="searchInput" type="search" placeholder="Words, aspects, dates…" autocomplete="off" />
+      </div>
+      <div class="chips" id="searchFilters"></div>
+      <div id="searchResults" class="entries"></div>
+    </section>
+
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab active" data-view="today"><span>◉</span>Today</button>
+    <button class="tab" data-view="timeline"><span>≡</span>Timeline</button>
+    <button id="composeBtn" class="compose" aria-label="Write">+</button>
+    <button class="tab" data-view="aspects"><span>❖</span>Aspects</button>
+    <button class="tab" data-view="search"><span>⌕</span>Search</button>
+  </nav>
+</div>
+
+<!-- ── Entry editor ─────────────────────────────────────────────── -->
+<div id="sheetEntry" class="sheet hidden" aria-hidden="true">
+  <div class="sheet-inner">
+    <header class="sheet-head">
+      <button class="text-btn" data-close>Cancel</button>
+      <div class="sheet-head-mid">
+        <input id="entryDate" type="date" class="date-input" />
+        <div class="save-state muted small" id="saveState"></div>
+      </div>
+      <button class="text-btn strong" id="entryDone">Done</button>
+    </header>
+
+    <div class="sheet-body" id="blocksHost"></div>
+
+    <footer class="sheet-foot">
+      <div class="foot-row">
+        <button class="tool" id="addText">✎ Text</button>
+        <!-- Labels, never input.click(): a sandboxed iframe can block a scripted
+             file-dialog open, but it cannot block a label activating its control. -->
+        <label class="tool" for="photoInput">▣ Camera</label>
+        <label class="tool" for="galleryInput">▤ Gallery</label>
+        <button class="tool" id="addAudio">◍ Voice</button>
+        <div class="foot-moods">
+          <label class="mini">mood
+            <select id="entryMood"><option value="">–</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+          </label>
+          <label class="mini">energy
+            <select id="entryEnergy"><option value="">–</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+          </label>
+        </div>
+      </div>
+      <div class="foot-row">
+        <span class="eyebrow tiny">aspects</span>
+        <div id="entryAspects" class="chips small"></div>
+      </div>
+      <div class="foot-row spread">
+        <span class="muted small" id="entryMeta"></span>
+        <button class="text-btn danger" id="entryDelete">Delete</button>
+      </div>
+    </footer>
+  </div>
+
+  <input type="file" id="photoInput" accept="image/*" capture="environment" hidden />
+  <input type="file" id="galleryInput" accept="image/*" multiple hidden />
+</div>
+
+<!-- Floating "turn selection into a key point" bar -->
+<div id="highlightBar" class="highlight-bar hidden">
+  <button id="makeKeyPoint">→ Key point</button>
+  <button id="quoteIt">❝ Quote</button>
+  <button id="dismissBar" class="x">×</button>
+</div>
+
+<!-- ── Key point sheet ──────────────────────────────────────────── -->
+<div id="sheetKey" class="sheet modal hidden">
+  <div class="sheet-inner narrow">
+    <header class="sheet-head">
+      <button class="text-btn" data-close>Cancel</button>
+      <b>Key point</b>
+      <button class="text-btn strong" id="keySave">Save</button>
+    </header>
+    <div class="sheet-body">
+      <p class="muted small" id="keySource"></p>
+      <textarea id="keyText" rows="4" placeholder="A decision, a commitment, a pattern you noticed."></textarea>
+      <div class="field">
+        <span class="eyebrow tiny">aspects</span>
+        <div id="keyAspects" class="chips small"></div>
+      </div>
+      <div class="field row gap">
+        <label class="check"><input type="checkbox" id="keyPinned" /> Pin to top</label>
+        <select id="keyStatus" class="mini-select">
+          <option value="open">open</option>
+          <option value="done">done</option>
+          <option value="dropped">dropped</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Aspect editor ────────────────────────────────────────────── -->
+<div id="sheetAspect" class="sheet modal hidden">
+  <div class="sheet-inner narrow">
+    <header class="sheet-head">
+      <button class="text-btn" data-close>Cancel</button>
+      <b id="aspectSheetTitle">Aspect</b>
+      <button class="text-btn strong" id="aspectSave">Save</button>
+    </header>
+    <div class="sheet-body">
+      <label class="field"><span class="eyebrow tiny">name</span>
+        <input id="aspectName" placeholder="Health" /></label>
+      <label class="field"><span class="eyebrow tiny">glyph</span>
+        <input id="aspectGlyph" maxlength="2" placeholder="◍" /></label>
+      <div class="field">
+        <span class="eyebrow tiny">colour</span>
+        <div id="aspectColors" class="swatches"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="aspectBigRock" /> Big rock — one of the few that matter this season</label>
+      <div id="aspectFocusEditor"></div>
+      <button class="text-btn danger" id="aspectArchive">Archive this aspect</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Weekly review ────────────────────────────────────────────── -->
+<div id="sheetReview" class="sheet modal hidden">
+  <div class="sheet-inner narrow">
+    <header class="sheet-head">
+      <button class="text-btn" data-close>Close</button>
+      <b>Weekly review</b>
+      <button class="text-btn strong" id="reviewSave">Save</button>
+    </header>
+    <div class="sheet-body" id="reviewBody"></div>
+  </div>
+</div>
+
+<!-- ── Settings ─────────────────────────────────────────────────── -->
+<div id="sheetSettings" class="sheet modal hidden">
+  <div class="sheet-inner narrow">
+    <header class="sheet-head">
+      <button class="text-btn" data-close>Close</button>
+      <b>Settings</b>
+      <span style="width:52px"></span>
+    </header>
+    <div class="sheet-body">
+      <div class="panel">
+        <div class="panel-head"><b>Storage</b><span class="muted small" id="storageState"></span></div>
+        <p class="muted small" id="storageText">measuring…</p>
+        <div class="meter"><i id="storageBar"></i></div>
+        <p class="muted tiny" id="persistText"></p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><b>Backup</b></div>
+        <p class="muted small">Export gives you real files — <code>journal.json</code> beside a <code>media/</code> folder of actual .webm and .jpg files. Not a database dump.</p>
+        <div class="row gap">
+          <button class="primary" id="exportBtn">Download backup</button>
+          <label class="ghost" for="importInput" style="border-radius:10px;padding:9px 15px;font-size:13.5px;font-weight:600;border:1px solid var(--line-2);background:var(--paper-2)">Import backup</label>
+          <input type="file" id="importInput" accept=".zip,application/zip" hidden />
+        </div>
+        <p class="muted tiny" id="lastBackup"></p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><b>Privacy</b></div>
+        <label class="check"><input type="checkbox" id="pinToggle" /> Ask for a PIN when the app opens</label>
+        <div id="pinSetRow" class="row gap hidden">
+          <input id="pinA" type="password" inputmode="numeric" maxlength="6" placeholder="PIN" class="mini-input" />
+          <input id="pinB" type="password" inputmode="numeric" maxlength="6" placeholder="again" class="mini-input" />
+          <button class="ghost" id="pinSave">Save PIN</button>
+        </div>
+        <p class="muted tiny">A PIN gate is honest UI-level protection: it stops someone who picks up your unlocked phone. It is <b>not</b> encryption — nothing here is unreadable without it. Real encryption (AES-GCM + passphrase) is a deliberate v1.5: lose the passphrase and the journal is gone forever, which is not a decision to rush.</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><b>Session</b></div>
+        <button class="text-btn danger" id="wipeBtn">Erase everything</button>
+        <p class="muted tiny">Tap twice. There is no undo, and no server copy exists.</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><b>About</b></div>
+        <p class="muted small">Rojni 1.0 · no account, no server, no analytics, no network calls. Everything lives on this device.</p>
+        <p class="muted tiny" id="backendText"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Recorder ─────────────────────────────────────────────────── -->
+<div id="sheetRecord" class="sheet modal hidden">
+  <div class="sheet-inner narrow center">
+    <header class="sheet-head">
+      <button class="text-btn" data-close>Close</button>
+      <b>Voice note</b>
+      <span style="width:52px"></span>
+    </header>
+    <div class="sheet-body rec-body">
+      <div class="rec-time" id="recTime">0:00</div>
+      <canvas id="recCanvas" class="rec-canvas" width="600" height="90"></canvas>
+      <p class="muted small" id="recHint">Speak. Nobody is listening but you.</p>
+      <div class="row center gap">
+        <button class="primary big" id="recToggle">Record</button>
+        <button class="ghost" id="recDiscard">Discard</button>
+      </div>
+      <p class="muted tiny" id="recError"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Media viewer ─────────────────────────────────────────────── -->
+<div id="viewer" class="viewer hidden">
+  <button class="viewer-close" id="viewerClose">×</button>
+  <div class="viewer-body" id="viewerBody"></div>
+  <div class="viewer-caption muted small" id="viewerCaption"></div>
+</div>
+
+<!-- Tap-twice confirmation toast (never window.confirm — sandboxed iframes
+     return false without asking, so anything guarded by it never runs). -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="data.js"></script>
+<script src="store.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
