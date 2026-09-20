@@ -325,10 +325,17 @@ function renderProgress() {
 async function loadAllFiles() {
   const edits = loadEdits();
   const filePaths = [...ALL_FILES.map((f) => f.path), "tools/harness.py"];
+  let failCount = 0;
   const results = await Promise.all(filePaths.map(async (path) => {
-    const response = await fetch(`../${path}`);
-    if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
-    return [path, await response.text()];
+    try {
+      const response = await fetch(`../${path}`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return [path, await response.text()];
+    } catch (err) {
+      failCount++;
+      console.warn(`Could not load ${path}:`, err);
+      return [path, `# ${path}\n\n# Note: This file could not be loaded (${err.message}).\n`];
+    }
   }));
   for (const [path, text] of results) {
     state.files.set(path, text);
@@ -336,6 +343,9 @@ async function loadAllFiles() {
   // Apply locally saved edits on top.
   for (const [path, content] of Object.entries(edits)) {
     if (state.files.has(path)) state.files.set(path, content);
+  }
+  if (failCount > 0 && failCount === filePaths.length) {
+    throw new Error("All course files failed to load");
   }
 }
 

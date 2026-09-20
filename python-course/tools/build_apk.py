@@ -81,7 +81,13 @@ def collect_assets():
         if item.is_file():
             assets[f"assets/playground/vendor/pyodide/{item.name}"] = item.read_bytes()
 
-    # 4. Lessons, exercises, dsa, problems, tools
+    # 4. Documentation (README and CHEATSHEET)
+    for doc in ["README.md", "CHEATSHEET.md"]:
+        fpath = COURSE / doc
+        if fpath.exists():
+            assets[f"assets/{doc}"] = fpath.read_bytes()
+
+    # 5. Lessons, exercises, dsa, problems, tools
     for section_dir in ["lessons", "exercises", "dsa", "problems", "tools"]:
         sdir = COURSE / section_dir
         if not sdir.exists():
