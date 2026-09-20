@@ -4,7 +4,7 @@ Two things live in this repository:
 
 | | What | Where |
 |---|------|-------|
-| 🐍 | **Python course: zero → intermediate → basic DSA** — 16 lessons, 16 exercise sets, 12 DSA topics and 21 auto-graded problems, plus a browser playground that runs Python offline (Pyodide/WebAssembly) | [`python-course/`](python-course/README.md) |
+| 🐍 | **Python course: zero → intermediate → basic DSA** — 16 lessons, 16 exercise sets, 12 DSA topics and 21 auto-graded problems, browser playground (Pyodide), and standalone Android APK (`PythonCourse-1.0.apk`) | [`python-course/`](python-course/README.md) |
 | 🛍️ | **Vendora** — a local-marketplace prototype (Vite + vanilla JS) with an Android wrapper | [`index.html`](index.html), [`app.js`](app.js), [`android/`](android/) |
 
 ## Start the Python course

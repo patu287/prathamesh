@@ -324,10 +324,11 @@ function renderProgress() {
 // ---------------------------------------------------------------------------
 async function loadAllFiles() {
   const edits = loadEdits();
-  const results = await Promise.all(ALL_FILES.map(async (file) => {
-    const response = await fetch(`../${file.path}`);
-    if (!response.ok) throw new Error(`${file.path}: HTTP ${response.status}`);
-    return [file.path, await response.text()];
+  const filePaths = [...ALL_FILES.map((f) => f.path), "tools/harness.py"];
+  const results = await Promise.all(filePaths.map(async (path) => {
+    const response = await fetch(`../${path}`);
+    if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+    return [path, await response.text()];
   }));
   for (const [path, text] of results) {
     state.files.set(path, text);

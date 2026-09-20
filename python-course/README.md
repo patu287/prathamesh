@@ -7,7 +7,7 @@ it right.
 
 ---
 
-## 🚀 Three ways to use this course
+## 🚀 Four ways to use this course
 
 ### 1. Interactive playground (start here — nothing to install)
 Python runs **inside your browser** (Pyodide + WebAssembly, vendored locally so
@@ -48,7 +48,18 @@ Screen space:
 > The playground is slightly slower than real Python (it is WebAssembly) and
 > can't run processes — `lesson_13_modules_venv.py` is marked 💻 for that reason.
 
-### 2. Run the files locally (recommended once you are past lesson 3)
+### 2. Standalone Android APK (`PythonCourse-1.0.apk`)
+Learn on your phone: the complete course and offline Pyodide runtime are
+packaged into a ~5.7 MB standalone Android APK (`python-course/PythonCourse-1.0.apk`).
+
+* **Fully offline**: all 16 lessons, 16 exercises, 12 DSA topics, 21 problems, and
+  vendored Pyodide WebAssembly bundle are stored in local assets.
+* **Zero permissions**: requires no network, location, or file system permissions.
+* **Persistent**: your code edits and test progress are saved in Android DOM storage.
+* **Rebuild**: `python3 tools/build_apk.py` packages and signs a new APK using
+  the committed sideload keys.
+
+### 3. Run the files locally (recommended once you are past lesson 3)
 ```bash
 cd python-course
 
