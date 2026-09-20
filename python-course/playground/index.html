@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Python Playground · zero → DSA</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🐍</span>
+      <div>
+        <h1>Python Playground</h1>
+        <p class="tagline">zero → intermediate → basic DSA · runs offline in your browser</p>
+      </div>
+    </div>
+    <div class="status-area">
+      <div id="status" class="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="status-text">starting Python…</span>
+      </div>
+      <div class="progress" title="exercise and problem files with all tests passing">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <span id="progress-text" class="muted">0 / 0 done</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <input id="filter" type="search" placeholder="filter files…" autocomplete="off" />
+      </div>
+      <nav id="file-list" class="file-list" aria-label="Course files"></nav>
+      <div class="sidebar-foot muted">
+        <p>Everything runs locally. Progress is saved in this browser.</p>
+        <button id="reset-progress" class="link-button" type="button">reset progress</button>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <div class="toolbar">
+        <div class="file-meta">
+          <h2 id="file-title">Welcome</h2>
+          <p id="file-path" class="muted"></p>
+        </div>
+        <div class="buttons">
+          <button id="run" class="primary" type="button" title="Ctrl/Cmd + Enter">
+            ▶ Run
+          </button>
+          <button id="run-solution" type="button" title="run the reference solution (--solution)">
+            🎓 Solution
+          </button>
+          <button id="reset-file" type="button">↺ Reset file</button>
+          <button id="clear" type="button">🗑 Clear output</button>
+        </div>
+      </div>
+
+      <p id="hint" class="hint hidden"></p>
+
+      <div class="editor-wrap">
+        <div id="gutter" class="gutter" aria-hidden="true">1</div>
+        <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off"
+                  autocorrect="off" wrap="off" aria-label="Python code editor"></textarea>
+      </div>
+
+      <details class="stdin-panel">
+        <summary>stdin — one line per <code>input()</code> call</summary>
+        <textarea id="stdin" rows="3" spellcheck="false"
+                  placeholder="type the answers input() should receive, one per line"></textarea>
+      </details>
+
+      <div class="console-head">
+        <span>output</span>
+        <span id="elapsed" class="muted"></span>
+      </div>
+      <pre id="console" class="console" tabindex="0"></pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
