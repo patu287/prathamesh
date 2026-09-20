@@ -21,6 +21,8 @@ def error_name(thunk):
     """
     try:
         thunk()
+    except NotImplementedError:
+        raise                                      # keep "not attempted yet" visible
     except Exception as exc:                       # noqa: BLE001 - on purpose
         return type(exc).__name__
     return "none"
