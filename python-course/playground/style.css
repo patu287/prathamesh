@@ -50,6 +50,25 @@ h1 { font-size: 1.05rem; margin: 0; letter-spacing: 0.2px; }
 .tagline { margin: 0; color: var(--muted); font-size: 0.78rem; }
 
 .status-area { display: flex; align-items: center; gap: 0.8rem; }
+.btn-apk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn-apk:hover {
+  background: var(--accent);
+  color: #0b0f17;
+  border-color: var(--accent);
+}
 .status { display: flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; color: var(--muted); }
 .spinner {
   width: 12px; height: 12px; border-radius: 50%;
