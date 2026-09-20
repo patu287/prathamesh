@@ -118,6 +118,8 @@ const state = {
 
 const STORAGE_PROGRESS = "python-course-progress-v1";
 const STORAGE_EDITS = "python-course-edits-v1";
+const STORAGE_SPLIT = "python-course-split-v1";
+const STORAGE_TEXT = "python-course-text-size-v1";
 
 const $ = (id) => document.getElementById(id);
 const statusEl = $("status");
@@ -161,6 +163,79 @@ function saveEdit(path, content) {
     }
     localStorage.setItem(STORAGE_EDITS, JSON.stringify(edits));
   } catch { /* ignore */ }
+}
+
+// ---------------------------------------------------------------------------
+// panel sizes — how much of the screen the lesson panel gets
+// ---------------------------------------------------------------------------
+const splitEl = $("split");
+const splitterEl = $("splitter");
+const DEFAULT_SPLIT = { editor: 70, output: 30 };
+
+function applySplit({ editor: ed, output: out }) {
+  splitEl.style.setProperty("--editor-grow", String(ed));
+  splitEl.style.setProperty("--output-grow", String(out));
+  splitterEl.setAttribute("aria-valuenow", String(Math.round((ed / (ed + out)) * 100)));
+}
+
+function currentSplit() {
+  const style = getComputedStyle(splitEl);
+  const ed = parseFloat(style.getPropertyValue("--editor-grow"));
+  const out = parseFloat(style.getPropertyValue("--output-grow"));
+  return {
+    editor: Number.isFinite(ed) && ed > 0 ? ed : DEFAULT_SPLIT.editor,
+    output: Number.isFinite(out) && out > 0 ? out : DEFAULT_SPLIT.output,
+  };
+}
+
+function saveSplit(values) {
+  try {
+    localStorage.setItem(STORAGE_SPLIT, JSON.stringify(values));
+  } catch { /* ignore */ }
+}
+
+function loadSplit() {
+  let saved = null;
+  try {
+    saved = JSON.parse(localStorage.getItem(STORAGE_SPLIT) || "null");
+  } catch { saved = null; }
+  const usable = saved
+    && Number.isFinite(saved.editor) && Number.isFinite(saved.output)
+    && saved.editor > 0 && saved.output > 0;
+  applySplit(usable ? saved : { ...DEFAULT_SPLIT });
+}
+
+function resetSplit() {
+  applySplit({ ...DEFAULT_SPLIT });
+  saveSplit({ ...DEFAULT_SPLIT });
+}
+
+// ---------------------------------------------------------------------------
+// code text size (A− / A+) — for long lessons and small screens
+// ---------------------------------------------------------------------------
+const TEXT_STEPS = [0.85, 1, 1.15, 1.3];
+let textStep = 1;
+
+function applyTextScale(step) {
+  textStep = Math.min(TEXT_STEPS.length - 1, Math.max(0, step));
+  const scale = TEXT_STEPS[textStep];
+  const percent = `${Math.round(scale * 100)}%`;
+  document.documentElement.style.setProperty("--text-scale", String(scale));
+  $("text-smaller").disabled = textStep === 0;
+  $("text-bigger").disabled = textStep === TEXT_STEPS.length - 1;
+  $("text-smaller").title = `smaller code (now ${percent})`;
+  $("text-bigger").title = `bigger code (now ${percent})`;
+  try {
+    localStorage.setItem(STORAGE_TEXT, String(textStep));
+  } catch { /* ignore */ }
+}
+
+function loadTextScale() {
+  let stored = null;
+  try {
+    stored = Number.parseInt(localStorage.getItem(STORAGE_TEXT) ?? "", 10);
+  } catch { stored = null; }
+  applyTextScale(Number.isInteger(stored) && stored >= 0 && stored < TEXT_STEPS.length ? stored : 1);
 }
 
 // ---------------------------------------------------------------------------
@@ -384,6 +459,8 @@ function run({ solution = false } = {}) {
   saveEdit(state.current, editor.value);
   state.files.set(state.current, editor.value);
   clearConsole();
+  // if the output was hidden to enlarge the lesson, bring it back for the results
+  if (splitEl.classList.contains("output-collapsed")) setOutputCollapsed(false);
   summaryBuffer = "";
   const files = {};
   for (const [path, content] of state.files) {
@@ -460,6 +537,88 @@ $("reset-file").addEventListener("click", async () => {
   write(`↺ ${state.current} restored to the original file\n`, "info");
 });
 $("filter").addEventListener("input", (event) => renderFileList(event.target.value));
+
+// ------------------------------------------------- the lesson ⇕ output divider
+let drag = null;
+
+splitterEl.addEventListener("pointerdown", (event) => {
+  if (splitEl.classList.contains("output-collapsed")) return;
+  drag = {
+    y: event.clientY,
+    height: Math.max(splitEl.getBoundingClientRect().height, 1),
+    ...currentSplit(),
+  };
+  splitterEl.setPointerCapture(event.pointerId);
+  splitterEl.classList.add("dragging");
+  document.body.classList.add("resizing");
+  event.preventDefault();
+});
+
+splitterEl.addEventListener("pointermove", (event) => {
+  if (!drag) return;
+  const total = drag.editor + drag.output;
+  const share = (event.clientY - drag.y) / drag.height;   // fraction of the split height
+  let editor = drag.editor + share * total;
+  editor = Math.min(total * 0.9, Math.max(total * 0.1, editor));
+  applySplit({ editor, output: total - editor });
+});
+
+function endDrag() {
+  if (!drag) return;
+  drag = null;
+  splitterEl.classList.remove("dragging");
+  document.body.classList.remove("resizing");
+  saveSplit(currentSplit());
+}
+splitterEl.addEventListener("pointerup", endDrag);
+splitterEl.addEventListener("pointercancel", endDrag);
+
+splitterEl.addEventListener("dblclick", resetSplit);
+
+splitterEl.addEventListener("keydown", (event) => {
+  if (event.key === "Home") {
+    event.preventDefault();
+    resetSplit();
+    return;
+  }
+  const step = event.key === "ArrowUp" ? -3 : event.key === "ArrowDown" ? 3 : 0;
+  if (!step) return;
+  event.preventDefault();
+  const { editor, output } = currentSplit();
+  const total = editor + output;
+  const next = Math.min(total * 0.9, Math.max(total * 0.1, editor + step));
+  applySplit({ editor: next, output: total - next });
+  saveSplit({ editor: next, output: total - next });
+});
+
+// ------------------------------------------------- show/hide the file list
+$("toggle-sidebar").addEventListener("click", () => {
+  const hidden = $("layout").classList.toggle("sidebar-hidden");
+  const button = $("toggle-sidebar");
+  button.classList.toggle("on", hidden);
+  button.textContent = hidden ? "☰ Files ▸" : "☰ Files";
+  button.title = hidden ? "show the file list" : "hide the file list for a wider page";
+});
+
+// ------------------------------------------------- "⤢ Big page" mode
+function setOutputCollapsed(collapsed) {
+  splitEl.classList.toggle("output-collapsed", collapsed);
+  const button = $("toggle-output");
+  button.classList.toggle("on", collapsed);
+  button.textContent = collapsed ? "⤡ Show output" : "⤢ Big page";
+  button.title = collapsed
+    ? "show the output panel again"
+    : "hide the output panel and give the lesson the whole screen";
+}
+
+$("toggle-output").addEventListener("click", () => {
+  setOutputCollapsed(!splitEl.classList.contains("output-collapsed"));
+});
+
+// ------------------------------------------------- code text size
+$("text-smaller").addEventListener("click", () => applyTextScale(textStep - 1));
+$("text-bigger").addEventListener("click", () => applyTextScale(textStep + 1));
+
 $("reset-progress").addEventListener("click", () => {
   state.progress = {};
   saveProgress();
@@ -473,6 +632,8 @@ $("reset-progress").addEventListener("click", () => {
 // ---------------------------------------------------------------------------
 (async function main() {
   loadStored();
+  loadSplit();
+  loadTextScale();
   try {
     await loadAllFiles();
   } catch (error) {

@@ -27,8 +27,8 @@
     </div>
   </header>
 
-  <main class="layout">
-    <aside class="sidebar">
+  <main class="layout" id="layout">
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar-head">
         <input id="filter" type="search" placeholder="filter files…" autocomplete="off" />
       </div>
@@ -54,28 +54,41 @@
           </button>
           <button id="reset-file" type="button">↺ Reset file</button>
           <button id="clear" type="button">🗑 Clear output</button>
+          <button id="toggle-sidebar" type="button" title="show/hide the file list">☰ Files</button>
+          <button id="toggle-output" type="button" title="give the lesson the whole screen">⤢ Big page</button>
+          <button id="text-smaller" type="button" title="smaller code">A−</button>
+          <button id="text-bigger" type="button" title="bigger code">A+</button>
         </div>
       </div>
 
       <p id="hint" class="hint hidden"></p>
 
-      <div class="editor-wrap">
-        <div id="gutter" class="gutter" aria-hidden="true">1</div>
-        <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off"
-                  autocorrect="off" wrap="off" aria-label="Python code editor"></textarea>
-      </div>
+      <div class="split" id="split">
+        <div class="editor-wrap">
+          <div id="gutter" class="gutter" aria-hidden="true">1</div>
+          <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off"
+                    autocorrect="off" wrap="off" aria-label="Python code editor"></textarea>
+        </div>
 
-      <details class="stdin-panel">
-        <summary>stdin — one line per <code>input()</code> call</summary>
-        <textarea id="stdin" rows="3" spellcheck="false"
-                  placeholder="type the answers input() should receive, one per line"></textarea>
-      </details>
+        <button id="splitter" class="splitter" type="button" role="separator"
+                aria-orientation="horizontal" aria-label="Resize the lesson panel"
+                aria-valuemin="10" aria-valuemax="90" aria-valuenow="70" tabindex="0"
+                title="Drag to resize · double-click to reset"></button>
 
-      <div class="console-head">
-        <span>output</span>
-        <span id="elapsed" class="muted"></span>
+        <div class="output-pane" id="output-pane">
+          <details class="stdin-panel">
+            <summary>stdin — one line per <code>input()</code> call</summary>
+            <textarea id="stdin" rows="3" spellcheck="false"
+                      placeholder="type the answers input() should receive, one per line"></textarea>
+          </details>
+
+          <div class="console-head">
+            <span>output</span>
+            <span class="muted" id="elapsed"></span>
+          </div>
+          <pre id="console" class="console" tabindex="0"></pre>
+        </div>
       </div>
-      <pre id="console" class="console" tabindex="0"></pre>
     </section>
   </main>
 

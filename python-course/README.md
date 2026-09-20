@@ -35,6 +35,16 @@ What you get in the playground:
 * a stdin box, so lessons that use `input()` still work,
 * live progress: "12 / 37 done".
 
+Screen space:
+
+* the lesson panel gets ~70% of the height — **drag the divider** under it (or
+  focus it and press ↑/↓; double-click resets) to give it up to 90%,
+* **⤢ Big page** hides the output panel entirely so a long lesson fits on one
+  screen; pressing **▶ Run** brings the output back automatically,
+* **☰ Files** hides the sidebar for a wider page,
+* **A− / A+** change the code font size (85% → 130%); your layout choices are
+  remembered next time.
+
 > The playground is slightly slower than real Python (it is WebAssembly) and
 > can't run processes — `lesson_13_modules_venv.py` is marked 💻 for that reason.
 
