@@ -28,6 +28,12 @@ class Handler(SimpleHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
 
     def end_headers(self):
+        # An .apk fetched from a browser should land in Downloads rather than
+        # being sniffed, rendered, or opened in a viewer.
+        path = self.path.split('?', 1)[0]
+        if path.lower().endswith('.apk'):
+            self.send_header('Content-Disposition',
+                             'attachment; filename="%s"' % os.path.basename(path))
         self.send_header('Cache-Control', 'no-store, max-age=0, must-revalidate')
         self.send_header('Pragma', 'no-cache')
         self.send_header('Expires', '0')
