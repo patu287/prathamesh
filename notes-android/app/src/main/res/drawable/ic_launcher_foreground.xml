@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- a page -->
+    <path
+        android:fillColor="#F6F2E9"
+        android:pathData="M35,26 h38 a6,6 0 0 1 6,6 v44 a6,6 0 0 1 -6,6 h-38 a6,6 0 0 1 -6,-6 v-44 a6,6 0 0 1 6,-6 Z" />
+    <!-- two ordinary lines -->
+    <path android:strokeColor="#2F3E6B" android:strokeWidth="4" android:strokeLineCap="round"
+        android:pathData="M42,45 H66" />
+    <path android:strokeColor="#2F3E6B" android:strokeWidth="4" android:strokeLineCap="round"
+        android:pathData="M42,55 H66" />
+    <!-- and the one that mattered: the promoted key point -->
+    <path android:strokeColor="#B07F2F" android:strokeWidth="4" android:strokeLineCap="round"
+        android:pathData="M42,65 H58" />
+</vector>

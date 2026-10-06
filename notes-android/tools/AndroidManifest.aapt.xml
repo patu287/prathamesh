@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The manifest as aapt2 wants it: a literal `package` (aapt2 has no notion of
+  Gradle's applicationId placeholder) and an explicit <uses-sdk>. Used only by
+  tools/build-apk.sh, the no-SDK build path.
+
+  Keep this in step with app/src/main/AndroidManifest.xml — they describe the
+  same app, and the only intended differences are the package attribute and the
+  fact that this file has no ${applicationId} to substitute.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="app.notes"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34" />
+
+    <!-- One permission: the microphone, because voice notes are a first-class
+         kind of entry here. No INTERNET (the app cannot phone home), no CAMERA
+         (capture delegates to the camera app), no storage permissions (photos
+         come in through ACTION_GET_CONTENT, backups go out through a save
+         dialog the user points at a folder). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Android 11+ hides other apps unless you say you are looking for them.
+         Without this the camera is not offered as a source for a new photo. -->
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="app.notes.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode|density|fontScale"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="app.notes.CaptureProvider"
+            android:authorities="app.notes.capture"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+    </application>
+</manifest>

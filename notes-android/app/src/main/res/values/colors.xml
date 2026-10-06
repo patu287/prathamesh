@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Paper and indigo, matching the app's own palette. -->
+    <color name="bg">#F6F2E9</color>
+    <color name="surface">#FFFDF8</color>
+    <color name="indigo">#2F3E6B</color>
+    <color name="ic_launcher_background">#2F3E6B</color>
+</resources>
