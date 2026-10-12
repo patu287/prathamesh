@@ -3,26 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Menu | Little Owl Cafe</title>
+    <title>Menu | Little Owl Cafe - Artisan Coffee & Cuisine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --primary: #6F4E37;
-            --secondary: #A67B5B;
-            --accent: #D4A574;
-            --dark: #2C1810;
+            --primary: #8B6F47;
+            --primary-dark: #6F4E37;
+            --primary-light: #A67B5B;
+            --secondary: #D4A574;
+            --accent: #C9A961;
+            --gold: #E8C872;
+            --dark: #1a1410;
+            --dark-light: #2C1810;
             --light: #F9F6F2;
             --cream: #FDFBF7;
-            --gold: #C9A961;
+            --warm-white: #FFFEF9;
+            --gradient-1: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
+            --gradient-2: linear-gradient(135deg, #1a1410 0%, #6F4E37 100%);
+            --gradient-3: linear-gradient(135deg, #FDFBF7 0%, #F9F6F2 100%);
+            --shadow-sm: 0 2px 8px rgba(26, 20, 16, 0.08);
+            --shadow-md: 0 4px 20px rgba(26, 20, 16, 0.12);
+            --shadow-lg: 0 8px 40px rgba(26, 20, 16, 0.16);
+            --shadow-xl: 0 16px 60px rgba(26, 20, 16, 0.2);
+            --shadow-glow: 0 0 40px rgba(212, 165, 116, 0.3);
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: var(--dark);
             background: var(--cream);
             line-height: 1.7;
@@ -30,15 +42,15 @@
         }
         
         h1, h2, h3, h4 {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
             line-height: 1.2;
         }
         
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
@@ -47,25 +59,33 @@
             to { opacity: 1; }
         }
         
-        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
-        .fade-in { animation: fadeIn 1s ease-out forwards; }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .fade-in-up { animation: fadeInUp 1s ease-out forwards; }
+        .fade-in { animation: fadeIn 1.2s ease-out forwards; }
         
         nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(253, 251, 247, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            background: rgba(253, 251, 247, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: var(--shadow-sm);
             z-index: 1000;
-            height: 80px;
-            transition: all 0.3s ease;
+            height: 90px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         nav.scrolled {
-            height: 70px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            height: 75px;
+            background: rgba(253, 251, 247, 0.95);
+            box-shadow: var(--shadow-md);
         }
         
         .nav-container {
@@ -79,20 +99,26 @@
         }
         
         .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
-            letter-spacing: 1px;
-            transition: color 0.3s ease;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
         }
         
-        .logo:hover { color: var(--accent); }
+        .logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
         
         .nav-links {
             display: flex;
-            gap: 40px;
+            gap: 48px;
             list-style: none;
         }
         
@@ -101,139 +127,220 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 15px;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             position: relative;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
         
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: 0;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
             width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
+            height: 3px;
+            background: var(--gradient-1);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
         }
         
         .nav-links a:hover::after,
         .nav-links a.active::after { width: 100%; }
         
         .nav-links a:hover,
-        .nav-links a.active { color: var(--primary); }
+        .nav-links a.active {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
         
         .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            background: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: var(--gradient-1);
             color: white;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 50px;
             font-weight: 600;
             font-size: 14px;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(111, 78, 55, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
         }
         
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .btn:hover::before { left: 100%; }
+        
         .btn:hover {
-            background: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(111, 78, 55, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
         }
         
         .page-header {
-            margin-top: 80px;
-            padding: 120px 0;
-            background: linear-gradient(135deg, rgba(44, 24, 16, 0.7), rgba(111, 78, 55, 0.5)),
-                        url('images/gallery/gallery-1.jpg') center/cover no-repeat;
+            margin-top: 90px;
+            padding: 140px 0;
+            background: var(--gradient-2);
             color: white;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(212, 165, 116, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(201, 169, 97, 0.15) 0%, transparent 50%);
+            animation: gradientShift 15s ease infinite;
+            background-size: 200% 200%;
         }
         
         .page-header h1 {
-            font-size: 64px;
-            margin-bottom: 20px;
-            font-weight: 700;
-            letter-spacing: 2px;
+            font-size: 72px;
+            margin-bottom: 24px;
+            position: relative;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         
         .page-header p {
-            font-size: 20px;
-            opacity: 0.9;
-            max-width: 600px;
+            font-size: 22px;
+            opacity: 0.95;
+            max-width: 650px;
             margin: 0 auto;
+            position: relative;
+            font-weight: 300;
         }
         
-        section { padding: 100px 0; }
+        section { padding: 120px 0; }
         
         .menu-tabs {
             display: flex;
             justify-content: center;
             gap: 16px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
             flex-wrap: wrap;
         }
         
         .menu-tab {
-            padding: 14px 32px;
+            padding: 16px 36px;
             background: white;
-            border: 2px solid var(--light);
-            border-radius: 4px;
+            border: 2px solid transparent;
+            border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Poppins', sans-serif;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-tab::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
         }
         
         .menu-tab:hover {
-            border-color: var(--accent);
-            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
         
         .menu-tab.active {
-            background: var(--primary);
+            background: var(--gradient-1);
             color: white;
-            border-color: var(--primary);
+            border-color: transparent;
+            box-shadow: var(--shadow-md), var(--shadow-glow);
         }
         
         .menu-category { display: none; }
         .menu-category.active { display: block; }
         
         .menu-list {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 32px;
         }
         
         .menu-item {
             display: flex;
-            gap: 24px;
-            padding: 32px;
+            gap: 28px;
+            padding: 36px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
         
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: var(--gradient-1);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .menu-item:hover::after { opacity: 1; }
+        
         .menu-item:hover {
-            transform: translateX(8px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
         }
         
         .menu-item-icon {
-            font-size: 48px;
+            font-size: 56px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-3);
+            border-radius: 16px;
+            transition: all 0.4s ease;
+        }
+        
+        .menu-item:hover .menu-item-icon {
+            background: var(--gradient-1);
+            transform: rotate(10deg) scale(1.1);
+        }
+        
+        .menu-item:hover .menu-item-icon svg {
+            stroke: white;
         }
         
         .menu-item-icon svg {
@@ -241,136 +348,153 @@
             height: 40px;
             stroke: var(--primary);
             fill: none;
-            stroke-width: 1.5;
+            stroke-width: 2;
+            transition: all 0.4s ease;
         }
         
         .menu-item-info { flex: 1; }
         
         .menu-item-name {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
             color: var(--dark);
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-family: 'Cormorant Garamond', serif;
+            gap: 14px;
+            font-family: 'Playfair Display', serif;
         }
         
         .badge {
             font-size: 11px;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .badge-best {
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-            color: #92400E;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: var(--shadow-sm);
         }
         
         .badge-new {
-            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
-            color: #065F46;
-        }
-        
-        .badge-veg {
-            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
-            color: #065F46;
+            background: linear-gradient(135deg, #C9A961 0%, #E8C872 100%);
         }
         
         .menu-item-desc {
-            color: var(--secondary);
-            font-size: 15px;
-            margin-bottom: 12px;
-            line-height: 1.6;
+            color: var(--primary-light);
+            font-size: 16px;
+            margin-bottom: 16px;
+            line-height: 1.7;
+            font-weight: 400;
         }
         
         .menu-item-price {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
-            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Playfair Display', serif;
         }
         
         .cta {
-            background: linear-gradient(135deg, var(--primary), var(--dark));
+            background: var(--gradient-1);
             color: white;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
         }
         
         .cta h2 {
-            font-size: 48px;
-            margin-bottom: 20px;
+            font-size: 56px;
+            margin-bottom: 24px;
+            position: relative;
         }
         
         .cta p {
-            font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.9;
+            font-size: 22px;
+            margin-bottom: 48px;
+            opacity: 0.95;
+            position: relative;
         }
         
         .cta .btn {
             background: white;
             color: var(--primary);
-            padding: 18px 48px;
+            padding: 20px 56px;
             font-size: 16px;
+            position: relative;
         }
         
         .cta .btn:hover {
-            background: var(--gold);
+            background: var(--dark);
             color: white;
         }
         
         footer {
             background: var(--dark);
             color: white;
-            padding: 80px 0 30px;
+            padding: 100px 0 40px;
         }
         
         .footer-grid {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 60px;
+            gap: 80px;
+            margin-bottom: 80px;
         }
         
         .footer-brand h3 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            margin-bottom: 24px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .footer-brand p {
-            color: rgba(255,255,255,0.7);
-            font-size: 15px;
-            line-height: 1.8;
+            color: rgba(255,255,255,0.75);
+            font-size: 16px;
+            line-height: 1.9;
         }
         
         .footer-column h4 {
-            font-size: 18px;
-            margin-bottom: 24px;
-            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            margin-bottom: 28px;
+            color: var(--gold);
         }
         
         .footer-column ul { list-style: none; }
-        .footer-column li { margin-bottom: 12px; }
+        .footer-column li { margin-bottom: 14px; }
         
         .footer-column a {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.75);
             text-decoration: none;
             font-size: 15px;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
         
-        .footer-column a:hover { color: var(--gold); }
+        .footer-column a:hover {
+            color: var(--gold);
+            transform: translateX(5px);
+        }
         
         .footer-bottom {
             text-align: center;
-            padding-top: 30px;
+            padding-top: 40px;
             border-top: 1px solid rgba(255,255,255,0.1);
             color: rgba(255,255,255,0.5);
             font-size: 14px;
@@ -378,11 +502,12 @@
         
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .page-header h1 { font-size: 42px; }
-            .menu-tabs { gap: 8px; }
-            .menu-tab { padding: 10px 20px; font-size: 12px; }
-            .menu-item { flex-direction: column; gap: 16px; }
-            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            .page-header h1 { font-size: 48px; }
+            .menu-tabs { gap: 12px; }
+            .menu-tab { padding: 12px 24px; font-size: 13px; }
+            .menu-list { grid-template-columns: 1fr; }
+            .menu-item { flex-direction: column; text-align: center; }
+            .footer-grid { grid-template-columns: 1fr; gap: 50px; }
         }
     </style>
 </head>
@@ -425,7 +550,7 @@
                         <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Cappuccino <span class="badge badge-best">Bestseller</span></div>
+                        <div class="menu-item-name">Cappuccino <span class="badge">Bestseller</span></div>
                         <div class="menu-item-desc">Classic Italian espresso with velvety steamed milk foam</div>
                         <div class="menu-item-price">₹179</div>
                     </div>
@@ -445,7 +570,7 @@
                         <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Vietnamese Cold Brew <span class="badge badge-best">Signature</span></div>
+                        <div class="menu-item-name">Vietnamese Cold Brew <span class="badge">Signature</span></div>
                         <div class="menu-item-desc">Slow-steeped cold brew with condensed milk — silky and bold</div>
                         <div class="menu-item-price">₹219</div>
                     </div>
@@ -460,26 +585,6 @@
                         <div class="menu-item-price">₹229</div>
                     </div>
                 </div>
-                <div class="menu-item fade-in-up">
-                    <div class="menu-item-icon">
-                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-name">Iced Americano</div>
-                        <div class="menu-item-desc">Bold double espresso over ice — clean and refreshing</div>
-                        <div class="menu-item-price">₹169</div>
-                    </div>
-                </div>
-                <div class="menu-item fade-in-up">
-                    <div class="menu-item-icon">
-                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-name">Dark Chocolate Mocha <span class="badge badge-best">Must Try</span></div>
-                        <div class="menu-item-desc">Rich dark chocolate meets bold espresso — pure indulgence</div>
-                        <div class="menu-item-price">₹229</div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -490,7 +595,7 @@
                         <svg viewBox="0 0 24 24"><path d="M8 2h8l-2 18H10L8 2z"></path><path d="M12 2v18"></path></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Mango Shake <span class="badge badge-veg">Vegetarian</span></div>
+                        <div class="menu-item-name">Mango Shake</div>
                         <div class="menu-item-desc">Creamy shake made with ripe Alphonso mangoes</div>
                         <div class="menu-item-price">₹217</div>
                     </div>
@@ -510,17 +615,7 @@
                         <svg viewBox="0 0 24 24"><path d="M8 2h8l-2 18H10L8 2z"></path><path d="M12 2v18"></path></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Kiwi Banana Shake</div>
-                        <div class="menu-item-desc">Tropical fusion of kiwi and banana — refreshing and exotic</div>
-                        <div class="menu-item-price">₹237</div>
-                    </div>
-                </div>
-                <div class="menu-item fade-in-up">
-                    <div class="menu-item-icon">
-                        <svg viewBox="0 0 24 24"><path d="M8 2h8l-2 18H10L8 2z"></path><path d="M12 2v18"></path></svg>
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-name">Salted Caramel Frappe <span class="badge badge-best">Fan Fave</span></div>
+                        <div class="menu-item-name">Salted Caramel Frappe <span class="badge">Fan Fave</span></div>
                         <div class="menu-item-desc">Sweet meets salty in this addictive frozen blend</div>
                         <div class="menu-item-price">₹249</div>
                     </div>
@@ -535,7 +630,7 @@
                         <svg viewBox="0 0 24 24"><path d="M3 11h18v2a8 8 0 0 1-8 8H11a8 8 0 0 1-8-8v-2z"></path><path d="M3 11V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v4"></path></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Butter Paneer Bowl <span class="badge badge-best">Chef's Pick</span></div>
+                        <div class="menu-item-name">Butter Paneer Bowl <span class="badge">Chef's Pick</span></div>
                         <div class="menu-item-desc">Creamy butter paneer masala with fragrant peas pulao</div>
                         <div class="menu-item-price">₹439</div>
                     </div>
@@ -545,7 +640,7 @@
                         <svg viewBox="0 0 24 24"><path d="M3 11h18v2a8 8 0 0 1-8 8H11a8 8 0 0 1-8-8v-2z"></path><path d="M3 11V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v4"></path></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Chicken Green Thai Curry <span class="badge badge-best">Bestseller</span></div>
+                        <div class="menu-item-name">Chicken Green Thai Curry <span class="badge">Bestseller</span></div>
                         <div class="menu-item-desc">Authentic Thai green curry with tender chicken & jasmine rice</div>
                         <div class="menu-item-price">₹509</div>
                     </div>
@@ -580,7 +675,7 @@
                         <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Fish & Chips <span class="badge badge-best">Popular</span></div>
+                        <div class="menu-item-name">Fish & Chips <span class="badge">Popular</span></div>
                         <div class="menu-item-desc">Beer-battered fish with crispy fries</div>
                         <div class="menu-item-price">₹399</div>
                     </div>
@@ -605,7 +700,7 @@
                         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Penne Pesto <span class="badge badge-best">Fan Favourite</span></div>
+                        <div class="menu-item-name">Penne Pesto <span class="badge">Fan Favourite</span></div>
                         <div class="menu-item-desc">Al dente penne in authentic basil pesto with Parmesan</div>
                         <div class="menu-item-price">₹349</div>
                     </div>
@@ -615,7 +710,7 @@
                         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">4-Layer Cheese Pizza <span class="badge badge-best">Must Try</span></div>
+                        <div class="menu-item-name">4-Layer Cheese Pizza <span class="badge">Must Try</span></div>
                         <div class="menu-item-desc">Four layers of melted cheese on a crispy base</div>
                         <div class="menu-item-price">₹399</div>
                     </div>
@@ -640,7 +735,7 @@
                         <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"></path></svg>
                     </div>
                     <div class="menu-item-info">
-                        <div class="menu-item-name">Dark Chocolate Brownie <span class="badge badge-best">Must Try</span></div>
+                        <div class="menu-item-name">Dark Chocolate Brownie <span class="badge">Must Try</span></div>
                         <div class="menu-item-desc">Warm fudgy brownie with vanilla ice cream</div>
                         <div class="menu-item-price">₹249</div>
                     </div>
@@ -722,15 +817,14 @@
         document.getElementById(category).classList.add('active');
         event.target.classList.add('active');
         
-        // Re-trigger animations
-        document.querySelectorAll(`#${category} .fade-in-up`).forEach(el => {
+        document.querySelectorAll(`#${category} .fade-in-up`).forEach((el, index) => {
             el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
+            el.style.transform = 'translateY(40px)';
             setTimeout(() => {
-                el.style.transition = 'all 0.6s ease-out';
+                el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
                 el.style.opacity = '1';
                 el.style.transform = 'translateY(0)';
-            }, 50);
+            }, index * 100);
         });
     }
 </script>
