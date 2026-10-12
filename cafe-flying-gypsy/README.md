@@ -4,9 +4,9 @@ Static site. **No build step, no dependencies, no backend.** Plain HTML, CSS and
 
 ```
 cafe-flying-gypsy/
-├── index.html    all sections: nav, hero, about, menu, experience, gallery, reviews, visit
-├── styles.css    design system (turquoise + terracotta + cream), responsive, animations
-├── app.js        menu data, gallery data, reviews, tabs, filters, lightbox, WhatsApp form
+├── index.html    every section: nav, hero, story, signatures, menu, hours, gallery, reviews, visit
+├── styles.css    design system — turquoise / terracotta / amber / cream, responsive, animated
+├── app.js        all content data + tabs, filters, lightbox, WhatsApp booking
 └── images/       the cafe's own photographs — no stock, no AI-generated imagery
 ```
 
@@ -18,47 +18,100 @@ python3 -m http.server 8080 --bind 0.0.0.0
 # → http://localhost:8080
 ```
 
-Opening `index.html` directly in a browser also works.
+Opening `index.html` directly also works.
 
-## ⚠️ Updating prices — the one thing left to do
+---
 
-Every menu item lives in the `MENU` array at the top of `app.js`.
-Prices that are **real** (taken from the cafe's public Google reviews) already have numbers.
-Everything showing a muted `—` on the site is still unknown.
+## Where everything lives
 
-To fill one in, change `null` to a number:
+Everything you'd ever want to change is a plain JavaScript array at the top of `app.js`.
+No templates, no build, no framework.
+
+| What | Where in `app.js` |
+| --- | --- |
+| Phone, WhatsApp, Instagram, email, map coords, reviews link | `CONFIG` |
+| The six "Signatures" cards | `SIGNATURES` |
+| **The full menu — 113 items in 11 categories** | `MENU` |
+| The 24-hour timeline | `HOURS` |
+| Gallery photos, captions, categories | `GALLERY` |
+| Reviews | `REVIEWS` |
+
+### Editing the menu
 
 ```js
-{ name:'Cheese Maggi', price:null, … }   // →  { name:'Cheese Maggi', price:179, … }
+{ name:'Masala Maggi', price:99, desc:'The plain-and-perfect original.', tag:'Most loved' }
 ```
 
-That is the only edit needed — the site renders `₹179` automatically.
+- `price` is a plain number — the site renders `₹99` automatically.
+- `tag` is optional. Allowed values: `'Most loved'` (amber), `'Spicy'` (terracotta),
+  `'Jain'` (plum), `'Egg'` (amber). Anything else falls back to the green veg pill.
+- To add a category, copy a whole `{ id, label, note, items:[…] }` block. The tab,
+  the panel and the count all generate themselves.
 
-## Other things worth knowing
+### Colours and fonts
 
-| What | Where |
+Every colour is a CSS custom property in `:root` at the top of `styles.css`.
+The palette was sampled directly from the cafe's own photographs:
+
+```
+--teal #1E9E9C   --teal-deep #0E5F63   --teal-dark #0A4A4E
+--terra #B4663A  --amber #E9A33C       --cream #FDF7EC
+```
+
+---
+
+## Content sources
+
+Everything on the page is real. Nothing here is invented.
+
+| Content | Source |
 | --- | --- |
-| Phone / WhatsApp / Instagram / map coords | `CONFIG` object, top of `app.js` |
-| Menu categories, items, tags, descriptions | `MENU` array, `app.js` |
-| Gallery photos, captions, categories | `GALLERY` array, `app.js` |
-| Reviews | `REVIEWS` array, `app.js` |
-| Colours, fonts, spacing | CSS custom properties in `:root`, top of `styles.css` |
-| Structured data (Google rich results) | `application/ld+json` block at the bottom of `index.html` |
+| Menu items & prices | The cafe's printed card (all 113 items) |
+| Address, phone, email, domain | The cafe's own site, `cafeflyinggypsys.online` |
+| 24-hour opening, all 7 days | Cafe's own listing + independent review sites |
+| Instagram `@cafeflyinggypsys` | Instagram |
+| Reviews & 4.5 rating / 1,400+ reviews | Public Google reviews, reproduced as written |
+| ₹450 cost for two | magicpin listing |
+| ₹250/hour pool table | Google review |
+| Pool table, board games, books, resident dogs | Public Google & Reddit reviews |
+| 18 photographs | Uploaded by the owner |
 
-## Facts currently hard-coded in the page
+---
 
-- Address: 1201-A/4, GH Patil Path, Shivajinagar, Pune 411004
-- Landmarks: off FC Road, behind Ghole Road, near ICICI Bank, opposite Kiosk Kaffee
-- Open 24 hours, every day
-- Pure vegetarian · pet-friendly · self-service
-- Pool table ₹250/hour, board games, cards, books
-- Google rating 4.5 from 1,400+ reviews
-- Coordinates 18.5240, 73.8425
+## Facts hard-coded in the page
 
-## Accessibility & performance notes
+- **Address:** 1201-A/4, GH Patil Path, Shivajinagar, Pune 411004
+- **Landmarks:** opposite ICICI Bank, behind Ghole Road, near FC Road
+- **Hours:** open 24 hours, seven days
+- **Phone / WhatsApp:** +91 90111 47147
+- **Email:** contact@cafeflyinggypsys.online
+- **Map:** 18.5240, 73.8425
+- **Serving Pune since:** 2008
 
-- Landmark elements, `aria-*` on all interactive controls, keyboard-operable tabs and lightbox
-  (arrows, Home/End, Escape), visible focus rings, skip link.
-- Gallery images are lazy-loaded with explicit `width`/`height` to avoid layout shift.
-- All animation honours `prefers-reduced-motion`.
-- Total page weight of imagery: ~1.2 MB across 18 photos.
+If any of those ever change, they live in `CONFIG` (`app.js`) plus the footer and
+visit sections of `index.html`, and the `application/ld+json` block at the very
+bottom of `index.html`.
+
+---
+
+## Accessibility
+
+- Landmark elements and a skip link; visible focus rings on everything.
+- Menu tabs are a proper ARIA tablist — clicking and arrow keys / Home / End all work.
+- Gallery opens by mouse, Enter or Space; the lightbox closes on Escape and
+  moves with arrow keys or a swipe.
+- Every image has a written description; every icon button has an accessible name.
+- All motion is disabled under `prefers-reduced-motion`.
+- `width` and `height` are set on gallery images so nothing shifts as they load.
+
+## About the photographs
+
+18 photographs, all the owner's own. Each was renamed to something descriptive
+(`gypsy-girl-mural.jpg`, `cheesy-loaded-fries.jpg`, …) so the code reads cleanly
+and new photos are easy to slot in.
+
+They are **243 px wide at native resolution**, which is the size they arrived in.
+The layout is deliberately built around that limit — images are shown as framed
+art objects rather than stretched full-bleed. **If higher-resolution originals
+exist, drop them into `images/` with the same filenames and the site gets
+sharper with zero code changes.**

@@ -3,29 +3,31 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cafe Flying Gypsy's — Art, Coffee &amp; Late Nights in Shivajinagar, Pune</title>
-<meta name="description" content="Cafe Flying Gypsy's, 1201-A/4 GH Patil Path, Shivajinagar, Pune. Hand-painted murals, a turquoise courtyard, pure-veg comfort food and coffee — open 24 hours. Pet-friendly, with pool, board games and books." />
-<meta name="theme-color" content="#0E5F63" />
-<link rel="canonical" href="https://cafeflyinggypsys.in/" />
+<title>Cafe Flying Gypsy's · Shivajinagar, Pune — Art, Coffee &amp; Late Nights, Open 24 Hours</title>
+<meta name="description" content="Cafe Flying Gypsy's, 1201-A/4 GH Patil Path, Shivajinagar, Pune. Hand-painted murals, a turquoise courtyard strung with fairy lights, wood-fired pizza, pasta, shakes and the 2 AM Maggi. Open 24 hours. Pet-friendly. Pool table and board games upstairs." />
+<meta name="theme-color" content="#0A4A4E" />
+<link rel="canonical" href="https://cafeflyinggypsys.online/" />
 
-<!-- Open Graph -->
 <meta property="og:type" content="restaurant.restaurant" />
-<meta property="og:title" content="Cafe Flying Gypsy's — Shivajinagar, Pune" />
-<meta property="og:description" content="Turquoise walls, hand-painted murals and a menu that runs from midnight Maggi to mushroom white-sauce pasta. Open 24 hours." />
+<meta property="og:title" content="Cafe Flying Gypsy's · Shivajinagar, Pune" />
+<meta property="og:description" content="Turquoise walls, hand-painted murals, and a menu that runs from the 8 AM espresso to the 2 AM Maggi. Open 24 hours." />
 <meta property="og:image" content="images/hero-gypsy-mural.jpg" />
 <meta property="og:locale" content="en_IN" />
+<meta name="twitter:card" content="summary_large_image" />
 
-<!-- Favicon: hand-authored SVG mark (no raster/stock asset) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230E5F63'/%3E%3Cpath d='M32 12c9 0 16 7 16 16 0 6-4 9-8 9-3 0-5-2-8-2s-5 2-8 2c-4 0-8-3-8-9 0-9 7-16 16-16z' fill='%235AAFAF'/%3E%3Ccircle cx='32' cy='28' r='4' fill='%23FDF7EC'/%3E%3Cpath d='M32 34v16M24 42c4 5 12 5 16 0' stroke='%23FDF7EC' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
+<!-- favicon: inline SVG mark, hand-authored -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A4A4E'/%3E%3Cpath d='M32 11c9.4 0 16.6 7.2 16.6 16.4 0 6.2-4.2 9.3-8.3 9.3-3.1 0-5.2-2.1-8.3-2.1s-5.2 2.1-8.3 2.1c-4.1 0-8.3-3.1-8.3-9.3C15.4 18.2 22.6 11 32 11z' fill='%235AAFAF'/%3E%3Ccircle cx='32' cy='27' r='4' fill='%23FDF7EC'/%3E%3Cpath d='M32 33.5V50M24 41c4.2 5.4 11.8 5.4 16 0' stroke='%23FDF7EC' stroke-width='2.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="preload" as="image" href="images/hero-gypsy-mural.jpg" />
 <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-reveal>
 
 <a class="skip-link" href="#hero">Skip to content</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
 
 <!-- ══════════════════════ NAV ══════════════════════ -->
 <header class="nav" id="nav">
@@ -33,10 +35,9 @@
     <a class="brand" href="#hero" aria-label="Cafe Flying Gypsy's — home">
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 64 64" focusable="false">
-          <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".14"/>
-          <path d="M32 12c9 0 16 7 16 16 0 6-4 9-8 9-3 0-5-2-8-2s-5 2-8 2c-4 0-8-3-8-9 0-9 7-16 16-16z" fill="currentColor"/>
-          <circle cx="32" cy="28" r="3.6" fill="#FDF7EC"/>
-          <path d="M32 34v15M24.5 41.5c4 5 11 5 15 0" stroke="#FDF7EC" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <path d="M32 11c9.4 0 16.6 7.2 16.6 16.4 0 6.2-4.2 9.3-8.3 9.3-3.1 0-5.2-2.1-8.3-2.1s-5.2 2.1-8.3 2.1c-4.1 0-8.3-3.1-8.3-9.3C15.4 18.2 22.6 11 32 11z" fill="currentColor"/>
+          <circle cx="32" cy="27" r="4" fill="#FDF7EC"/>
+          <path d="M32 33.5V50M24 41c4.2 5.4 11.8 5.4 16 0" stroke="#FDF7EC" stroke-width="2.8" fill="none" stroke-linecap="round"/>
         </svg>
       </span>
       <span class="brand-text">
@@ -46,39 +47,39 @@
     </a>
 
     <nav class="nav-links" aria-label="Primary">
-      <a href="#about">About</a>
+      <a href="#story">Story</a>
+      <a href="#signatures">Signatures</a>
       <a href="#menu">Menu</a>
-      <a href="#experiences">Experience</a>
+      <a href="#allhours">All Hours</a>
       <a href="#gallery">Gallery</a>
       <a href="#reviews">Reviews</a>
-      <a href="#visit">Visit</a>
     </nav>
 
     <div class="nav-actions">
-      <a class="nav-phone" href="tel:+919011147147" aria-label="Call Cafe Flying Gypsy's">
+      <a class="nav-phone" href="tel:+919011147147" aria-label="Call Cafe Flying Gypsy's on +91 90111 47147">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l1.9-1.9c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.6 20 4 13.4 4 5.4c0-.6.4-1 1-1h3.1c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1l-1.9 1.9z"/></svg>
         <span>90111&nbsp;47147</span>
       </a>
-      <a class="btn btn-primary btn-sm" href="#visit">Reserve</a>
-      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <a class="btn btn-primary btn-sm" href="#visit">Book a table</a>
+      <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </header>
 
-<!-- mobile drawer -->
 <div class="drawer" id="drawer" hidden>
   <nav class="drawer-links" aria-label="Mobile">
-    <a href="#about"><span>01</span>About</a>
-    <a href="#menu"><span>02</span>Menu</a>
-    <a href="#experiences"><span>03</span>Experience</a>
-    <a href="#gallery"><span>04</span>Gallery</a>
-    <a href="#reviews"><span>05</span>Reviews</a>
-    <a href="#visit"><span>06</span>Visit</a>
+    <a href="#story"><span>01</span>Story</a>
+    <a href="#signatures"><span>02</span>Signatures</a>
+    <a href="#menu"><span>03</span>Menu</a>
+    <a href="#allhours"><span>04</span>All Hours</a>
+    <a href="#gallery"><span>05</span>Gallery</a>
+    <a href="#reviews"><span>06</span>Reviews</a>
+    <a href="#visit"><span>07</span>Visit</a>
   </nav>
   <div class="drawer-foot">
-    <a class="btn btn-primary" href="https://wa.me/919011147147?text=Hi%20Cafe%20Flying%20Gypsy's!%20I'd%20like%20to%20reserve%20a%20table." target="_blank" rel="noopener">Reserve on WhatsApp</a>
+    <a class="btn btn-amber" href="https://wa.me/919011147147?text=Hi%20Cafe%20Flying%20Gypsy's!%20I'd%20like%20to%20book%20a%20table." target="_blank" rel="noopener">Book on WhatsApp</a>
     <div class="drawer-meta">
       <a href="tel:+919011147147">+91 90111 47147</a>
       <a href="https://www.instagram.com/cafeflyinggypsys/" target="_blank" rel="noopener">@cafeflyinggypsys</a>
@@ -89,143 +90,162 @@
 <main>
 <!-- ══════════════════════ HERO ══════════════════════ -->
 <section class="hero" id="hero">
-  <div class="hero-bg" aria-hidden="true">
-    <img src="images/hero-courtyard.jpg" alt="" />
-  </div>
+  <div class="hero-glow" aria-hidden="true"><img src="images/hero-courtyard.jpg" alt="" /></div>
 
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow reveal"><span class="pulse"></span> Cafe Flying Gypsy's · Open 24 hours</p>
+      <p class="eyebrow reveal"><span class="pulse"></span> Shivajinagar, Pune · Open 24 hours</p>
 
-      <h1 class="reveal d1">Where art, coffee &amp; the <em>night</em> meet.</h1>
+      <h1 class="reveal d1">
+        Turquoise walls&nbsp;&amp;<br />
+        <em>two&nbsp;a.m.&nbsp;Maggi.</em>
+      </h1>
 
       <p class="lede reveal d2">
-        Turquoise walls, hand-painted murals and a courtyard strung with fairy lights.
-        A pure-veg menu that runs from a 2&nbsp;AM Maggi to mushroom white-sauce pasta —
-        and a door that never closes.
+        Hand-painted murals, a courtyard strung with fairy lights, and a pool table
+        upstairs. We open at midnight on purpose — because that is when
+        Shivajinagar gets interesting.
       </p>
 
       <div class="hero-cta reveal d3">
-        <a class="btn btn-primary" href="#menu">Explore the menu</a>
-        <a class="btn btn-whatsapp" href="https://wa.me/919011147147?text=Hi%20Cafe%20Flying%20Gypsy's!" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-1.2.1-2.7-.5-4.6-2s-2.9-3.3-3-4.4c-.1-.7.4-1.8 1-2.1.3-.2.8-.2 1 .1l1 1.4c.2.3.2.5 0 .8l-.5.6c-.2.2-.2.4 0 .7.4.7 1.6 2 2.4 2.4.3.2.5.1.7-.1l.6-.6c.2-.2.5-.3.8-.1l1.4 1c.3.2.3.7.2 1z"/></svg>
-          Reserve on WhatsApp
-        </a>
+        <a class="btn btn-primary" href="#menu">See the full menu &amp; prices</a>
+        <a class="btn btn-ghost" href="#visit">Book a table</a>
       </div>
 
-      <ul class="hero-badges reveal d4">
-        <li>Pure Veg</li>
-        <li>Pet-friendly</li>
-        <li>Pool &amp; board games</li>
-        <li>Self-service</li>
-      </ul>
-
-      <a class="hero-rating reveal d5" href="#reviews">
-        <span class="stars" aria-hidden="true">★★★★★</span>
-        <b>4.5</b>
-        <span>from 1,400+ Google reviews</span>
-      </a>
+      <div class="hero-meta reveal d4">
+        <a class="hero-rating" href="#reviews">
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          <b>4.5</b>
+          <span>1,400+ Google reviews</span>
+        </a>
+        <ul class="hero-badges">
+          <li><span class="dot"></span>Open 24/7</li>
+          <li>Pet-friendly</li>
+          <li>Self-service</li>
+        </ul>
+      </div>
     </div>
 
     <div class="hero-art">
-      <!-- all images are the cafe's own photographs -->
-      <figure class="arch arch-main reveal">
+      <figure class="arch reveal">
         <img src="images/hero-gypsy-mural.jpg" width="510" height="853" fetchpriority="high"
-             alt="The hand-painted gypsy-girl mural at Cafe Flying Gypsy's — a woman with a feather crown and butterflies, painted above white wrought-iron tables." />
-        <figcaption>The mural everyone photographs</figcaption>
+             alt="The hand-painted gypsy-girl mural at Cafe Flying Gypsy's — a woman with a feather crown and butterflies painted above white wrought-iron tables." />
+        <figcaption>The mural on the wall everyone photographs</figcaption>
       </figure>
 
-      <figure class="arch arch-sub reveal d3">
+      <figure class="arch-pod reveal d3">
         <img src="images/heart-latte-art-cappuccino.jpg" width="243" height="174" loading="lazy"
-             alt="A cappuccino with heart latte art in a red-and-white heart mug, beside an iced coffee and a bowl of food." />
+             alt="A cappuccino with heart latte art in a heart-patterned mug, beside an iced coffee and a bowl of food." />
       </figure>
 
-      <div class="chip chip-open reveal d4">
+      <div class="chip-status reveal d4">
         <span class="pulse"></span>
-        <div><b>Open now</b><small>24 hours, every day</small></div>
-      </div>
-
-      <div class="chip chip-pet reveal d5">
-        <span class="paw" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="7" cy="9" r="2.1"/><circle cx="12" cy="7" r="2.1"/><circle cx="17" cy="9" r="2.1"/><path d="M12 11c-3 0-5.2 2-5.2 4.3 0 1.7 1.5 2.7 3.1 2.7 1 0 1.5-.4 2.1-.4s1.1.4 2.1.4c1.6 0 3.1-1 3.1-2.7C17.2 13 15 11 12 11z"/></svg>
-        </span>
-        <div><b>Pawsitively</b><small>pet-welcoming</small></div>
+        <div><b>Open right now</b><small>24 hours · every single day</small></div>
       </div>
     </div>
   </div>
 
-  <a class="scroll-hint" href="#about" aria-label="Scroll to about">
-    <span></span>
-  </a>
+  <div class="wrap hero-strip reveal d5">
+    <div class="strip-item"><b>₹450</b><span>cost for two</span></div>
+    <div class="strip-sep" aria-hidden="true"></div>
+    <div class="strip-item"><b>4.5★</b><span>on Google</span></div>
+    <div class="strip-sep" aria-hidden="true"></div>
+    <div class="strip-item"><b>24/7</b><span>never closed</span></div>
+    <div class="strip-sep" aria-hidden="true"></div>
+    <div class="strip-item"><b>₹250<small>/hr</small></b><span>pool &amp; snooker</span></div>
+    <div class="strip-sep" aria-hidden="true"></div>
+    <div class="strip-item"><b>2008</b><span>serving FC Road</span></div>
+  </div>
 </section>
 
-<!-- ══════════════════════ TICKER ══════════════════════ -->
+<!-- ══════════════════════ MARQUEE ══════════════════════ -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>Open 24 / 7</span><i>✦</i>
-    <span>Pure vegetarian</span><i>✦</i>
+    <span>Open 24 · 7</span><i>✦</i>
+    <span>Two a.m. Maggi</span><i>✦</i>
     <span>Pet-friendly</span><i>✦</i>
-    <span>Courtyard seating</span><i>✦</i>
-    <span>Pool table · ₹250 / hr</span><i>✦</i>
-    <span>Board games &amp; books</span><i>✦</i>
+    <span>Courtyard nights</span><i>✦</i>
+    <span>Pool &amp; snooker</span><i>✦</i>
+    <span>Board games</span><i>✦</i>
     <span>Off FC Road</span><i>✦</i>
-    <span>Open 24 / 7</span><i>✦</i>
-    <span>Pure vegetarian</span><i>✦</i>
+    <span>Since 2008</span><i>✦</i>
+    <span>Open 24 · 7</span><i>✦</i>
+    <span>Two a.m. Maggi</span><i>✦</i>
     <span>Pet-friendly</span><i>✦</i>
-    <span>Courtyard seating</span><i>✦</i>
-    <span>Pool table · ₹250 / hr</span><i>✦</i>
-    <span>Board games &amp; books</span><i>✦</i>
+    <span>Courtyard nights</span><i>✦</i>
+    <span>Pool &amp; snooker</span><i>✦</i>
+    <span>Board games</span><i>✦</i>
     <span>Off FC Road</span><i>✦</i>
+    <span>Since 2008</span><i>✦</i>
   </div>
 </div>
 
-<!-- ══════════════════════ ABOUT ══════════════════════ -->
-<section class="section about" id="about">
-  <div class="wrap about-grid">
-    <div class="about-media reveal">
-      <figure class="m-tall">
-        <img src="images/courtyard-blue-staircase.jpg" width="243" height="406" loading="lazy"
-             alt="The courtyard at Cafe Flying Gypsy's at dusk — a blue metal staircase, a boat hung from the ceiling and palms wrapped in fairy lights." />
-      </figure>
-      <figure class="m-wide">
-        <img src="images/turquoise-gallery-wall.jpg" width="243" height="244" loading="lazy"
-             alt="A turquoise wall covered in ornate framed art, mirrors and curios, with white wrought-iron seating in front." />
-      </figure>
-      <figure class="m-sq">
-        <img src="images/teddy-book-shelf-corner.jpg" width="243" height="304" loading="lazy"
-             alt="A reading corner with teal wall shelves full of books, exposed brick and a large teddy bear sitting on a chair." />
-      </figure>
-    </div>
-
-    <div class="about-copy">
-      <p class="eyebrow reveal">Our story</p>
-      <h2 class="reveal d1">A little Goa in the middle of <em>Shivajinagar</em>.</h2>
+<!-- ══════════════════════ STORY ══════════════════════ -->
+<section class="section story" id="story">
+  <div class="wrap story-grid">
+    <div class="story-copy">
+      <p class="eyebrow reveal">The story</p>
+      <h2 class="reveal d1">A little Goa, tucked behind <em>FC&nbsp;Road</em>.</h2>
 
       <p class="reveal d2">
-        Tucked down GH Patil Path, just off FC Road, Cafe Flying Gypsy's began as a small
-        room full of art and grew into something closer to a second home. Every wall was
-        painted by hand — the gypsy girl with her feather crown and butterflies, the
-        turquoise panels, the frames that climb corner to corner.
+        Down GH Patil Path — opposite ICICI Bank, behind Ghole Road — a turquoise door
+        opens into something that does not feel like Pune. Every surface was painted by hand:
+        the gypsy girl with her feather crown and butterfly halo, the teal panels,
+        the frames that climb the wall corner to corner.
       </p>
 
       <p class="reveal d3">
-        We built the kind of place we wanted at 3&nbsp;AM: mismatched wrought-iron chairs,
-        a courtyard under fairy lights, a pool table, a shelf of well-thumbed books,
-        and a kitchen that stays on. Come for the coffee, stay for the conversation,
-        or come alone with a book — nobody will rush you.
+        We started in 2008 with a small room full of art and a habit of staying up late.
+        Nothing has changed except the queue. Come at 11&nbsp;AM and it's laptops and cold coffee.
+        Come at 2&nbsp;AM and you'll struggle to find a chair.
       </p>
 
       <p class="reveal d3">
-        We're <b>pure vegetarian</b>, <b>pawsitively pet-welcoming</b>, and <b>open 24 hours</b>.
-        Your order is called out by name when it's ready — we're proudly self-service.
+        There's a snooker table on the first floor, a shelf of board games and well-thumbed books,
+        and a resident dog or two who may inspect your table. We're
+        <b>self-service</b> — your name gets called when it's ready — and we are
+        <b>open every hour of every day</b>, including tonight.
       </p>
 
-      <dl class="facts reveal d4">
-        <div><dt>24/7</dt><dd>Never closed</dd></div>
-        <div><dt>100%</dt><dd>Pure veg kitchen</dd></div>
-        <div><dt>4.5★</dt><dd>1,400+ Google reviews</dd></div>
-        <div><dt>₹250</dt><dd>Pool table, per hour</dd></div>
-      </dl>
+      <a class="text-link reveal d4" href="#gallery">See the place inside <span>→</span></a>
+    </div>
+
+    <div class="story-media reveal">
+      <figure class="sm sm-1">
+        <img src="images/courtyard-blue-staircase.jpg" width="243" height="406" loading="lazy"
+             alt="The courtyard at Cafe Flying Gypsy's at dusk — a blue metal staircase, a boat hung from the ceiling and palms wrapped in fairy lights." />
+        <figcaption>The courtyard</figcaption>
+      </figure>
+      <figure class="sm sm-2">
+        <img src="images/turquoise-gallery-wall.jpg" width="243" height="244" loading="lazy"
+             alt="A turquoise wall at the cafe covered in ornate framed art, mirrors and curios." />
+        <figcaption>The gallery wall</figcaption>
+      </figure>
+      <figure class="sm sm-3">
+        <img src="images/teddy-book-shelf-corner.jpg" width="243" height="304" loading="lazy"
+             alt="A reading corner with teal wall shelves full of books, exposed brick and a large teddy bear on a chair." />
+        <figcaption>The book corner</figcaption>
+      </figure>
+      <figure class="sm sm-4">
+        <img src="images/cafe-exterior-signboard.jpg" width="243" height="244" loading="lazy"
+             alt="The illuminated entrance sign of Cafe Flying Gypsy's, with hanging plants and a teal-framed door." />
+        <figcaption>Find the sign</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ SIGNATURES ══════════════════════ -->
+<section class="section signatures" id="signatures">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow reveal">Signatures</p>
+      <h2 class="reveal d1">Six things people <em>come back</em> for.</h2>
+      <p class="sec-lede reveal d2">Photographed on our own tables, priced at our own counter.</p>
+    </header>
+
+    <div class="sig-grid" id="sigGrid">
+      <!-- injected by app.js from real photo + real price data -->
     </div>
   </div>
 </section>
@@ -235,99 +255,55 @@
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow reveal">The menu</p>
-      <h2 class="reveal d1">Comfort food, <em>all day and all night</em>.</h2>
+      <h2 class="reveal d1">Every plate, <em>every price</em>.</h2>
       <p class="sec-lede reveal d2">
-        Pure vegetarian, made to order. From the Maggi that regulars come back for
-        at 2&nbsp;AM to the white-sauce pasta everyone tells you not to miss.
+        The full card, start to finish — Maggi, wood-fired pizza, pasta, burgers, shakes,
+        mojitos and the coffee we're quietly proud of.
       </p>
     </header>
 
     <div class="tabs reveal d2" role="tablist" aria-label="Menu categories">
-      <!-- buttons injected by app.js -->
+      <!-- injected by app.js -->
     </div>
 
     <div class="menu-body">
-      <div class="menu-panels" id="menuPanels">
-        <!-- panels injected by app.js -->
-      </div>
+      <div class="menu-panels" id="menuPanels"><!-- injected --></div>
 
       <aside class="menu-aside reveal">
         <figure class="aside-photo">
           <img src="images/paneer-tikka-pizza.jpg" width="243" height="203" loading="lazy"
                alt="A paneer tikka pizza topped with paneer cubes, green capsicum, red pepper and onion." />
         </figure>
-        <h3>Can't decide?</h3>
-        <p>Ask for the <b>white-sauce pasta</b> and an <b>Italian Maggi</b>. Between them they've convinced most of the neighbourhood.</p>
-        <a class="btn btn-primary btn-sm" href="https://wa.me/919011147147?text=Hi!%20Could%20you%20share%20the%20latest%20menu%20and%20prices%3F" target="_blank" rel="noopener">
-          Ask for today's rates
+        <h3>The house order</h3>
+        <p>
+          <b>Italian Cheese Maggi</b> to start the argument, <b>Cheesy White Sauce Pasta</b>
+          to settle it. Both have been on the menu longer than most of our regulars have had jobs.
+        </p>
+        <ul class="aside-list">
+          <li><span>Kitchen</span><b>Open all 24 hours</b></li>
+          <li><span>Service</span><b>Self-service</b></li>
+          <li><span>Payment</span><b>Cash · UPI</b></li>
+        </ul>
+        <a class="btn btn-whatsapp btn-block" href="https://wa.me/919011147147?text=Hi!%20I'd%20like%20to%20place%20an%20order." target="_blank" rel="noopener">
+          Order on WhatsApp
         </a>
       </aside>
     </div>
-
-    <p class="menu-foot reveal">
-      Prices marked <span class="price is-tbd">—</span> are being refreshed.
-      <a href="https://wa.me/919011147147?text=Hi!%20Could%20you%20share%20the%20latest%20menu%20and%20prices%3F" target="_blank" rel="noopener">WhatsApp us for today's rates →</a>
-    </p>
   </div>
 </section>
 
-<!-- ══════════════════════ EXPERIENCE ══════════════════════ -->
-<section class="section exp" id="experiences">
+<!-- ══════════════════════ ALL HOURS ══════════════════════ -->
+<section class="section allhours" id="allhours">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">More than a cafe</p>
-      <h2 class="reveal d1">Things to do while your coffee <em>goes cold</em>.</h2>
+      <p class="eyebrow reveal">24 hours, seven days</p>
+      <h2 class="reveal d1">The cafe changes. <em>The lights don't.</em></h2>
+      <p class="sec-lede reveal d2">
+        Most places have one personality. Ours has six — and you're welcome at any of them.
+      </p>
     </header>
 
-    <div class="exp-grid">
-      <article class="exp-card reveal">
-        <span class="exp-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="17" cy="12" r="3.4"/></svg>
-        </span>
-        <h3>Pool &amp; snooker</h3>
-        <p>Upstairs, one table, all night. <b>₹250 per hour</b>.</p>
-      </article>
-
-      <article class="exp-card reveal d1">
-        <span class="exp-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="8" height="14" rx="1.4"/><rect x="13" y="5" width="8" height="14" rx="1.4"/><circle cx="7" cy="12" r="1.2" fill="#FDF7EC"/></svg>
-        </span>
-        <h3>Board games &amp; cards</h3>
-        <p>A shelf of games, sudoku and playing cards. Borrow freely.</p>
-      </article>
-
-      <article class="exp-card reveal d2">
-        <span class="exp-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M5 4h5a3 3 0 0 1 3 3v13a2.4 2.4 0 0 0-2.4-2.3H5z"/><path d="M19 4h-5a3 3 0 0 0-3 3v13a2.4 2.4 0 0 1 2.4-2.3H19z"/></svg>
-        </span>
-        <h3>Books corner</h3>
-        <p>Pick a book off the teal shelves and settle into the quiet seats.</p>
-      </article>
-
-      <article class="exp-card reveal d3">
-        <span class="exp-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="7" cy="9" r="2.1"/><circle cx="12" cy="7" r="2.1"/><circle cx="17" cy="9" r="2.1"/><path d="M12 11c-3 0-5.2 2-5.2 4.3 0 1.7 1.5 2.7 3.1 2.7 1 0 1.5-.4 2.1-.4s1.1.4 2.1.4c1.6 0 3.1-1 3.1-2.7C17.2 13 15 11 12 11z"/></svg>
-        </span>
-        <h3>Bring your pet</h3>
-        <p>Water bowls on the house. Resident dogs may inspect your table.</p>
-      </article>
-
-      <article class="exp-card reveal d4">
-        <span class="exp-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
-        </span>
-        <h3>Courtyard nights</h3>
-        <p>Fairy lights, plants and open air — the best seat after dark.</p>
-      </article>
-
-      <article class="exp-card reveal d5">
-        <span class="exp-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 4l2.3 5 5.7.6-4.2 3.8 1.2 5.6L12 16.2 7 19l1.2-5.6L4 9.6 9.7 9z"/></svg>
-        </span>
-        <h3>Celebrations</h3>
-        <p>Birthdays, farewells, first dates. Tell us in advance and we'll set it up.</p>
-      </article>
-    </div>
+    <ol class="hours" id="hoursList"><!-- injected --></ol>
   </div>
 </section>
 
@@ -336,68 +312,65 @@
   <div class="wrap">
     <header class="sec-head">
       <p class="eyebrow reveal">Gallery</p>
-      <h2 class="reveal d1">Every corner is <em>someone's favourite</em>.</h2>
-      <p class="sec-lede reveal d2">All photographs from inside the cafe — the murals, the food, the courtyard at night.</p>
+      <h2 class="reveal d1">Eighteen corners, <em>one turquoise thread</em>.</h2>
+      <p class="sec-lede reveal d2">Every photograph here was taken inside the cafe or at our tables. Nothing borrowed.</p>
     </header>
 
     <div class="filters reveal d2" role="tablist" aria-label="Gallery filters">
-      <button class="filter is-on" data-filter="all" role="tab" aria-selected="true">All <i>18</i></button>
+      <button class="filter is-on" data-filter="all" role="tab" aria-selected="true">Everything <i>18</i></button>
       <button class="filter" data-filter="interiors" role="tab" aria-selected="false">Interiors &amp; art <i>8</i></button>
       <button class="filter" data-filter="food" role="tab" aria-selected="false">Food <i>7</i></button>
       <button class="filter" data-filter="drinks" role="tab" aria-selected="false">Drinks <i>3</i></button>
     </div>
 
-    <div class="gal-grid" id="galGrid">
-      <!-- injected by app.js -->
-    </div>
+    <div class="gal-grid" id="galGrid"><!-- injected --></div>
   </div>
 </section>
 
 <!-- ══════════════════════ REVIEWS ══════════════════════ -->
 <section class="section reviews" id="reviews">
   <div class="wrap">
-    <header class="sec-head">
-      <p class="eyebrow reveal">Reviews</p>
-      <h2 class="reveal d1">What people say when they <em>come back</em>.</h2>
-
-      <div class="rating-row reveal d2">
-        <div class="rating-score">
-          <b>4.5</b>
-          <div>
-            <span class="stars" aria-hidden="true">★★★★★</span>
-            <small>1,400+ Google reviews</small>
-          </div>
+    <header class="sec-head sec-head-row">
+      <div>
+        <p class="eyebrow reveal">Reviews</p>
+        <h2 class="reveal d1">1,400 people have <em>already been</em>.</h2>
+      </div>
+      <div class="rating-box reveal d2">
+        <b>4.5</b>
+        <div>
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          <small>1,400+ Google reviews</small>
         </div>
-        <a class="rating-link" href="https://search.google.com/local/reviews?placeid=ChIJTWY0G2TBwjsR9M0AcA-mZ0A" target="_blank" rel="noopener">
-          Read them on Google →
-        </a>
       </div>
     </header>
 
-    <div class="rev-grid" id="revGrid">
-      <!-- injected by app.js -->
-    </div>
+    <div class="rev-grid" id="revGrid"><!-- injected --></div>
 
     <p class="rev-note reveal">
-      Quotes above are from public Google reviews of Cafe Flying Gypsy's.
-      <a href="https://search.google.com/local/reviews?placeid=ChIJTWY0G2TBwjsR9M0AcA-mZ0A" target="_blank" rel="noopener">See all reviews</a>
+      Every quote above is from a public Google review of Cafe Flying Gypsy's, reproduced as written.
+      <a href="https://search.google.com/local/reviews?placeid=ChIJTWY0G2TBwjsR9M0AcA-mZ0A" target="_blank" rel="noopener">Read all of them on Google →</a>
     </p>
   </div>
 </section>
 
-<!-- ══════════════════════ VISIT / RESERVE ══════════════════════ -->
+<!-- ══════════════════════ VISIT ══════════════════════ -->
 <section class="section visit" id="visit">
   <div class="wrap">
     <header class="sec-head">
-      <p class="eyebrow reveal">Visit us</p>
-      <h2 class="reveal d1">Come as you are. <em>We're always open.</em></h2>
+      <p class="eyebrow reveal">Visit</p>
+      <h2 class="reveal d1">Opposite ICICI Bank, <em>behind Ghole Road</em>.</h2>
+      <p class="sec-lede reveal d2">
+        Two minutes off FC Road. Look for the turquoise door and the hanging plants.
+      </p>
     </header>
 
     <div class="visit-grid">
-      <!-- ── reservation form ── -->
       <div class="card form-card reveal">
-        <h3>Reserve a table</h3>
-        <p class="form-sub">Fill this in and we'll open WhatsApp with your details ready to send — no accounts, no waiting.</p>
+        <h3>Book a table</h3>
+        <p class="form-sub">
+          Fill this in and we'll open WhatsApp with your booking already written out.
+          No app, no account — just press send.
+        </p>
 
         <form id="reserveForm" novalidate>
           <div class="field">
@@ -423,14 +396,15 @@
                 <option value="">Select</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option>
                 <option>5</option><option>6</option><option>7</option><option>8</option>
-                <option>9+</option>
+                <option>9</option><option>10+</option>
               </select>
             </div>
             <div class="field">
-              <label for="rSeat">Seating</label>
+              <label for="rSeat">Where</label>
               <select id="rSeat" name="seating">
                 <option>Courtyard</option>
                 <option>Indoors</option>
+                <option>Upstairs, near the pool table</option>
                 <option>No preference</option>
               </select>
             </div>
@@ -438,20 +412,19 @@
 
           <div class="field">
             <label for="rNote">Anything we should know?</label>
-            <textarea id="rNote" name="note" rows="3" placeholder="Birthday, bringing a dog, need the pool table…"></textarea>
+            <textarea id="rNote" name="note" rows="3" placeholder="Birthday, bringing a dog, need the snooker table, Jain order…"></textarea>
           </div>
 
           <p class="form-error" id="formError" role="alert" hidden></p>
 
           <button class="btn btn-whatsapp btn-block" type="submit">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-1.2.1-2.7-.5-4.6-2s-2.9-3.3-3-4.4c-.1-.7.4-1.8 1-2.1.3-.2.8-.2 1 .1l1 1.4c.2.3.2.5 0 .8l-.5.6c-.2.2-.2.4 0 .7.4.7 1.6 2 2.4 2.4.3.2.5.1.7-.1l.6-.6c.2-.2.5-.3.8-.1l1.4 1c.3.2.3.7.2 1z"/></svg>
-            Send on WhatsApp
+            Send my booking on WhatsApp
           </button>
-          <p class="form-fine">Opens WhatsApp to <b>+91 90111 47147</b>. We reply from the same number.</p>
+          <p class="form-fine">Opens WhatsApp to <b>+91 90111 47147</b> — the number we actually answer.</p>
         </form>
       </div>
 
-      <!-- ── details ── -->
       <div class="visit-info">
         <div class="card info-card reveal d1">
           <ul class="info-list">
@@ -461,21 +434,21 @@
               </span>
               <div>
                 <b>Address</b>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=18.5240,73.8425" target="_blank" rel="noopener">
+                <a href="https://www.google.com/maps/dir/?api=1&amp;destination=18.5240,73.8425" target="_blank" rel="noopener">
                   1201-A/4, GH Patil Path,<br />Shivajinagar, Pune 411004
                 </a>
-                <small>Off FC Road — behind Ghole Road, near ICICI Bank, opposite Kiosk Kaffee.</small>
+                <small>Opposite ICICI Bank, behind Ghole Road, near FC Road.</small>
               </div>
             </li>
 
             <li>
               <span class="ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.4 2" stroke="#FDF7EC" stroke-width="1.9" fill="none" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 7v5.3l3.4 2" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round"/></svg>
               </span>
               <div>
                 <b>Hours</b>
-                <span>Open 24 hours, every day</span>
-                <small>Yes — including tonight.</small>
+                <span>Open 24 hours, seven days</span>
+                <small>Yes — including right now.</small>
               </div>
             </li>
 
@@ -486,18 +459,29 @@
               <div>
                 <b>Phone &amp; WhatsApp</b>
                 <a href="tel:+919011147147">+91 90111 47147</a>
-                <small><a class="inline-wa" href="https://wa.me/919011147147" target="_blank" rel="noopener">Message us on WhatsApp →</a></small>
+                <small><a class="inline-wa" href="https://wa.me/919011147147" target="_blank" rel="noopener">Message us →</a></small>
               </div>
             </li>
 
             <li>
               <span class="ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.2" cy="6.8" r="1.2" fill="#FDF7EC"/></svg>
+                <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.2" cy="6.8" r="1.2"/></svg>
               </span>
               <div>
                 <b>Instagram</b>
                 <a href="https://www.instagram.com/cafeflyinggypsys/" target="_blank" rel="noopener">@cafeflyinggypsys</a>
-                <small>Daily specials, new murals and resident-dog updates.</small>
+                <small>New murals, daily specials, resident-dog updates.</small>
+              </div>
+            </li>
+
+            <li>
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M3.4 6.6L12 13l8.6-6.4" fill="none" stroke="currentColor" stroke-width="1.9"/></svg>
+              </span>
+              <div>
+                <b>Email</b>
+                <a href="mailto:contact@cafeflyinggypsys.online">contact@cafeflyinggypsys.online</a>
+                <small>For large bookings and collaborations.</small>
               </div>
             </li>
           </ul>
@@ -512,11 +496,11 @@
               WhatsApp
             </a>
             <a class="qa" href="https://www.instagram.com/cafeflyinggypsys/" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.2" cy="6.8" r="1.2" fill="#FDF7EC"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.2" cy="6.8" r="1.2"/></svg>
               Instagram
             </a>
-            <a class="qa" href="https://www.google.com/maps/dir/?api=1&destination=18.5240,73.8425" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 14H4z"/><path d="M12 9l4.5 8h-9z" fill="#FDF7EC" opacity=".5"/></svg>
+            <a class="qa" href="https://www.google.com/maps/dir/?api=1&amp;destination=18.5240,73.8425" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c3.9 0 7 3.1 7 7 0 5.2-7 13-7 13S5 14.2 5 9c0-3.9 3.1-7 7-7z"/><circle cx="12" cy="9" r="2.6" fill="#FDF7EC"/></svg>
               Directions
             </a>
           </div>
@@ -526,24 +510,25 @@
           <iframe
             title="Map showing Cafe Flying Gypsy's at 1201-A/4 GH Patil Path, Shivajinagar, Pune"
             src="https://www.google.com/maps?q=18.5240,73.8425&amp;z=16&amp;output=embed"
-            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen></iframe>
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════ CTA STRIP ══════════════════════ -->
-<section class="cta-strip">
-  <div class="wrap cta-inner">
-    <div class="reveal">
-      <h2>It's 2&nbsp;AM somewhere.</h2>
-      <p>Actually, it's 2&nbsp;AM here too — and the kitchen is still on.</p>
-    </div>
-    <div class="cta-actions reveal d1">
-      <a class="btn btn-primary" href="https://wa.me/919011147147?text=Hi!%20Table%20for%20tonight%20please." target="_blank" rel="noopener">Book on WhatsApp</a>
-      <a class="btn btn-outline" href="tel:+919011147147">Call the cafe</a>
+<!-- ══════════════════════ CLOSING ══════════════════════ -->
+<section class="closing">
+  <div class="wrap closing-inner">
+    <p class="eyebrow eyebrow-light reveal">It's late. Good.</p>
+    <h2 class="reveal d1">We're still open.</h2>
+    <p class="reveal d2">
+      Three in the morning, a plate of Maggi, and a courtyard to yourself.
+      Bring a friend or bring a book — the door on GH Patil Path doesn't close.
+    </p>
+    <div class="closing-cta reveal d3">
+      <a class="btn btn-amber" href="https://wa.me/919011147147?text=Hi!%20Table%20for%20tonight%2C%20please." target="_blank" rel="noopener">Book on WhatsApp</a>
+      <a class="btn btn-outline-light" href="tel:+919011147147">Call +91 90111 47147</a>
     </div>
   </div>
 </section>
@@ -556,26 +541,34 @@
       <a class="brand brand-foot" href="#hero">
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 64 64" focusable="false">
-            <circle cx="32" cy="32" r="30" fill="currentColor" opacity=".14"/>
-            <path d="M32 12c9 0 16 7 16 16 0 6-4 9-8 9-3 0-5-2-8-2s-5 2-8 2c-4 0-8-3-8-9 0-9 7-16 16-16z" fill="currentColor"/>
-            <circle cx="32" cy="28" r="3.6" fill="#0A4A4E"/>
-            <path d="M32 34v15M24.5 41.5c4 5 11 5 15 0" stroke="#0A4A4E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path d="M32 11c9.4 0 16.6 7.2 16.6 16.4 0 6.2-4.2 9.3-8.3 9.3-3.1 0-5.2-2.1-8.3-2.1s-5.2 2.1-8.3 2.1c-4.1 0-8.3-3.1-8.3-9.3C15.4 18.2 22.6 11 32 11z" fill="currentColor"/>
+            <circle cx="32" cy="27" r="4" fill="#0A4A4E"/>
+            <path d="M32 33.5V50M24 41c4.2 5.4 11.8 5.4 16 0" stroke="#0A4A4E" stroke-width="2.8" fill="none" stroke-linecap="round"/>
           </svg>
         </span>
-        <span class="brand-text"><b>Flying&nbsp;Gypsy's</b><i>Bringing art &amp; flavour together</i></span>
+        <span class="brand-text">
+          <b>Flying&nbsp;Gypsy's</b>
+          <i>Bringing art &amp; flavour together</i>
+        </span>
       </a>
-      <p class="foot-blurb">A pure-veg, pet-friendly, art-filled cafe in Shivajinagar — open 24 hours.</p>
+      <p class="foot-blurb">
+        An art-filled, pet-friendly cafe in Shivajinagar — serving Pune
+        every hour of every day since 2008.
+      </p>
       <div class="socials">
         <a href="tel:+919011147147" aria-label="Call us">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l1.9-1.9c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.6 20 4 13.4 4 5.4c0-.6.4-1 1-1h3.1c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1l-1.9 1.9z"/></svg>
         </a>
-        <a href="https://wa.me/919011147147" target="_blank" rel="noopener" aria-label="WhatsApp us">
+        <a href="https://wa.me/919011147147" target="_blank" rel="noopener" aria-label="WhatsApp">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-1.2.1-2.7-.5-4.6-2s-2.9-3.3-3-4.4c-.1-.7.4-1.8 1-2.1.3-.2.8-.2 1 .1l1 1.4c.2.3.2.5 0 .8l-.5.6c-.2.2-.2.4 0 .7.4.7 1.6 2 2.4 2.4.3.2.5.1.7-.1l.6-.6c.2-.2.5-.3.8-.1l1.4 1c.3.2.3.7.2 1z"/></svg>
         </a>
         <a href="https://www.instagram.com/cafeflyinggypsys/" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.2" cy="6.8" r="1.2" fill="#0A4A4E"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.2" cy="6.8" r="1.2"/></svg>
         </a>
-        <a href="https://www.google.com/maps/dir/?api=1&destination=18.5240,73.8425" target="_blank" rel="noopener" aria-label="Directions">
+        <a href="mailto:contact@cafeflyinggypsys.online" aria-label="Email">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M3.4 6.6L12 13l8.6-6.4" fill="none" stroke="currentColor" stroke-width="1.9"/></svg>
+        </a>
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=18.5240,73.8425" target="_blank" rel="noopener" aria-label="Directions">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c3.9 0 7 3.1 7 7 0 5.2-7 13-7 13S5 14.2 5 9c0-3.9 3.1-7 7-7z"/><circle cx="12" cy="9" r="2.6" fill="#0A4A4E"/></svg>
         </a>
       </div>
@@ -583,12 +576,13 @@
 
     <nav class="foot-col" aria-label="Sections">
       <h4>Explore</h4>
-      <a href="#about">About us</a>
-      <a href="#menu">Menu</a>
-      <a href="#experiences">Experience</a>
+      <a href="#story">Our story</a>
+      <a href="#signatures">Signatures</a>
+      <a href="#menu">Menu &amp; prices</a>
+      <a href="#allhours">All hours</a>
       <a href="#gallery">Gallery</a>
       <a href="#reviews">Reviews</a>
-      <a href="#visit">Reserve a table</a>
+      <a href="#visit">Book a table</a>
     </nav>
 
     <div class="foot-col">
@@ -599,54 +593,56 @@
         Maharashtra, India
       </address>
       <a href="tel:+919011147147">+91 90111 47147</a>
+      <a href="mailto:contact@cafeflyinggypsys.online">contact@cafeflyinggypsys.online</a>
       <a href="https://www.instagram.com/cafeflyinggypsys/" target="_blank" rel="noopener">@cafeflyinggypsys</a>
     </div>
 
     <div class="foot-col">
       <h4>Good to know</h4>
       <p class="foot-note"><b>Open 24 hours</b><br />Seven days a week</p>
-      <p class="foot-note"><b>Pure vegetarian</b><br />100% veg kitchen</p>
+      <p class="foot-note"><b>Jain options</b><br />No onion, no garlic on request</p>
       <p class="foot-note"><b>Pet-friendly</b><br />Bring your companion</p>
+      <p class="foot-note"><b>Self-service</b><br />We call your name</p>
     </div>
   </div>
 
   <div class="wrap foot-bottom">
     <p>© <span id="year">2026</span> Cafe Flying Gypsy's · Shivajinagar, Pune</p>
-    <p class="foot-cred">Photographs are of our own cafe and food.</p>
+    <p class="foot-cred">Photographs are our own. Prices in ₹, inclusive of taxes as displayed in-store.</p>
   </div>
 </footer>
 
 <!-- ══════════════════════ LIGHTBOX ══════════════════════ -->
 <div class="lightbox" id="lightbox" hidden>
-  <button class="lb-close" id="lbClose" aria-label="Close image">✕</button>
-  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous image">‹</button>
-  <button class="lb-nav lb-next" id="lbNext" aria-label="Next image">›</button>
+  <button class="lb-close" id="lbClose" type="button" aria-label="Close image">✕</button>
+  <button class="lb-nav lb-prev" id="lbPrev" type="button" aria-label="Previous image">‹</button>
+  <button class="lb-nav lb-next" id="lbNext" type="button" aria-label="Next image">›</button>
   <figure class="lb-figure">
     <img id="lbImg" src="" alt="" />
-    <figcaption>
-      <span id="lbCap"></span>
-      <i id="lbCount"></i>
-    </figcaption>
+    <figcaption><span id="lbCap"></span><i id="lbCount"></i></figcaption>
   </figure>
 </div>
 
-<!-- floating WhatsApp -->
 <a class="fab" href="https://wa.me/919011147147?text=Hi%20Cafe%20Flying%20Gypsy's!" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-1.2.1-2.7-.5-4.6-2s-2.9-3.3-3-4.4c-.1-.7.4-1.8 1-2.1.3-.2.8-.2 1 .1l1 1.4c.2.3.2.5 0 .8l-.5.6c-.2.2-.2.4 0 .7.4.7 1.6 2 2.4 2.4.3.2.5.1.7-.1l.6-.6c.2-.2.5-.3.8-.1l1.4 1c.3.2.3.7.2 1z"/></svg>
 </a>
 
 <script src="app.js"></script>
 
-<!-- structured data: real business details -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "CafeOrCoffeeShop",
   "name": "Cafe Flying Gypsy's",
+  "url": "https://cafeflyinggypsys.online/",
+  "email": "contact@cafeflyinggypsys.online",
   "image": "images/hero-gypsy-mural.jpg",
-  "servesCuisine": ["Vegetarian", "Cafe", "Continental", "Fast Food"],
+  "servesCuisine": ["Cafe", "Italian", "Continental", "Fast Food", "Vegetarian"],
   "priceRange": "₹₹",
+  "currenciesAccepted": "INR",
+  "paymentAccepted": "Cash, UPI",
   "telephone": "+91-90111-47147",
+  "foundingDate": "2008",
   "sameAs": ["https://www.instagram.com/cafeflyinggypsys/"],
   "address": {
     "@type": "PostalAddress",
@@ -660,14 +656,17 @@
   "openingHoursSpecification": [{
     "@type": "OpeningHoursSpecification",
     "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-    "opens": "00:00", "closes": "23:59"
+    "opens": "00:00",
+    "closes": "23:59"
   }],
   "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.5", "reviewCount": "1400" },
   "amenityFeature": [
-    { "@type": "LocationFeatureSpecification", "name": "Pet friendly", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Open 24 hours", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Pet friendly", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Pool table", "value": true },
-    { "@type": "LocationFeatureSpecification", "name": "Board games", "value": true }
+    { "@type": "LocationFeatureSpecification", "name": "Board games", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Jain food options", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Self service", "value": true }
   ]
 }
 </script>
