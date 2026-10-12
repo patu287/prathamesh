@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KERN — Coffee &amp; Bakery · Zürich (Bento)</title>
+  <meta name="description" content="KERN is a specialty coffee house and bakery in Zürich. Small-batch roasts, morning bakes and a quiet room to think." />
+  <meta name="theme-color" content="#EFEBE4" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top utility bar -->
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <span class="hide-sm">KERN Coffee &amp; Bakery — Zürich</span>
+      <span class="live" id="liveStatus"><i class="dot"></i><span id="liveText">Checking hours…</span></span>
+      <span class="hide-sm">Kernstrasse 14, 8004 Zürich</span>
+    </div>
+  </div>
+
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="logo" aria-label="KERN home"><span class="logo-mark"></span>KERN</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#menu">Menu</a>
+        <a href="#roasts">Roasts</a>
+        <a href="#space">Space</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <a href="#reserve" class="btn btn-sm magnetic"><span>Reserve a table</span><b aria-hidden="true">→</b></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="label reveal-up"><span class="num">00</span> Specialty coffee house — Est. 2019</p>
+          <h1 class="display">
+            <span class="line"><span style="--d:.10s">Coffee,</span></span>
+            <span class="line"><span style="--d:.22s">made with</span></span>
+            <span class="line"><span style="--d:.34s">precision<em class="red">.</em></span></span>
+          </h1>
+          <p class="lede reveal-up" style="--d:.5s">Small-batch roasts, bread baked before sunrise and a room designed to be quiet. We take the slow way on purpose — one cup, made properly, every time.</p>
+          <div class="cta-row reveal-up" style="--d:.62s">
+            <a href="#menu" class="btn magnetic"><span>Explore the menu</span><b aria-hidden="true">→</b></a>
+            <a href="#reserve" class="btn btn-ghost"><span>Book a table</span></a>
+          </div>
+        </div>
+
+        <figure class="hero-media reveal-scale">
+          <div class="media-frame">
+            <img src="assets/hero.jpg" alt="A flat white cappuccino with latte art on a concrete ledge" class="parallax" />
+          </div>
+          <figcaption><span>Fig. 01</span> Cappuccino, 160 ml — house roast</figcaption>
+          <div class="seal" aria-hidden="true">
+            <svg viewBox="0 0 120 120" class="seal-ring"><defs><path id="circ" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text textLength="286" lengthAdjust="spacing"><textPath href="#circ" textLength="286" lengthAdjust="spacing">ROASTED IN SMALL BATCHES · EVERY WEEK ·</textPath></text></svg>
+            <span class="seal-core">est.<br><b>2019</b></span>
+          </div>
+        </figure>
+      </div>
+
+      <div class="hero-meta reveal-up" style="--d:.7s">
+        <div><small>Location</small><span>Kernstrasse 14, Zürich</span></div>
+        <div><small>Roastery</small><span>On site, Tue &amp; Fri</span></div>
+        <div><small>Bakery</small><span>Fresh from 06:30</span></div>
+        <div><small>Reservations</small><span>Up to 14 days ahead</span></div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Single origin <i>✱</i> Roasted weekly <i>✱</i> Laminated by hand <i>✱</i> Slow bar <i>✱</i> Quiet room <i>✱</i> Honest prices <i>✱</i></span>
+        <span>Single origin <i>✱</i> Roasted weekly <i>✱</i> Laminated by hand <i>✱</i> Slow bar <i>✱</i> Quiet room <i>✱</i> Honest prices <i>✱</i></span>
+      </div>
+    </div>
+
+    <!-- STORY -->
+    <section class="story wrap section">
+      <div class="story-head">
+        <p class="label reveal-up"><span class="num">01</span> The idea</p>
+        <h2 class="h2 reveal-up">Good coffee is a series of small, careful decisions. We make all of them ourselves.</h2>
+      </div>
+      <div class="story-body">
+        <figure class="story-img reveal-scale">
+          <div class="media-frame tall"><img src="assets/pour.jpg" alt="A barista pours steamed milk into an espresso cup" class="parallax" /></div>
+          <figcaption><span>Fig. 02</span> Microfoam, poured by hand</figcaption>
+        </figure>
+        <div class="story-text">
+          <p class="reveal-up">KERN started in a converted print workshop with one grinder and a lot of opinions. Today we roast three times a week, bake every morning and buy from farms we have visited — or will visit.</p>
+          <p class="reveal-up">Every cup follows a simple grid: one origin, one method, one person responsible from bean to pour. Nothing is hidden, nothing is rushed.</p>
+          <div class="stats">
+            <div class="stat reveal-up"><b data-count="14">0</b><small>Origins sourced</small></div>
+            <div class="stat reveal-up"><b data-count="3">0</b><small>Roasts every week</small></div>
+            <div class="stat reveal-up"><b data-count="6">0</b><small>Breads baked daily</small></div>
+            <div class="stat reveal-up"><b data-count="0">0</b><small>Single-use cups</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section class="menu section" id="menu">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="label reveal-up"><span class="num">02</span> Menu</p>
+          <h2 class="h2 reveal-up">Four sections. <span class="muted">No surprises.</span></h2>
+        </div>
+
+        <div class="menu-grid">
+          <aside class="menu-aside reveal-scale">
+            <div class="media-frame square"><img src="assets/pastry.jpg" alt="A golden butter croissant on a stone surface" class="parallax" /></div>
+            <p class="caption"><span>Fig. 03</span> Butter croissant, 48 hours laminated</p>
+          </aside>
+
+          <div class="menu-main">
+            <div class="tabs" role="tablist" aria-label="Menu sections" id="tabs">
+              <button role="tab" aria-selected="true" aria-controls="panel" data-tab="espresso" class="tab active">Espresso</button>
+              <button role="tab" aria-selected="false" aria-controls="panel" data-tab="filter" class="tab">Filter</button>
+              <button role="tab" aria-selected="false" aria-controls="panel" data-tab="tea" class="tab">Tea &amp; Matcha</button>
+              <button role="tab" aria-selected="false" aria-controls="panel" data-tab="bakery" class="tab">Bakery</button>
+              <span class="tab-indicator" aria-hidden="true"></span>
+            </div>
+
+            <ul class="menu-list" id="panel" role="tabpanel"></ul>
+            <p class="menu-note">Oat, almond or soy milk at no extra charge. Prices in CHF, incl. VAT.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROASTS -->
+    <section class="roasts section" id="roasts">
+      <div class="wrap">
+        <div class="section-head split">
+          <div>
+            <p class="label reveal-up"><span class="num">03</span> This week's roasts</p>
+            <h2 class="h2 reveal-up">Three coffees.<br><span class="muted">Roasted on Tuesday.</span></h2>
+          </div>
+          <p class="reveal-up section-lede">We print the tasting notes, acidity and body on every bag. The scales below are our own cupping numbers, out of five.</p>
+        </div>
+
+        <div class="roast-grid">
+          <article class="roast reveal-up">
+            <div class="roast-top"><span class="num">R—01</span><span class="pill">Single origin</span></div>
+            <h3>Lindo</h3>
+            <p class="origin">Ethiopia · Yirgacheffe · Washed</p>
+            <p class="notes">Bergamot, white peach, jasmine tea.</p>
+            <div class="scale"><span>Acidity</span><div class="bar"><i style="--v:90%"></i></div><b>5</b></div>
+            <div class="scale"><span>Body</span><div class="bar"><i style="--v:40%"></i></div><b>2</b></div>
+            <a href="#visit" class="link">Buy 250 g — CHF 24 →</a>
+          </article>
+
+          <article class="roast reveal-up dark-card">
+            <div class="roast-top"><span class="num">R—02</span><span class="pill pill-red">Seasonal</span></div>
+            <h3>Mora</h3>
+            <p class="origin">Colombia · Huila · Honey process</p>
+            <p class="notes">Red cherry, caramel, dark cocoa.</p>
+            <div class="scale"><span>Acidity</span><div class="bar"><i style="--v:55%"></i></div><b>3</b></div>
+            <div class="scale"><span>Body</span><div class="bar"><i style="--v:75%"></i></div><b>4</b></div>
+            <a href="#visit" class="link">Buy 250 g — CHF 22 →</a>
+          </article>
+
+          <article class="roast reveal-up">
+            <div class="roast-top"><span class="num">R—03</span><span class="pill">House blend</span></div>
+            <h3>Kern No.1</h3>
+            <p class="origin">Brazil · Colombia · Ethiopia</p>
+            <p class="notes">Hazelnut, dark chocolate, brown sugar.</p>
+            <div class="scale"><span>Acidity</span><div class="bar"><i style="--v:30%"></i></div><b>2</b></div>
+            <div class="scale"><span>Body</span><div class="bar"><i style="--v:90%"></i></div><b>5</b></div>
+            <a href="#visit" class="link">Buy 250 g — CHF 20 →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPACE -->
+    <section class="space section" id="space">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="label reveal-up"><span class="num">04</span> The space</p>
+          <h2 class="h2 reveal-up">Concrete, oak and daylight.<br><span class="muted">Built to slow you down.</span></h2>
+        </div>
+      </div>
+      <figure class="space-img reveal-scale">
+        <img src="assets/interior.jpg" alt="Minimal café interior with concrete walls, an oak communal table and tall glass windows" class="parallax" />
+        <figcaption><span>Fig. 04</span> The long table seats twelve — bring a book.</figcaption>
+      </figure>
+      <div class="wrap facts">
+        <div class="fact reveal-up"><span class="num">A</span><h3>Quiet hours</h3><p>No music before 11:00. Laptops welcome, calls are better outside.</p></div>
+        <div class="fact reveal-up"><span class="num">B</span><h3>Courtyard</h3><p>Eight seats in the garden from April to October, weather permitting.</p></div>
+        <div class="fact reveal-up"><span class="num">C</span><h3>Private tasting</h3><p>Our roaster hosts a 60-minute cupping for up to six guests, Thursdays.</p></div>
+      </div>
+    </section>
+
+    <!-- PROMISE (dark) -->
+    <section class="promise">
+      <div class="wrap promise-inner">
+        <p class="label reveal-up"><span class="num">05</span> How we brew</p>
+        <ol class="steps">
+          <li class="reveal-up"><span class="step-n">01</span><div><h3>Bloom</h3><p>Thirty seconds of wet grounds, so the gas can escape and the sweetness can open.</p></div></li>
+          <li class="reveal-up"><span class="step-n">02</span><div><h3>Pour</h3><p>Slow concentric circles at 92 °C. Water temperature checked on every brew.</p></div></li>
+          <li class="reveal-up"><span class="step-n">03</span><div><h3>Drawdown</h3><p>Between two and three minutes. We stop when it tastes right, not when the timer says so.</p></div></li>
+        </ol>
+        <blockquote class="quote reveal-up">
+          “The best cup is the one you finish while it is still warm.”
+          <cite>— Mira Keller, head barista</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- VISIT -->
+    <section class="visit section" id="visit">
+      <div class="wrap visit-grid">
+        <div class="visit-info">
+          <p class="label reveal-up"><span class="num">06</span> Visit</p>
+          <h2 class="h2 reveal-up">Kernstrasse 14<br><span class="muted">8004 Zürich</span></h2>
+          <p class="reveal-up">Two minutes from Hardbrücke station, tram 4 and 13. Bicycle parking at the back.</p>
+          <table class="hours reveal-up" id="hours">
+            <tbody>
+              <tr data-day="1"><th>Monday – Friday</th><td>07:30 – 18:00</td></tr>
+              <tr data-day="6"><th>Saturday</th><td>08:30 – 17:00</td></tr>
+              <tr data-day="0"><th>Sunday</th><td>09:00 – 16:00</td></tr>
+            </tbody>
+          </table>
+          <div class="contact reveal-up">
+            <a href="tel:+41440000014">+41 44 000 00 14</a>
+            <a href="mailto:hello@kern.coffee">hello@kern.coffee</a>
+          </div>
+        </div>
+
+        <div class="map reveal-scale" aria-label="Schematic map showing KERN's location">
+          <svg viewBox="0 0 600 600" role="img" aria-label="Schematic street map">
+            <g class="grid-lines">
+              <line x1="0" y1="100" x2="600" y2="100"/><line x1="0" y1="250" x2="600" y2="250"/><line x1="0" y1="420" x2="600" y2="420"/>
+              <line x1="120" y1="0" x2="120" y2="600"/><line x1="300" y1="0" x2="300" y2="600"/><line x1="480" y1="0" x2="480" y2="600"/>
+            </g>
+            <rect class="block" x="130" y="110" width="160" height="130"/>
+            <rect class="block" x="310" y="260" width="160" height="150"/>
+            <rect class="block" x="20" y="430" width="90" height="140"/>
+            <rect class="block" x="490" y="20" width="90" height="70"/>
+            <path class="route" d="M40,40 L120,40 L120,250 L300,250 L300,420 L480,420 L480,560"/>
+            <circle class="ring" cx="300" cy="250" r="26"/>
+            <rect class="pin" x="290" y="240" width="20" height="20"/>
+            <text x="332" y="236">KERN</text>
+            <text x="332" y="252" class="sm">Kernstrasse 14</text>
+          </svg>
+          <p class="map-foot">Not to scale · Route from Hardbrücke</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESERVE -->
+    <section class="reserve section" id="reserve">
+      <div class="wrap reserve-grid">
+        <div>
+          <p class="label reveal-up"><span class="num">07</span> Reserve</p>
+          <h2 class="h2 reveal-up">Book a table.<br><span class="muted">Or just walk in.</span></h2>
+          <p class="reveal-up">Tables for two to twelve. Large groups and the cupping can be requested by email.</p>
+        </div>
+
+        <form class="form reveal-up" id="reserveForm" novalidate>
+          <div class="form-content" id="formContent">
+            <div class="field">
+              <label for="fName">Name</label>
+              <input id="fName" name="name" autocomplete="name" placeholder="Your full name" required />
+              <small class="err" data-for="fName"></small>
+            </div>
+            <div class="field">
+              <label for="fEmail">Email</label>
+              <input id="fEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+              <small class="err" data-for="fEmail"></small>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="fDate">Date</label>
+                <input id="fDate" name="date" type="date" required />
+                <small class="err" data-for="fDate"></small>
+              </div>
+              <div class="field">
+                <label for="fTime">Time</label>
+                <select id="fTime" name="time" required>
+                  <option value="">Select</option>
+                  <option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option>
+                  <option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option>
+                  <option>16:00</option><option>17:00</option>
+                </select>
+                <small class="err" data-for="fTime"></small>
+              </div>
+              <div class="field">
+                <label for="fGuests">Guests</label>
+                <select id="fGuests" name="guests">
+                  <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10</option><option>12</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-block" type="submit"><span>Request reservation</span><b aria-hidden="true">→</b></button>
+            <p class="fine">We confirm by email within two hours. Free cancellation until 24 h before.</p>
+          </div>
+
+          <div class="form-success" id="formSuccess" hidden>
+            <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+            <h3>Thank you, <span id="successName">friend</span>.</h3>
+            <p>Your request for <b id="successWhen"></b> is in. We will confirm by email shortly.</p>
+            <button type="button" class="btn btn-ghost" id="resetForm"><span>Make another request</span></button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <p class="label">Stay in the loop</p>
+        <form class="subscribe" id="subscribe">
+          <input type="email" placeholder="Email for roast drops" aria-label="Email address" required />
+          <button class="btn" type="submit"><span>Subscribe</span><b aria-hidden="true">→</b></button>
+        </form>
+      </div>
+      <div class="footer-mark" aria-hidden="true">KERN<i class="red">.</i></div>
+      <div class="footer-bottom">
+        <span>© 2026 KERN Coffee &amp; Bakery GmbH</span>
+        <nav aria-label="Social"><a href="#top">Instagram</a><a href="#top">Newsletter</a><a href="#top">Careers</a></nav>
+        <a href="#top" class="to-top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
