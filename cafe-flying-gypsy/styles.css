@@ -312,7 +312,7 @@ p{ text-wrap:pretty; }
   gap:clamp(2.4rem,5vw,4.8rem); align-items:center;
 }
 .hero h1{
-  font-size:clamp(2.6rem,6.6vw,4.85rem);
+  font-size:clamp(2.05rem,7vw,4.85rem);
   line-height:1; margin-top:1.1rem; letter-spacing:-.032em;
 }
 .lede{
@@ -355,13 +355,15 @@ p{ text-wrap:pretty; }
 }
 .arch img{ width:100%; height:100%; object-fit:cover; }
 .arch figcaption{
-  position:absolute; left:.9rem; bottom:.9rem;
-  background:rgba(10,74,78,.7); backdrop-filter:blur(10px);
-  color:var(--cream); font-size:.71rem; font-weight:500;
+  /* bottom-right: the circular pod sits bottom-left and would cover it */
+  position:absolute; right:.9rem; bottom:.9rem;
+  max-width:min(58%, 13rem);
+  background:rgba(10,74,78,.72); backdrop-filter:blur(10px);
+  color:var(--cream); font-size:.71rem; font-weight:500; line-height:1.4;
   padding:.45rem .85rem; border-radius:999px;
 }
 .arch-pod{
-  position:absolute; left:-1.5rem; bottom:1.2rem; width:min(43%,210px);
+  position:absolute; left:-1.5rem; bottom:1.1rem; width:min(40%,200px);
   aspect-ratio:1; border-radius:50%; overflow:hidden;
   border:6px solid rgba(255,255,255,.92); box-shadow:var(--sh);
   background:var(--sand);
@@ -458,8 +460,17 @@ p{ text-wrap:pretty; }
 .sig-card:hover{
   transform:translateY(-7px); box-shadow:var(--sh); border-color:rgba(30,158,156,.32);
 }
-.sig-img{ position:relative; overflow:hidden; aspect-ratio:4/3.05; background:var(--sand); }
-.sig-img img{ width:100%; height:100%; object-fit:cover; transition:transform .9s var(--ease); }
+.sig-img{
+  position:relative; overflow:hidden; background:var(--sand);
+  /* ratio via padding, NOT aspect-ratio: this figure is a flex item and
+     aspect-ratio collapses inside a column flex container. */
+  padding-top:76.25%;
+}
+.sig-img img{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .9s var(--ease);
+}
 .sig-card:hover .sig-img img{ transform:scale(1.06); }
 .sig-badge{
   position:absolute; top:.8rem; left:.8rem;
@@ -467,7 +478,10 @@ p{ text-wrap:pretty; }
   font-size:.62rem; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
   padding:.3rem .62rem; border-radius:999px;
 }
-.sig-body{ padding:1.25rem 1.35rem 1.45rem; display:flex; flex-direction:column; gap:.5rem; flex:1; }
+.sig-body{
+  padding:1.25rem 1.35rem 1.45rem;
+  display:flex; flex-direction:column; gap:.5rem; flex:1 1 auto;
+}
 .sig-top{ display:flex; align-items:baseline; justify-content:space-between; gap:.9rem; }
 .sig-top h3{
   font-family:var(--sans); font-size:1.03rem; font-weight:600;
@@ -482,10 +496,14 @@ p{ text-wrap:pretty; }
 /* ─────────── 11 · menu ─────────── */
 .menu{ background:linear-gradient(180deg,var(--cream-2),var(--cream) 46%); }
 .tabs{
-  display:flex; gap:.4rem; padding:.42rem; margin-bottom:2.6rem;
+  display:flex; gap:.4rem; padding:.45rem; margin-bottom:2.6rem;
   background:rgba(255,255,255,.72); border:1px solid var(--line);
-  border-radius:999px; width:fit-content; max-width:100%;
+  /* 11 categories wrap to a second row on desktop — a fully-round pill
+     turns into a distorted oval, so this is a rounded panel instead. */
+  border-radius:var(--r);
+  width:fit-content; max-width:100%;
   box-shadow:var(--sh-xs); flex-wrap:wrap;
+  justify-content:center;
 }
 .tab{
   padding:.6rem 1.1rem; border-radius:999px; white-space:nowrap;
@@ -754,7 +772,7 @@ p{ text-wrap:pretty; }
 }
 .field label b{ color:var(--terra); }
 .field input,.field select,.field textarea{
-  width:100%; padding:.88rem 1.05rem;
+  width:100%; max-width:100%; min-width:0; padding:.88rem 1.05rem;
   background:var(--cream); border:1.5px solid var(--line);
   border-radius:13px; font-size:.935rem;
   transition:border-color .24s, box-shadow .24s, background .24s;
@@ -779,7 +797,8 @@ p{ text-wrap:pretty; }
 .visit-info{ display:grid; gap:1.5rem; }
 .info-card{ padding:clamp(1.4rem,3vw,2rem); }
 .info-list{ display:grid; gap:1.4rem; }
-.info-list li{ display:flex; gap:1rem; }
+.info-list li{ display:flex; gap:1rem; min-width:0; }
+.info-list li > div{ min-width:0; }
 .info-list .ico{
   width:42px; height:42px; flex:0 0 auto; border-radius:13px;
   display:grid; place-items:center; color:var(--teal-deep);
@@ -790,7 +809,7 @@ p{ text-wrap:pretty; }
   display:block; font-size:.7rem; font-weight:700; letter-spacing:.14em;
   text-transform:uppercase; color:var(--ink-mute); margin-bottom:.18rem;
 }
-.info-list a,.info-list span:not(.ico){ font-size:.945rem; font-weight:500; color:var(--teal-dark); line-height:1.55; }
+.info-list a,.info-list span:not(.ico){ font-size:.945rem; font-weight:500; color:var(--teal-dark); line-height:1.55; overflow-wrap:anywhere; min-width:0; }
 .info-list a:hover{ color:var(--terra); }
 .info-list small{ display:block; margin-top:.32rem; font-size:.785rem; color:var(--ink-mute); line-height:1.55; }
 .inline-wa{ font-size:.82rem!important; color:var(--terra)!important; font-weight:600; border-bottom:1px solid rgba(180,102,58,.35); }
@@ -863,7 +882,7 @@ p{ text-wrap:pretty; }
   letter-spacing:.16em; text-transform:uppercase; color:var(--amber);
   margin-bottom:.55rem;
 }
-.foot-col a{ transition:color .22s, padding-left .28s var(--ease); }
+.foot-col a{ overflow-wrap:anywhere; transition:color .22s, padding-left .28s var(--ease); }
 .foot-col a:hover{ color:var(--cream); padding-left:.3rem; }
 .foot-col address{ line-height:1.68; }
 .foot-note{ line-height:1.55; }
@@ -910,7 +929,7 @@ p{ text-wrap:pretty; }
    ================================================================ */
 @media (max-width:1120px){
   .gal-grid{ columns:3 218px; }
-  .menu-body{ grid-template-columns:1fr; }
+  .menu-body{ grid-template-columns:minmax(0,1fr); }
   .menu-aside{ position:static; max-width:540px; }
   .foot-grid{ grid-template-columns:1.5fr 1fr 1.15fr; }
   .foot-brand{ grid-column:1/-1; }
@@ -922,30 +941,37 @@ p{ text-wrap:pretty; }
   .nav-phone span{ display:none; }
   .nav-phone{ padding:.5rem; }
 
-  .hero-grid{ grid-template-columns:1fr; gap:3.2rem; }
+  .hero-grid{ grid-template-columns:minmax(0,1fr); gap:3.2rem; }
   .hero-art{ max-width:400px; margin-inline:auto; width:100%; }
-  .arch-pod{ left:-1rem; width:41%; bottom:1rem; }
+  .arch-pod{ left:-1rem; width:36%; bottom:1rem; }
   .chip-status{ right:-.4rem; }
   .hero-strip{ justify-content:flex-start; row-gap:1.2rem; column-gap:1.6rem; }
   .strip-sep{ display:none; }
   .strip-item{ min-width:calc(50% - 1.6rem); }
 
-  .story-grid{ grid-template-columns:1fr; }
+  .story-grid{ grid-template-columns:minmax(0,1fr); }
   .story-copy{ order:1; }
   .story-media{ order:2; }
 
-  .visit-grid{ grid-template-columns:1fr; }
+  .visit-grid{ grid-template-columns:minmax(0,1fr); }
   .allhours .sec-head{ margin-bottom:2.2rem; }
+}
+
+/* the nav CTA does not fit beside the brand below ~640px — the drawer
+   carries its own "Book on WhatsApp", so nothing is lost by hiding it. */
+@media (max-width:640px){
+  .nav-actions .btn{ display:none; }
 }
 
 @media (max-width:720px){
   .gal-grid{ columns:2 148px; column-gap:.72rem; }
   .gal-item{ margin-bottom:.72rem; }
-  .field-row{ grid-template-columns:1fr; gap:0; }
+  .field-row{ grid-template-columns:minmax(0,1fr); gap:0; }
   .quick-actions{ grid-template-columns:repeat(2,1fr); }
 
   .tabs{
-    width:100%; flex-wrap:nowrap; overflow-x:auto; border-radius:16px;
+    width:100%; flex-wrap:nowrap; overflow-x:auto; border-radius:14px;
+    justify-content:flex-start;
     -webkit-overflow-scrolling:touch; scrollbar-width:none;
   }
   .tabs::-webkit-scrollbar{ display:none; }
@@ -956,7 +982,7 @@ p{ text-wrap:pretty; }
   .hours::before{ left:10px; }
 
   .closing-cta .btn{ width:100%; }
-  .foot-grid{ grid-template-columns:1fr; }
+  .foot-grid{ grid-template-columns:minmax(0,1fr); }
   .foot-brand,.foot-col:last-child{ grid-column:auto; }
   .lb-nav{ width:44px; height:44px; }
   .lb-prev{ left:.4rem; } .lb-next{ right:.4rem; }
@@ -969,7 +995,7 @@ p{ text-wrap:pretty; }
   .hero-badges li{ font-size:.72rem; padding:.38rem .72rem; }
   .brand-text i{ display:none; }
   .strip-item{ min-width:100%; }
-  .sig-grid{ grid-template-columns:1fr; }
+  .sig-grid{ grid-template-columns:minmax(0,1fr); }
   .item{ padding-block:.9rem; }
   .sec-head-row{ align-items:flex-start; }
 }

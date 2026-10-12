@@ -390,7 +390,10 @@ const observeReveals = (root = document) => {
     const img = document.createElement('img');
     img.src = `images/${s.file}`;
     img.alt = s.alt;
-    img.loading = 'lazy';
+    // explicit intrinsic size: reserves the box before the photo arrives
+    img.width = 243;
+    img.height = 185;
+    img.loading = i < 3 ? 'eager' : 'lazy';
     img.decoding = 'async';
     fig.appendChild(img);
 
@@ -595,12 +598,14 @@ const observeReveals = (root = document) => {
     fig.setAttribute('role', 'button');
     fig.setAttribute('aria-label', `Open image: ${shot.cap}`);
 
+    // the single most likely image to LCP is the first one in the grid
     const img = document.createElement('img');
     img.src = `images/${shot.file}`;
     img.width = shot.w;
     img.height = shot.h;
     img.loading = 'lazy';
     img.decoding = 'async';
+    if (i === 0) img.fetchPriority = 'low';
     img.alt = shot.cap;
 
     const cap = document.createElement('figcaption');
