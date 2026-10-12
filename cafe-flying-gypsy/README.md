@@ -14,11 +14,21 @@ cafe-flying-gypsy/
 
 ```bash
 cd cafe-flying-gypsy
-python3 -m http.server 8080 --bind 0.0.0.0
+python3 serve.py 8080
 # → http://localhost:8080
 ```
 
+**Use `serve.py`, not `python3 -m http.server`.** The plain server sends no cache
+headers, so after an edit your browser keeps serving the old `styles.css` and
+nothing appears to change. `serve.py` sends `Cache-Control: no-store` on every
+response, so a normal refresh always shows the current files.
+
 Opening `index.html` directly also works.
+
+> Still seeing an old version? The asset URLs are versioned
+> (`styles.css?v=…` and `app.js?v=…` in `index.html`). Bump that string when you
+> make a change and every browser is forced to re-fetch. A hard refresh
+> (Ctrl/Cmd + Shift + R) also works.
 
 ---
 
