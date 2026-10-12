@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu | Little Owl Cafe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6F4E37;
+            --secondary: #A67B5B;
+            --accent: #D4A574;
+            --dark: #2C1810;
+            --light: #F9F6F2;
+            --cream: #FDFBF7;
+            --gold: #C9A961;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background: var(--cream);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .fade-in { animation: fadeIn 1s ease-out forwards; }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            z-index: 1000;
+            height: 80px;
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            height: 70px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+        
+        .logo:hover { color: var(--accent); }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 100%; }
+        
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--primary); }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(111, 78, 55, 0.2);
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(111, 78, 55, 0.3);
+        }
+        
+        .page-header {
+            margin-top: 80px;
+            padding: 120px 0;
+            background: linear-gradient(135deg, rgba(44, 24, 16, 0.7), rgba(111, 78, 55, 0.5)),
+                        url('images/gallery/gallery-1.jpg') center/cover no-repeat;
+            color: white;
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 64px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        .page-header p {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        section { padding: 100px 0; }
+        
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .menu-tab {
+            padding: 14px 32px;
+            background: white;
+            border: 2px solid var(--light);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .menu-tab:hover {
+            border-color: var(--accent);
+            color: var(--primary);
+        }
+        
+        .menu-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .menu-category { display: none; }
+        .menu-category.active { display: block; }
+        
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .menu-item {
+            display: flex;
+            gap: 24px;
+            padding: 32px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .menu-item-icon {
+            font-size: 48px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-item-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--primary);
+            fill: none;
+            stroke-width: 1.5;
+        }
+        
+        .menu-item-info { flex: 1; }
+        
+        .menu-item-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .badge {
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .badge-best {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            color: #92400E;
+        }
+        
+        .badge-new {
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+        }
+        
+        .badge-veg {
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+        }
+        
+        .menu-item-desc {
+            color: var(--secondary);
+            font-size: 15px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .menu-item-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .cta .btn {
+            background: white;
+            color: var(--primary);
+            padding: 18px 48px;
+            font-size: 16px;
+        }
+        
+        .cta .btn:hover {
+            background: var(--gold);
+            color: white;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 80px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-brand h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .footer-brand p {
+            color: rgba(255,255,255,0.7);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .footer-column h4 {
+            font-size: 18px;
+            margin-bottom: 24px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 12px; }
+        
+        .footer-column a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-column a:hover { color: var(--gold); }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-header h1 { font-size: 42px; }
+            .menu-tabs { gap: 8px; }
+            .menu-tab { padding: 10px 20px; font-size: 12px; }
+            .menu-item { flex-direction: column; gap: 16px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav id="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo">Little Owl Cafe</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="menu.html" class="active">Menu</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="tel:+917350184965" class="btn">Reserve Table</a>
+    </div>
+</nav>
+
+<div class="page-header">
+    <div class="container">
+        <h1>Our Menu</h1>
+        <p>From bold espressos to hearty bowls — every item is crafted with passion and served with care</p>
+    </div>
+</div>
+
+<section>
+    <div class="container">
+        <div class="menu-tabs">
+            <button class="menu-tab active" onclick="showCategory('coffee')">Coffee</button>
+            <button class="menu-tab" onclick="showCategory('shakes')">Shakes</button>
+            <button class="menu-tab" onclick="showCategory('bowls')">Bowls</button>
+            <button class="menu-tab" onclick="showCategory('starters')">Starters</button>
+            <button class="menu-tab" onclick="showCategory('pasta')">Pasta</button>
+            <button class="menu-tab" onclick="showCategory('desserts')">Desserts</button>
+        </div>
+
+        <div id="coffee" class="menu-category active">
+            <div class="menu-list">
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Cappuccino <span class="badge badge-best">Bestseller</span></div>
+                        <div class="menu-item-desc">Classic Italian espresso with velvety steamed milk foam</div>
+                        <div class="menu-item-price">₹179</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Spanish Latte</div>
+                        <div class="menu-item-desc">Rich espresso blended with sweet condensed milk</div>
+                        <div class="menu-item-price">₹199</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Vietnamese Cold Brew <span class="badge badge-best">Signature</span></div>
+                        <div class="menu-item-desc">Slow-steeped cold brew with condensed milk — silky and bold</div>
+                        <div class="menu-item-price">₹219</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Hibiscus Cold Brew <span class="badge badge-new">New</span></div>
+                        <div class="menu-item-desc">Floral-infused cold brew for the adventurous palate</div>
+                        <div class="menu-item-price">₹229</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Iced Americano</div>
+                        <div class="menu-item-desc">Bold double espresso over ice — clean and refreshing</div>
+                        <div class="menu-item-price">₹169</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Dark Chocolate Mocha <span class="badge badge-best">Must Try</span></div>
+                        <div class="menu-item-desc">Rich dark chocolate meets bold espresso — pure indulgence</div>
+                        <div class="menu-item-price">₹229</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="shakes" class="menu-category">
+            <div class="menu-list">
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 2h8l-2 18H10L8 2z"></path><path d="M12 2v18"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Mango Shake <span class="badge badge-veg">Vegetarian</span></div>
+                        <div class="menu-item-desc">Creamy shake made with ripe Alphonso mangoes</div>
+                        <div class="menu-item-price">₹217</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 2h8l-2 18H10L8 2z"></path><path d="M12 2v18"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Strawberry Shake</div>
+                        <div class="menu-item-desc">Fresh strawberries blended into a dreamy pink treat</div>
+                        <div class="menu-item-price">₹217</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 2h8l-2 18H10L8 2z"></path><path d="M12 2v18"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Kiwi Banana Shake</div>
+                        <div class="menu-item-desc">Tropical fusion of kiwi and banana — refreshing and exotic</div>
+                        <div class="menu-item-price">₹237</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 2h8l-2 18H10L8 2z"></path><path d="M12 2v18"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Salted Caramel Frappe <span class="badge badge-best">Fan Fave</span></div>
+                        <div class="menu-item-desc">Sweet meets salty in this addictive frozen blend</div>
+                        <div class="menu-item-price">₹249</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bowls" class="menu-category">
+            <div class="menu-list">
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 11h18v2a8 8 0 0 1-8 8H11a8 8 0 0 1-8-8v-2z"></path><path d="M3 11V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v4"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Butter Paneer Bowl <span class="badge badge-best">Chef's Pick</span></div>
+                        <div class="menu-item-desc">Creamy butter paneer masala with fragrant peas pulao</div>
+                        <div class="menu-item-price">₹439</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 11h18v2a8 8 0 0 1-8 8H11a8 8 0 0 1-8-8v-2z"></path><path d="M3 11V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v4"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Chicken Green Thai Curry <span class="badge badge-best">Bestseller</span></div>
+                        <div class="menu-item-desc">Authentic Thai green curry with tender chicken & jasmine rice</div>
+                        <div class="menu-item-price">₹509</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 11h18v2a8 8 0 0 1-8 8H11a8 8 0 0 1-8-8v-2z"></path><path d="M3 11V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v4"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Chicken Tikka Bowl</div>
+                        <div class="menu-item-desc">Spicy chicken tikka gravy with aromatic peas pulao</div>
+                        <div class="menu-item-price">₹469</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="starters" class="menu-category">
+            <div class="menu-list">
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Salted Potato Wedges</div>
+                        <div class="menu-item-desc">Crispy golden wedges with perfect seasoning</div>
+                        <div class="menu-item-price">₹199</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Fish & Chips <span class="badge badge-best">Popular</span></div>
+                        <div class="menu-item-desc">Beer-battered fish with crispy fries</div>
+                        <div class="menu-item-price">₹399</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Falafel Pita Pockets</div>
+                        <div class="menu-item-desc">Crispy falafel wrapped in warm pita with fresh veggies</div>
+                        <div class="menu-item-price">₹299</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pasta" class="menu-category">
+            <div class="menu-list">
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Penne Pesto <span class="badge badge-best">Fan Favourite</span></div>
+                        <div class="menu-item-desc">Al dente penne in authentic basil pesto with Parmesan</div>
+                        <div class="menu-item-price">₹349</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">4-Layer Cheese Pizza <span class="badge badge-best">Must Try</span></div>
+                        <div class="menu-item-desc">Four layers of melted cheese on a crispy base</div>
+                        <div class="menu-item-price">₹399</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Crispy Chicken Burger</div>
+                        <div class="menu-item-desc">Crunchy chicken patty with fresh veggies & smoky mayo</div>
+                        <div class="menu-item-price">₹299</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="desserts" class="menu-category">
+            <div class="menu-list">
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Dark Chocolate Brownie <span class="badge badge-best">Must Try</span></div>
+                        <div class="menu-item-desc">Warm fudgy brownie with vanilla ice cream</div>
+                        <div class="menu-item-price">₹249</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">New York Cheesecake</div>
+                        <div class="menu-item-desc">Creamy classic cheesecake with berry compote</div>
+                        <div class="menu-item-price">₹279</div>
+                    </div>
+                </div>
+                <div class="menu-item fade-in-up">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"></path></svg>
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-name">Belgian Waffle</div>
+                        <div class="menu-item-desc">Crispy golden waffle with fresh fruits and whipped cream</div>
+                        <div class="menu-item-price">₹289</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>Craving Something Special?</h2>
+        <p>Visit us or order online — we're open 11 AM to 11 PM, all days</p>
+        <a href="https://www.zomato.com/nagpur/little-owl-cafe-3-pratap-nagar/order" target="_blank" class="btn">Order on Zomato</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Little Owl Cafe</h3>
+                <p>Your neighbourhood boutique cafe — serving artisan coffee, handcrafted cuisine, and warm memories in the heart of Pratap Nagar, Nagpur.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Navigate</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Order Online</h4>
+                <ul>
+                    <li><a href="https://www.zomato.com/nagpur/little-owl-cafe-3-pratap-nagar/order" target="_blank">Zomato</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Hours</h4>
+                <ul><li>Mon – Sun: 11 AM – 11 PM</li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Little Owl Cafe, Nagpur. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+    
+    function showCategory(category) {
+        document.querySelectorAll('.menu-category').forEach(cat => cat.classList.remove('active'));
+        document.querySelectorAll('.menu-tab').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(category).classList.add('active');
+        event.target.classList.add('active');
+        
+        // Re-trigger animations
+        document.querySelectorAll(`#${category} .fade-in-up`).forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            setTimeout(() => {
+                el.style.transition = 'all 0.6s ease-out';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 50);
+        });
+    }
+</script>
+
+</body>
+</html>

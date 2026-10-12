@@ -1,36 +1,853 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vendora — Find laptops nearby</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Owl Cafe | Premium Boutique Cafe in Nagpur</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6F4E37;
+            --secondary: #A67B5B;
+            --accent: #D4A574;
+            --dark: #2C1810;
+            --light: #F9F6F2;
+            --cream: #FDFBF7;
+            --gold: #C9A961;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background: var(--cream);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .fade-in { animation: fadeIn 1s ease-out forwards; }
+        .slide-in-left { animation: slideInLeft 0.8s ease-out forwards; }
+        .slide-in-right { animation: slideInRight 0.8s ease-out forwards; }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            z-index: 1000;
+            height: 80px;
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            height: 70px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+        
+        .logo:hover { color: var(--accent); }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 100%; }
+        
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--primary); }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(111, 78, 55, 0.2);
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(111, 78, 55, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            height: 90vh;
+            min-height: 600px;
+            background: linear-gradient(135deg, rgba(44, 24, 16, 0.6), rgba(111, 78, 55, 0.4)),
+                        url('images/hero/hero.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            padding: 0 24px;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero h1 {
+            font-size: 72px;
+            margin-bottom: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hero .btn {
+            padding: 16px 40px;
+            font-size: 15px;
+        }
+        
+        .hero .btn-outline {
+            color: white;
+            border-color: white;
+        }
+        
+        .hero .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        /* Sections */
+        section {
+            padding: 100px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-tag {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .about-image {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover { transform: scale(1.02); }
+        
+        .about-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover img { transform: scale(1.05); }
+        
+        .about-content h2 {
+            font-size: 42px;
+            margin-bottom: 24px;
+            color: var(--dark);
+        }
+        
+        .about-content p {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature {
+            padding: 24px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+        
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+        
+        .feature h4 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .feature p {
+            font-size: 14px;
+            color: var(--secondary);
+            margin: 0;
+        }
+        
+        /* Menu Highlights */
+        .menu-section {
+            background: white;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .menu-card {
+            background: var(--cream);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .menu-card-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .menu-card:hover .menu-card-image { transform: scale(1.1); }
+        
+        .menu-card-content {
+            padding: 28px;
+        }
+        
+        .menu-card-content h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        
+        .menu-card-content p {
+            color: var(--secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .menu-card-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .menu-cta {
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(44,24,16,0.6), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-item:hover::after { opacity: 1; }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img { transform: scale(1.1); }
+        
+        /* Testimonials */
+        .testimonials {
+            background: var(--dark);
+            color: white;
+        }
+        
+        .testimonials .section-tag { color: var(--gold); }
+        .testimonials .section-title { color: white; }
+        .testimonials .section-subtitle { color: rgba(255,255,255,0.7); }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background: rgba(255,255,255,0.05);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+        
+        .testimonial-stars {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 24px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .testimonial-source {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .cta .btn {
+            background: white;
+            color: var(--primary);
+            padding: 18px 48px;
+            font-size: 16px;
+        }
+        
+        .cta .btn:hover {
+            background: var(--gold);
+            color: white;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 80px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-brand h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .footer-brand p {
+            color: rgba(255,255,255,0.7);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .footer-column h4 {
+            font-size: 18px;
+            margin-bottom: 24px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 12px; }
+        
+        .footer-column a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-column a:hover { color: var(--gold); }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 42px; }
+            .hero p { font-size: 18px; }
+            .section-title { font-size: 36px; }
+            .about-grid { grid-template-columns: 1fr; gap: 40px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="announcement"><span>✦</span> Now helping Kolhapur buy local, better. <a href="#stores">Explore stores →</a></div>
-  <header><a class="brand" href="#"><span class="brand-mark">V</span> vendora</a><nav><a href="#browse">Browse</a><a href="#stores">Local stores</a><a href="#how">How it works</a></nav><div class="header-actions"><button class="city">⌖ Kolhapur <span>⌄</span></button><button class="merchant-link" id="openDashboard">For merchants <b>→</b></button></div></header>
-  <main id="customer">
-    <section class="hero">
-      <div class="hero-copy"><div class="eyebrow">YOUR LOCAL TECH MARKETPLACE</div><h1>Find your next laptop,<br><em>right around the corner.</em></h1><p>Browse real inventory from trusted computer stores in Kolhapur. Compare options, then talk directly to the people who know tech.</p>
-        <div class="search-wrap"><span class="search-icon">⌕</span><input id="heroSearch" placeholder="Search MacBook, gaming laptop, accessories..." /><button id="searchBtn">Search</button></div>
-        <div class="popular"><span>Popular:</span><button>MacBook Air</button><button>Gaming laptops</button><button>Under ₹60,000</button></div>
-      </div>
-      <div class="hero-art"><div class="shape shape-1"></div><div class="shape shape-2"></div><div class="laptop"><div class="screen"><div class="screen-glow"></div><div class="ui-line long"></div><div class="ui-line"></div><div class="mini-cards"><i></i><i></i><i></i></div></div><div class="keyboard"></div></div><div class="float-card card-rating"><span class="round-icon">★</span><div><b>4.8 average</b><small>from local buyers</small></div></div><div class="float-card card-stock"><span class="stock-dot"></span><div><b>In stock nearby</b><small>Updated today</small></div></div></div>
-    </section>
 
-    <section class="trust"><div><b>6+</b><span>trusted local stores</span></div><div><b>100+</b><span>products in stock</span></div><div><b>Same day</b><span>shop pickup</span></div><div><b>Zero</b><span>online commissions</span></div></section>
-    <section class="section browse" id="browse"><div class="section-heading"><div><div class="eyebrow">EXPLORE INVENTORY</div><h2>What are you looking for?</h2></div><button class="text-link">View all categories →</button></div><div class="categories"><button class="category active" data-filter="All"><span class="cat-icon">▣</span><b>All products</b><small>126 products</small></button><button class="category" data-filter="Student"><span class="cat-icon">◫</span><b>Student laptops</b><small>38 products</small></button><button class="category" data-filter="Gaming"><span class="cat-icon">◈</span><b>Gaming laptops</b><small>24 products</small></button><button class="category" data-filter="Business"><span class="cat-icon">▤</span><b>Work & business</b><small>31 products</small></button><button class="category" data-filter="Accessories"><span class="cat-icon">⌘</span><b>Accessories</b><small>33 products</small></button></div></section>
-    <section class="section products"><div class="section-heading"><div><div class="eyebrow">AVAILABLE NEAR YOU</div><h2>Fresh from local shelves</h2><p class="sub">Prices and stock status are updated by stores.</p></div><div class="product-controls"><button id="compareButton" class="compare-btn">Compare <span id="compareCount">0</span></button><button class="sort">Sort: Recommended ⌄</button></div></div><div class="product-grid" id="productGrid"></div><div id="noResults" class="no-results hidden">No products match that search. Try another model or category.</div><button class="load-more">See more local inventory <span>↓</span></button></section>
-    <section class="how section" id="how"><div class="how-copy"><div class="eyebrow">HOW VENDORA WORKS</div><h2>Online discovery.<br>Local expertise.</h2><p>Skip the endless calls and uncertain listings. Vendora gives you a clear view of what’s available before you head out.</p><a href="#browse" class="primary-link">Start exploring <span>→</span></a></div><div class="steps"><article><span>01</span><div><h3>Find it</h3><p>Search products across trusted computer stores in your city.</p></div></article><article><span>02</span><div><h3>Compare it</h3><p>See live availability, prices, offers and specifications at a glance.</p></div></article><article><span>03</span><div><h3>Get it locally</h3><p>Call, chat or visit the store directly to make your purchase.</p></div></article></div></section>
-    <section class="section stores" id="stores"><div class="section-heading"><div><div class="eyebrow">MEET THE SELLERS</div><h2>Trusted stores in Kolhapur</h2></div><button class="text-link">See all stores →</button></div><div class="store-grid"><article class="store-card"><div class="store-logo blue">c.</div><h3>CompuCare</h3><p>Rajarampuri · 1.2 km away</p><div class="store-meta">★ 4.8 <i></i> 42 products</div><a href="tel:+919000000001">View storefront →</a></article><article class="store-card"><div class="store-logo orange">IT</div><h3>IT Solutions</h3><p>Shahupuri · 2.1 km away</p><div class="store-meta">★ 4.7 <i></i> 35 products</div><a href="tel:+919000000002">View storefront →</a></article><article class="store-card"><div class="store-logo green">PC</div><h3>PC World</h3><p>Tarabai Park · 3.5 km away</p><div class="store-meta">★ 4.9 <i></i> 28 products</div><a href="tel:+919000000003">View storefront →</a></article></div></section>
-    <section class="merchant-cta"><div><div class="eyebrow">FOR LOCAL RETAILERS</div><h2>Your shelves deserve a digital storefront.</h2><p>Get discovered by customers already looking for what you sell. No commission. No complexity.</p></div><button id="merchantCta">List your store <span>→</span></button></section>
-  </main>
-  <footer><a class="brand"><span class="brand-mark">V</span> vendora</a><p>Helping Kolhapur shop local, better.</p><div>© 2026 Vendora &nbsp; · &nbsp; Built for local commerce</div></footer>
+<nav id="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo">Little Owl Cafe</a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="tel:+917350184965" class="btn">Reserve Table</a>
+    </div>
+</nav>
 
-  <div class="modal hidden" id="compareModal"><div class="modal-card compare-modal"><button class="close">×</button><div class="eyebrow">YOUR SHORTLIST</div><h2>Compare local options</h2><div id="comparison"></div><button class="primary-full close">Done comparing</button></div></div>
-  <div class="modal hidden" id="contactModal"><div class="modal-card contact-card"><button class="close">×</button><div class="shop-badge">CC</div><div class="eyebrow">IN STOCK AT COMPUCARE</div><h2 id="contactName">Product</h2><p>Ask about availability, offers, and pick-up before you visit.</p><a class="whatsapp" href="https://wa.me/919000000001" target="_blank">◉ Chat on WhatsApp</a><a class="call" href="tel:+919000000001">⌕ Call the shop</a><a class="directions" href="https://maps.google.com/?q=Kolhapur" target="_blank">⌖ Get directions</a></div></div>
-  <div id="dashboard" class="dashboard hidden"><aside><a class="brand"><span class="brand-mark">V</span> vendora</a><div class="shop-mini"><span>CC</span><div><b>CompuCare</b><small>Kolhapur</small></div></div><nav class="dash-nav"><button class="active" data-tab="overview">▦ Overview</button><button data-tab="inventory">▤ Inventory <i>12</i></button><button data-tab="profile">♙ Shop profile</button></nav><button class="back" id="backCustomer">← Back to Vendora</button></aside><div class="dash-main"><header class="dash-head"><div><p>Thursday, August 21</p><h1 id="dashTitle">Good morning, Prathamesh <span>👋</span></h1></div><button class="view-store">↗ View your storefront</button></header><section class="dash-content" id="overview"><div class="stats"><article><span class="stat-label">PRODUCT VIEWS</span><b>248</b><small class="up">↑ 12% <em>vs last week</em></small></article><article><span class="stat-label">CONTACT CLICKS</span><b>36</b><small class="up">↑ 8% <em>vs last week</em></small></article><article><span class="stat-label">IN STOCK</span><b>12</b><small><em>of 15 products</em></small></article></div><div class="dash-grid"><article class="panel activity"><div class="panel-title"><h3>Recent activity</h3><button>View all</button></div><div class="activity-row"><span class="avatar">A</span><p><b>Someone viewed</b><br>MacBook Air M2</p><small>2 min ago</small></div><div class="activity-row"><span class="avatar peach">S</span><p><b>Someone tapped WhatsApp</b><br>for ASUS Vivobook</p><small>18 min ago</small></div><div class="activity-row"><span class="avatar lavender">R</span><p><b>Someone got directions</b><br>to your store</p><small>1 hr ago</small></div></article><article class="panel inventory-preview"><div class="panel-title"><h3>Inventory status</h3><button data-tab="inventory">Manage inventory →</button></div><div class="status-row"><div><b>3</b><span>Low stock items</span></div><button class="warn">Review</button></div><div class="status-row"><div><b>2</b><span>Out of stock items</span></div><button>Update</button></div><div class="status-row"><div><b>10</b><span>Items well stocked</span></div><button>View</button></div></article></div></section><section class="dash-content hidden" id="inventory"><div class="inventory-top"><div><h2>Your inventory</h2><p>Manage products shown on your Vendora storefront.</p></div><button class="add-product" id="addProduct">+ Add product</button></div><div class="inventory-table"><div class="table-head"><span>PRODUCT</span><span>PRICE</span><span>STOCK</span><span>STATUS</span><span></span></div><div id="inventoryRows"></div></div></section><section class="dash-content hidden" id="profile"><div class="profile-card"><div class="profile-logo">CC</div><h2>CompuCare</h2><p>Rajarampuri, Kolhapur · Open today until 8:00 PM</p><hr><label>Shop description<textarea>Trusted computers, laptops and accessories in Kolhapur. Expert advice, fair prices and local support.</textarea></label><label>WhatsApp number<input value="+91 90000 00001"></label><button class="add-product">Save changes</button></div></section></div></div>
-  <div class="modal hidden" id="productModal"><div class="modal-card product-form"><button class="close">×</button><h2>Add a product</h2><label>Product name<input id="newName" placeholder="e.g. HP Pavilion 15"></label><div class="form-two"><label>Price<input id="newPrice" placeholder="₹ 54,999"></label><label>Stock<input id="newStock" type="number" placeholder="5"></label></div><label>Category<select id="newCategory"><option>Student</option><option>Gaming</option><option>Business</option><option>Accessories</option></select></label><button id="saveProduct" class="primary-full">Add to inventory</button></div></div>
-  <script type="module" src="/app.js"></script>
-</body></html>
+<section class="hero">
+    <div class="hero-content">
+        <h1>Where Every Sip Tells a Story</h1>
+        <p>Artisan coffee, handcrafted cuisine, and an atmosphere that feels like home. Welcome to Nagpur's finest boutique cafe.</p>
+        <div class="hero-buttons">
+            <a href="menu.html" class="btn">Explore Menu</a>
+            <a href="contact.html" class="btn btn-outline">Visit Us</a>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-image slide-in-left">
+                <img src="images/about/about-1.jpg" alt="Little Owl Cafe Interior">
+            </div>
+            <div class="about-content slide-in-right">
+                <span class="section-tag">Our Story</span>
+                <h2>A Place to Call Your Own</h2>
+                <p>Welcome to Little Owl Cafe — Nagpur's most cherished neighbourhood boutique cafe, where warmth meets flavour in every corner.</p>
+                <p>Born from a passion for exceptional coffee and meaningful conversations, Little Owl Cafe is more than just a place to eat. It's your sanctuary — whether you're catching up with friends, enjoying a quiet date, celebrating life's moments, or finding your focus over a perfectly brewed cup.</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                        </div>
+                        <h4>Artisan Coffee</h4>
+                        <p>Carefully sourced beans, expertly brewed</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+                        </div>
+                        <h4>Handcrafted Cuisine</h4>
+                        <p>Fresh ingredients, exceptional taste</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </div>
+                        <h4>Warm Atmosphere</h4>
+                        <p>Your home away from home</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                        </div>
+                        <h4>Free Parking</h4>
+                        <p>Convenient access, always</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="menu-section">
+    <div class="container">
+        <div class="section-header fade-in-up">
+            <span class="section-tag">Culinary Excellence</span>
+            <h2 class="section-title">Signature Creations</h2>
+            <p class="section-subtitle">Discover our most beloved dishes, crafted with passion and served with pride</p>
+        </div>
+        <div class="menu-grid">
+            <div class="menu-card fade-in-up">
+                <img src="images/gallery/gallery-2.jpg" alt="Vietnamese Cold Brew" class="menu-card-image">
+                <div class="menu-card-content">
+                    <h3>Vietnamese Cold Brew</h3>
+                    <p>Slow-steeped perfection with sweet condensed milk — silky, bold, unforgettable</p>
+                    <div class="menu-card-price">₹199</div>
+                </div>
+            </div>
+            <div class="menu-card fade-in-up">
+                <img src="images/gallery/gallery-4.jpg" alt="Penne Pesto" class="menu-card-image">
+                <div class="menu-card-content">
+                    <h3>Penne Pesto</h3>
+                    <p>Al dente penne in house-made basil pesto, finished with aged Parmesan</p>
+                    <div class="menu-card-price">₹349</div>
+                </div>
+            </div>
+            <div class="menu-card fade-in-up">
+                <img src="images/gallery/gallery-7.jpg" alt="Green Thai Curry" class="menu-card-image">
+                <div class="menu-card-content">
+                    <h3>Chicken Green Thai Curry</h3>
+                    <p>Authentic Thai curry with tender chicken and fragrant jasmine rice</p>
+                    <div class="menu-card-price">₹509</div>
+                </div>
+            </div>
+            <div class="menu-card fade-in-up">
+                <img src="images/gallery/gallery-6.jpg" alt="Dark Chocolate Mocha" class="menu-card-image">
+                <div class="menu-card-content">
+                    <h3>Dark Chocolate Mocha</h3>
+                    <p>Rich dark chocolate meets bold espresso — comfort in every sip</p>
+                    <div class="menu-card-price">₹229</div>
+                </div>
+            </div>
+        </div>
+        <div class="menu-cta">
+            <a href="menu.html" class="btn">View Complete Menu</a>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="section-header fade-in-up">
+            <span class="section-tag">Gallery</span>
+            <h2 class="section-title">Moments at Little Owl</h2>
+            <p class="section-subtitle">A glimpse into the experiences that make us special</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="images/gallery/gallery-1.jpg" alt="Cafe Interior"></div>
+            <div class="gallery-item"><img src="images/gallery/gallery-3.jpg" alt="Signature Dish"></div>
+            <div class="gallery-item"><img src="images/gallery/gallery-5.jpg" alt="Ambiance"></div>
+            <div class="gallery-item"><img src="images/gallery/gallery-8.jpg" alt="Coffee Art"></div>
+            <div class="gallery-item"><img src="images/gallery/gallery-9.jpg" alt="Cozy Corner"></div>
+            <div class="gallery-item"><img src="images/gallery/gallery-13.jpg" alt="Cafe Culture"></div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <div class="section-header fade-in-up">
+            <span class="section-tag">Testimonials</span>
+            <h2 class="section-title">What Our Guests Say</h2>
+            <p class="section-subtitle">Real experiences from our valued customers</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-in-up">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I live in Manhattan, and my expectations from a café are rather high. This place not only meets them but exceeds them. I spent 4 hours working here — productive and pampered the entire time."</p>
+                <div class="testimonial-author">A Traveller</div>
+                <div class="testimonial-source">Google Review</div>
+            </div>
+            <div class="testimonial-card fade-in-up">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"The Penne Pesto was exceptional — loaded with Parmesan and authentic basil pesto. The Dark Chocolate Mocha is pure indulgence. And the Vietnamese Cold Brew? An absolute must-try!"</p>
+                <div class="testimonial-author">Narayani M.</div>
+                <div class="testimonial-source">Zomato Review</div>
+            </div>
+            <div class="testimonial-card fade-in-up">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"A beautiful, immaculate cafe with courteous staff and exceptional food. Their hygiene standards are top-notch. The iced latte and Mushroom Crostini were absolutely delightful."</p>
+                <div class="testimonial-author">Shalini S.</div>
+                <div class="testimonial-source">District Review</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>Experience Little Owl Cafe</h2>
+        <p>Open daily from 11:00 AM to 11:00 PM in Pratap Nagar, Nagpur</p>
+        <a href="contact.html" class="btn">Plan Your Visit</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Little Owl Cafe</h3>
+                <p>Your neighbourhood boutique cafe — serving artisan coffee, handcrafted cuisine, and warm memories in the heart of Pratap Nagar, Nagpur.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Navigate</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Order Online</h4>
+                <ul>
+                    <li><a href="https://www.zomato.com/nagpur/little-owl-cafe-3-pratap-nagar/order" target="_blank">Zomato</a></li>
+                    <li><a href="https://linktr.ee/littleowlcafe" target="_blank">Linktree</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Hours</h4>
+                <ul>
+                    <li>Monday – Sunday</li>
+                    <li>11:00 AM – 11:00 PM</li>
+                    <li>Open All Days</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Little Owl Cafe, Nagpur. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    document.querySelectorAll('.fade-in-up, .slide-in-left, .slide-in-right').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.8s ease-out';
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>
