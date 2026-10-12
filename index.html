@@ -3,149 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Little Owl Cafe | Premium Boutique Cafe in Nagpur</title>
+    <title>Little Owl Cafe | Artisan Coffee & Handcrafted Cuisine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Raleway:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --primary: #1a2847;
-            --primary-light: #2d4273;
-            --primary-dark: #0f1a2e;
-            --accent: #ff6b4d;
-            --accent-light: #ff8c73;
-            --accent-dark: #e85438;
-            --secondary: #0d9488;
-            --secondary-light: #14b8a6;
-            --gold: #d4af37;
-            --gold-light: #f4d03f;
-            --cream: #faf7f2;
-            --ivory: #fefdfb;
-            --charcoal: #2c3338;
-            --gradient-1: linear-gradient(135deg, #1a2847 0%, #2d4273 50%, #0d9488 100%);
-            --gradient-2: linear-gradient(135deg, #ff6b4d 0%, #ff8c73 100%);
-            --gradient-3: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
-            --gradient-hero: linear-gradient(135deg, rgba(26, 40, 71, 0.92) 0%, rgba(13, 148, 136, 0.85) 50%, rgba(255, 107, 77, 0.78) 100%);
-            --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(250,247,242,0.9) 100%);
-            --shadow-sm: 0 2px 12px rgba(26, 40, 71, 0.08);
-            --shadow-md: 0 8px 24px rgba(26, 40, 71, 0.12);
-            --shadow-lg: 0 16px 48px rgba(26, 40, 71, 0.18);
-            --shadow-xl: 0 24px 64px rgba(26, 40, 71, 0.24);
-            --shadow-accent: 0 12px 36px rgba(255, 107, 77, 0.35);
-            --shadow-glow: 0 0 48px rgba(255, 107, 77, 0.4);
+            --wine: #4a0e1f;
+            --wine-light: #6b1a2e;
+            --wine-dark: #2d0812;
+            --gold: #c9a961;
+            --gold-light: #e4c87f;
+            --gold-dark: #a88942;
+            --champagne: #f5e6d3;
+            --cream: #faf3e8;
+            --ivory: #fdfaf5;
+            --charcoal: #1f1f2e;
+            --charcoal-light: #2d2d3f;
+            --rose: #b76e79;
+            --gradient-wine: linear-gradient(135deg, #4a0e1f 0%, #6b1a2e 50%, #8b2635 100%);
+            --gradient-gold: linear-gradient(135deg, #c9a961 0%, #e4c87f 50%, #d4b870 100%);
+            --gradient-luxury: linear-gradient(135deg, rgba(74, 14, 31, 0.95) 0%, rgba(107, 26, 46, 0.88) 50%, rgba(201, 169, 97, 0.82) 100%);
+            --gradient-elegant: linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(250,243,232,0.95) 100%);
+            --shadow-soft: 0 4px 16px rgba(74, 14, 31, 0.08);
+            --shadow-medium: 0 12px 32px rgba(74, 14, 31, 0.12);
+            --shadow-strong: 0 20px 56px rgba(74, 14, 31, 0.18);
+            --shadow-luxury: 0 28px 72px rgba(74, 14, 31, 0.25);
+            --shadow-gold: 0 16px 48px rgba(201, 169, 97, 0.35);
+            --shadow-glow: 0 0 56px rgba(201, 169, 97, 0.5);
         }
         
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Raleway', sans-serif;
             color: var(--charcoal);
             background: var(--ivory);
-            line-height: 1.8;
+            line-height: 1.9;
             overflow-x: hidden;
+            font-weight: 300;
         }
         
         h1, h2, h3, h4 {
-            font-family: 'DM Serif Display', serif;
-            font-weight: 400;
-            line-height: 1.15;
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            line-height: 1.2;
         }
         
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+        .container { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
         
-        /* Advanced Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
+            from { opacity: 0; transform: translateY(60px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-50px); }
+            from { opacity: 0; transform: translateY(-60px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-60px); }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-80px); }
             to { opacity: 1; transform: translateX(0); }
         }
         
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(60px); }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(80px); }
             to { opacity: 1; transform: translateX(0); }
         }
         
-        @keyframes scaleIn {
+        @keyframes zoomIn {
             from { opacity: 0; transform: scale(0.85); }
             to { opacity: 1; transform: scale(1); }
         }
         
         @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(5deg); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(3deg); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
+            50% { transform: scale(1.08); opacity: 0.9; }
         }
         
         @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+            0% { transform: translateX(-100%) rotate(15deg); }
+            100% { transform: translateX(100%) rotate(15deg); }
         }
         
-        @keyframes morphBlob {
-            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        @keyframes rotateIn {
+            from { opacity: 0; transform: rotate(-180deg) scale(0.5); }
+            to { opacity: 1; transform: rotate(0deg) scale(1); }
         }
         
-        @keyframes rotate360 {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
         }
         
-        @keyframes slideInStagger {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
         }
         
-        @keyframes textReveal {
-            from { clip-path: inset(0 100% 0 0); }
-            to { clip-path: inset(0 0 0 0); }
+        @keyframes morphShape {
+            0%, 100% { border-radius: 50% 30% 50% 70% / 50% 60% 40% 50%; }
+            50% { border-radius: 30% 50% 70% 50% / 60% 40% 60% 50%; }
         }
         
-        .fade-in-up { animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        .fade-in-down { animation: fadeInDown 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        .fade-in-left { animation: fadeInLeft 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        .fade-in-right { animation: fadeInRight 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        .scale-in { animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         
-        /* Navigation */
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(254, 253, 251, 0.88);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            box-shadow: var(--shadow-sm);
+            background: rgba(253, 250, 245, 0.85);
+            backdrop-filter: blur(28px) saturate(200%);
+            -webkit-backdrop-filter: blur(28px) saturate(200%);
+            box-shadow: var(--shadow-soft);
             z-index: 1000;
-            height: 95px;
+            height: 100px;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         nav.scrolled {
-            height: 80px;
-            background: rgba(254, 253, 251, 0.96);
-            box-shadow: var(--shadow-md);
+            height: 85px;
+            background: rgba(253, 250, 245, 0.95);
+            box-shadow: var(--shadow-medium);
         }
         
         .nav-container {
-            max-width: 1280px;
+            max-width: 1320px;
             margin: 0 auto;
-            padding: 0 32px;
+            padding: 0 40px;
             height: 100%;
             display: flex;
             align-items: center;
@@ -153,145 +164,125 @@
         }
         
         .logo {
-            font-family: 'DM Serif Display', serif;
-            font-size: 34px;
-            background: var(--gradient-1);
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 700;
+            background: var(--gradient-wine);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
-            letter-spacing: 1.2px;
-            transition: all 0.4s ease;
+            letter-spacing: 1.5px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
         
         .logo::after {
             content: '';
             position: absolute;
-            bottom: -6px;
+            bottom: -8px;
             left: 0;
             width: 0;
             height: 3px;
-            background: var(--gradient-2);
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--gradient-gold);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .logo:hover::after { width: 100%; }
-        
-        .logo:hover { transform: scale(1.05); }
+        .logo:hover { transform: scale(1.05) translateY(-2px); }
         
         .nav-links {
             display: flex;
-            gap: 56px;
+            gap: 64px;
             list-style: none;
         }
         
         .nav-links a {
-            color: var(--primary);
+            color: var(--charcoal);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 15px;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
             position: relative;
-            transition: all 0.4s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
         }
         
         .nav-links a::before {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -12px;
             left: 50%;
             transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
             border-radius: 50%;
             opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 16px rgba(201, 169, 97, 0.6);
         }
         
         .nav-links a:hover::before,
         .nav-links a.active::before {
             opacity: 1;
-            transform: translateX(-50%) scale(1.5);
+            transform: translateX(-50%) scale(1.6);
         }
         
         .nav-links a:hover,
         .nav-links a.active {
-            color: var(--accent);
-            transform: translateY(-3px);
+            color: var(--wine);
+            transform: translateY(-4px);
         }
         
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            padding: 18px 42px;
-            background: var(--gradient-2);
-            color: white;
+            gap: 14px;
+            padding: 20px 48px;
+            background: var(--gradient-gold);
+            color: var(--wine-dark);
             text-decoration: none;
-            border-radius: 60px;
+            border-radius: 50px;
             font-weight: 700;
             font-size: 14px;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.8px;
             text-transform: uppercase;
             border: none;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--shadow-accent);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-gold);
             position: relative;
             overflow: hidden;
+            font-family: 'Raleway', sans-serif;
         }
         
         .btn::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.7s ease;
         }
         
-        .btn:hover::before {
-            width: 400px;
-            height: 400px;
-        }
+        .btn:hover::before { left: 100%; }
         
         .btn:hover {
-            transform: translateY(-4px) scale(1.05);
+            transform: translateY(-5px) scale(1.05);
             box-shadow: var(--shadow-glow);
         }
         
-        .btn-outline {
-            background: transparent;
-            color: var(--primary);
-            border: 2.5px solid var(--primary);
-            box-shadow: none;
-        }
-        
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        /* Hero Section */
         .hero {
-            margin-top: 95px;
-            height: 100vh;
-            min-height: 750px;
-            background: var(--gradient-hero),
-                        url('images/hero/hero.jpg') center/cover no-repeat;
+            margin-top: 100px;
+            min-height: 100vh;
+            background: var(--gradient-luxury),
+                        url('images/hero/hero-1.jpg') center/cover no-repeat;
             display: flex;
             align-items: center;
-            justify-content: center;
             color: white;
-            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -299,531 +290,351 @@
         .hero::before {
             content: '';
             position: absolute;
-            width: 600px;
-            height: 600px;
-            background: var(--gradient-2);
-            opacity: 0.15;
+            width: 700px;
+            height: 700px;
+            background: var(--gradient-gold);
+            opacity: 0.12;
             border-radius: 50%;
-            filter: blur(100px);
-            animation: morphBlob 20s ease-in-out infinite, float 15s ease-in-out infinite;
-            top: -200px;
-            right: -200px;
+            filter: blur(120px);
+            animation: morphShape 25s ease-in-out infinite, float 20s ease-in-out infinite;
+            top: -250px;
+            right: -250px;
         }
         
         .hero::after {
             content: '';
             position: absolute;
-            width: 500px;
-            height: 500px;
-            background: var(--gradient-3);
-            opacity: 0.12;
+            width: 600px;
+            height: 600px;
+            background: var(--wine-light);
+            opacity: 0.1;
             border-radius: 50%;
-            filter: blur(80px);
-            animation: morphBlob 25s ease-in-out infinite reverse, float 18s ease-in-out infinite;
-            bottom: -150px;
-            left: -150px;
+            filter: blur(100px);
+            animation: morphShape 30s ease-in-out infinite reverse, float 25s ease-in-out infinite;
+            bottom: -200px;
+            left: -200px;
         }
         
         .hero-content {
-            max-width: 950px;
-            padding: 0 32px;
             position: relative;
-            z-index: 2;
+            z-index: 10;
+            max-width: 880px;
+        }
+        
+        .hero-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-style: italic;
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeInDown 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+            color: var(--gold-light);
+            font-weight: 400;
+            letter-spacing: 2px;
         }
         
         .hero h1 {
-            font-size: 88px;
-            margin-bottom: 32px;
-            text-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 96px;
             line-height: 1.05;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+            text-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            font-weight: 600;
+            letter-spacing: -1px;
         }
         
         .hero p {
             font-size: 26px;
             margin-bottom: 56px;
+            opacity: 0;
+            animation: fadeInUp 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.9s forwards;
+            line-height: 1.8;
             font-weight: 300;
-            line-height: 1.7;
-            opacity: 0.95;
-            text-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s backwards;
         }
         
         .hero-buttons {
             display: flex;
-            gap: 28px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.6s backwards;
+            gap: 32px;
+            opacity: 0;
+            animation: fadeInUp 1.4s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
         }
         
-        .hero .btn {
-            padding: 22px 56px;
-            font-size: 16px;
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: var(--wine-dark);
         }
         
-        .hero .btn-outline {
+        .btn-secondary {
+            background: transparent;
+            border: 3px solid rgba(255,255,255,0.6);
             color: white;
+            padding: 20px 48px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
             border-color: white;
-            border-width: 3px;
+            backdrop-filter: blur(12px);
         }
         
-        .hero .btn-outline:hover {
-            background: white;
-            color: var(--primary);
-        }
-        
-        /* Sections */
-        section {
-            padding: 140px 0;
-            position: relative;
-        }
+        section { padding: 160px 0; }
         
         .section-header {
             text-align: center;
-            margin-bottom: 90px;
+            margin-bottom: 100px;
         }
         
-        .section-tag {
-            display: inline-block;
-            font-family: 'Dancing Script', cursive;
-            font-size: 28px;
-            font-weight: 600;
-            background: var(--gradient-2);
+        .section-header h2 {
+            font-size: 72px;
+            margin-bottom: 32px;
+            background: var(--gradient-wine);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
+            font-weight: 600;
         }
         
-        .section-title {
-            font-size: 64px;
-            margin-bottom: 28px;
-            color: var(--primary);
-            line-height: 1.1;
-        }
-        
-        .section-subtitle {
-            font-size: 20px;
-            color: var(--primary-light);
-            max-width: 700px;
+        .section-header p {
+            font-size: 22px;
+            color: var(--charcoal-light);
+            max-width: 720px;
             margin: 0 auto;
-            line-height: 1.9;
-            font-weight: 400;
-        }
-        
-        /* About Section */
-        .about-section {
-            background: var(--gradient-card);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .about-section::before {
-            content: '';
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            background: var(--gradient-3);
-            opacity: 0.05;
-            border-radius: 50%;
-            filter: blur(120px);
-            top: -400px;
-            left: -400px;
-            animation: float 30s ease-in-out infinite;
+            font-weight: 300;
         }
         
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 120px;
+            gap: 100px;
             align-items: center;
         }
         
         .about-image {
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: var(--shadow-luxury);
+            aspect-ratio: 4/5;
         }
         
-        .about-image::after {
+        .about-image::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: var(--gradient-1);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            mix-blend-mode: overlay;
-        }
-        
-        .about-image:hover::after { opacity: 0.2; }
-        
-        .about-image:hover {
-            transform: translateY(-16px) scale(1.03);
-            box-shadow: var(--shadow-xl), var(--shadow-accent);
+            inset: -8px;
+            background: var(--gradient-gold);
+            border-radius: 32px;
+            z-index: -1;
+            opacity: 0.5;
+            animation: pulse 4s ease-in-out infinite;
         }
         
         .about-image img {
             width: 100%;
-            height: 600px;
+            height: 100%;
             object-fit: cover;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .about-image:hover img { transform: scale(1.12) rotate(2deg); }
+        .about-image:hover img {
+            transform: scale(1.08) rotate(1deg);
+        }
         
-        .about-content h2 {
+        .about-content h3 {
             font-size: 56px;
-            margin-bottom: 32px;
-            color: var(--primary);
+            margin-bottom: 40px;
+            color: var(--wine);
+            font-weight: 600;
         }
         
         .about-content p {
-            color: var(--primary-light);
-            margin-bottom: 28px;
-            font-size: 18px;
+            font-size: 20px;
+            margin-bottom: 32px;
+            color: var(--charcoal-light);
             line-height: 2;
-            font-weight: 400;
         }
         
-        .features-grid {
+        .about-stats {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            margin-top: 56px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            margin-top: 64px;
         }
         
-        .feature {
-            padding: 40px;
+        .stat {
+            text-align: center;
+            padding: 40px 28px;
             background: white;
-            border-radius: 20px;
-            box-shadow: var(--shadow-md);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 24px;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
         
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--gradient-2);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .feature:hover::before { transform: scaleX(1); }
-        
-        .feature:hover {
-            transform: translateY(-12px);
-            box-shadow: var(--shadow-lg), var(--shadow-accent);
-        }
-        
-        .feature-icon {
-            width: 72px;
-            height: 72px;
-            background: var(--gradient-1);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            color: white;
-            transition: all 0.4s ease;
-        }
-        
-        .feature:hover .feature-icon {
-            transform: rotate(10deg) scale(1.15);
-            box-shadow: var(--shadow-accent);
-        }
-        
-        .feature-icon svg {
-            width: 36px;
-            height: 36px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-        }
-        
-        .feature h4 {
-            font-size: 26px;
-            margin-bottom: 12px;
-            color: var(--primary);
-        }
-        
-        .feature p {
-            font-size: 16px;
-            color: var(--primary-light);
-            margin: 0;
-            line-height: 1.7;
-        }
-        
-        /* Menu Highlights */
-        .menu-section {
-            background: white;
-            position: relative;
-        }
-        
-        .menu-section::before {
+        .stat::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 300px;
-            background: linear-gradient(180deg, var(--cream) 0%, transparent 100%);
+            height: 5px;
+            background: var(--gradient-gold);
+            transform: scaleX(0);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
+        .stat:hover::before {
+            transform: scaleX(1);
         }
         
-        .menu-card {
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+        .stat:hover {
+            transform: translateY(-16px);
+            box-shadow: var(--shadow-luxury);
         }
         
-        .menu-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 24px;
-            padding: 3px;
-            background: var(--gradient-2);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        
-        .menu-card:hover::after { opacity: 1; }
-        
-        .menu-card:hover {
-            transform: translateY(-16px) scale(1.03);
-            box-shadow: var(--shadow-xl);
-        }
-        
-        .menu-card-image-wrapper {
-            position: relative;
-            overflow: hidden;
-            height: 280px;
-        }
-        
-        .menu-card-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .menu-card:hover .menu-card-image { transform: scale(1.2) rotate(3deg); }
-        
-        .menu-card-content {
-            padding: 36px;
-        }
-        
-        .menu-card-content h3 {
-            font-size: 30px;
-            margin-bottom: 16px;
-            color: var(--primary);
-        }
-        
-        .menu-card-content p {
-            color: var(--primary-light);
-            font-size: 16px;
-            margin-bottom: 28px;
-            line-height: 1.8;
-        }
-        
-        .menu-card-price {
-            font-size: 36px;
+        .stat-number {
+            font-size: 56px;
             font-weight: 800;
-            background: var(--gradient-2);
+            background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-family: 'DM Serif Display', serif;
+            font-family: 'Playfair Display', serif;
         }
         
-        .menu-cta {
-            text-align: center;
-            margin-top: 90px;
-        }
-        
-        /* Gallery */
-        .gallery-section {
-            background: var(--gradient-card);
+        .stat-label {
+            font-size: 16px;
+            color: var(--charcoal-light);
+            margin-top: 16px;
+            font-weight: 500;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
         }
         
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 36px;
         }
         
         .gallery-item {
-            border-radius: 20px;
-            overflow: hidden;
             aspect-ratio: 1;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
             cursor: pointer;
             position: relative;
-            box-shadow: var(--shadow-md);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .gallery-item::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: var(--gradient-1);
+            background: var(--gradient-luxury);
             opacity: 0;
             transition: opacity 0.5s ease;
-            mix-blend-mode: overlay;
         }
         
-        .gallery-item:hover::after { opacity: 0.3; }
+        .gallery-item:hover::after { opacity: 1; }
         
         .gallery-item:hover {
-            transform: scale(1.08) translateY(-8px);
-            box-shadow: var(--shadow-xl), var(--shadow-accent);
+            transform: translateY(-16px) scale(1.05);
+            box-shadow: var(--shadow-luxury);
         }
         
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .gallery-item:hover img { transform: scale(1.25) rotate(4deg); }
-        
-        /* Testimonials */
-        .testimonials {
-            background: var(--gradient-1);
-            color: white;
-            position: relative;
-            overflow: hidden;
+        .gallery-item:hover img {
+            transform: scale(1.15) rotate(2deg);
         }
         
-        .testimonials::before {
-            content: '';
-            position: absolute;
-            width: 700px;
-            height: 700px;
-            background: var(--gradient-2);
-            opacity: 0.1;
-            border-radius: 50%;
-            filter: blur(100px);
-            top: -300px;
-            right: -300px;
-            animation: float 25s ease-in-out infinite;
-        }
-        
-        .testimonials::after {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: var(--gradient-3);
-            opacity: 0.08;
-            border-radius: 50%;
-            filter: blur(80px);
-            bottom: -250px;
-            left: -250px;
-            animation: float 30s ease-in-out infinite reverse;
-        }
-        
-        .testimonials .section-tag {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .testimonials .section-title { color: white; }
-        .testimonials .section-subtitle { color: rgba(255,255,255,0.85); }
-        
-        .testimonials-grid {
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 56px;
         }
         
-        .testimonial-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(16px);
-            padding: 56px;
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        .feature-card {
+            background: white;
+            padding: 56px 40px;
+            border-radius: 28px;
+            text-align: center;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
         
-        .testimonial-card::before {
-            content: '"';
+        .feature-card::before {
+            content: '';
             position: absolute;
-            top: 30px;
-            right: 40px;
-            font-size: 140px;
-            font-family: 'DM Serif Display', serif;
-            color: rgba(255,255,255,0.08);
-            line-height: 1;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-gold);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 0;
         }
         
-        .testimonial-card:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-12px) scale(1.03);
-            border-color: var(--gold);
+        .feature-card:hover::before { opacity: 0.08; }
+        
+        .feature-card > * { position: relative; z-index: 1; }
+        
+        .feature-card:hover {
+            transform: translateY(-20px) scale(1.03);
+            box-shadow: var(--shadow-luxury);
+        }
+        
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-gold);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 36px;
+            box-shadow: var(--shadow-gold);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: rotate(15deg) scale(1.2);
             box-shadow: var(--shadow-glow);
         }
         
-        .testimonial-stars {
-            color: var(--gold);
-            font-size: 26px;
-            margin-bottom: 28px;
-            letter-spacing: 8px;
+        .feature-icon svg {
+            width: 52px;
+            height: 52px;
+            stroke: var(--wine-dark);
+            fill: none;
+            stroke-width: 2;
         }
         
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 36px;
-            line-height: 2;
-            color: rgba(255,255,255,0.95);
-            font-size: 18px;
-            font-weight: 300;
-        }
-        
-        .testimonial-author {
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        
-        .testimonial-source {
-            font-size: 14px;
-            color: rgba(255,255,255,0.65);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .feature-card h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--wine);
             font-weight: 600;
         }
         
-        /* CTA Section */
+        .feature-card p {
+            color: var(--charcoal-light);
+            font-size: 18px;
+            line-height: 1.9;
+        }
+        
         .cta {
-            background: var(--gradient-2);
+            background: var(--gradient-wine);
             color: white;
             text-align: center;
             position: relative;
@@ -833,112 +644,118 @@
         .cta::before {
             content: '';
             position: absolute;
-            width: 800px;
-            height: 800px;
-            background: white;
-            opacity: 0.08;
+            width: 900px;
+            height: 900px;
+            background: var(--gradient-gold);
+            opacity: 0.1;
             border-radius: 50%;
-            filter: blur(120px);
-            top: -400px;
+            filter: blur(140px);
+            top: -450px;
             left: 50%;
             transform: translateX(-50%);
-            animation: pulse 8s ease-in-out infinite;
+            animation: morphShape 20s ease-in-out infinite;
         }
         
         .cta h2 {
-            font-size: 64px;
-            margin-bottom: 28px;
+            font-size: 72px;
+            margin-bottom: 36px;
             position: relative;
+            font-weight: 600;
         }
         
         .cta p {
-            font-size: 24px;
-            margin-bottom: 56px;
+            font-size: 26px;
+            margin-bottom: 64px;
             opacity: 0.95;
             position: relative;
+            font-weight: 300;
         }
         
         .cta .btn {
-            background: white;
-            color: var(--accent);
-            padding: 24px 64px;
-            font-size: 17px;
+            background: var(--gradient-gold);
+            color: var(--wine-dark);
+            padding: 28px 72px;
+            font-size: 16px;
             position: relative;
         }
         
         .cta .btn:hover {
-            background: var(--primary);
-            color: white;
+            background: white;
+            color: var(--wine);
         }
         
-        /* Footer */
         footer {
-            background: var(--primary-dark);
+            background: var(--wine-dark);
             color: white;
-            padding: 120px 0 48px;
+            padding: 140px 0 56px;
         }
         
         .footer-grid {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 100px;
-            margin-bottom: 100px;
+            gap: 120px;
+            margin-bottom: 120px;
         }
         
         .footer-brand h3 {
-            font-size: 36px;
-            margin-bottom: 28px;
-            background: var(--gradient-2);
+            font-size: 40px;
+            margin-bottom: 32px;
+            background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 700;
         }
         
         .footer-brand p {
-            color: rgba(255,255,255,0.8);
-            font-size: 17px;
+            color: rgba(255,255,255,0.85);
+            font-size: 18px;
             line-height: 2;
         }
         
         .footer-column h4 {
-            font-size: 22px;
-            margin-bottom: 32px;
+            font-size: 24px;
+            margin-bottom: 36px;
             color: var(--gold);
+            font-weight: 600;
         }
         
         .footer-column ul { list-style: none; }
-        .footer-column li { margin-bottom: 16px; }
+        .footer-column li { margin-bottom: 18px; }
         
         .footer-column a {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.85);
             text-decoration: none;
-            font-size: 16px;
-            transition: all 0.4s ease;
+            font-size: 17px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-block;
         }
         
         .footer-column a:hover {
             color: var(--gold);
-            transform: translateX(8px);
+            transform: translateX(10px);
         }
         
         .footer-bottom {
             text-align: center;
-            padding-top: 48px;
+            padding-top: 56px;
             border-top: 1px solid rgba(255,255,255,0.15);
-            color: rgba(255,255,255,0.6);
-            font-size: 15px;
+            color: rgba(255,255,255,0.65);
+            font-size: 16px;
         }
         
-        /* Responsive */
+        @media (max-width: 1024px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 80px; }
+        }
+        
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero h1 { font-size: 52px; }
-            .hero p { font-size: 20px; }
-            .section-title { font-size: 44px; }
-            .about-grid { grid-template-columns: 1fr; gap: 70px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr; gap: 60px; }
+            .hero h1 { font-size: 56px; }
+            .about-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 80px; }
         }
     </style>
 </head>
@@ -956,161 +773,122 @@
     </div>
 </nav>
 
-<section class="hero">
-    <div class="hero-content">
-        <h1>Where Every Sip Tells a Story</h1>
-        <p>Artisan coffee, handcrafted cuisine, and an atmosphere that feels like home. Welcome to Nagpur's finest boutique cafe.</p>
-        <div class="hero-buttons">
-            <a href="menu.html" class="btn">Explore Menu</a>
-            <a href="contact.html" class="btn btn-outline">Visit Us</a>
+<div class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-tagline">Artisan Coffee & Handcrafted Cuisine</div>
+            <h1>Where Every Sip Tells a Story</h1>
+            <p>Step into Nagpur's most enchanting boutique cafe — where artisan coffee meets handcrafted cuisine in an atmosphere of timeless elegance</p>
+            <div class="hero-buttons">
+                <a href="menu.html" class="btn btn-primary">Explore Menu</a>
+                <a href="contact.html" class="btn btn-secondary">Visit Us</a>
+            </div>
         </div>
     </div>
-</section>
+</div>
 
-<section class="about-section">
+<section>
     <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2>Our Story</h2>
+            <p>Born from a passion for exceptional coffee and warm hospitality, Little Owl Cafe has become Nagpur's beloved sanctuary for food lovers</p>
+        </div>
+        
         <div class="about-grid">
-            <div class="about-image fade-in-left">
+            <div class="about-image animate-on-scroll">
                 <img src="images/about/about-1.jpg" alt="Little Owl Cafe Interior">
             </div>
-            <div class="about-content fade-in-right">
-                <span class="section-tag">Our Story</span>
-                <h2>A Place to Call Your Own</h2>
-                <p>Welcome to Little Owl Cafe — Nagpur's most cherished neighbourhood boutique cafe, where warmth meets flavour in every corner.</p>
-                <p>Born from a passion for exceptional coffee and meaningful conversations, Little Owl Cafe is more than just a place to eat. It's your sanctuary — whether you're catching up with friends, enjoying a quiet date, celebrating life's moments, or finding your focus over a perfectly brewed cup.</p>
-                <div class="features-grid">
-                    <div class="feature scale-in">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
-                        </div>
-                        <h4>Artisan Coffee</h4>
-                        <p>Carefully sourced beans, expertly brewed</p>
-                    </div>
-                    <div class="feature scale-in">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
-                        </div>
-                        <h4>Handcrafted Cuisine</h4>
-                        <p>Fresh ingredients, exceptional taste</p>
-                    </div>
-                    <div class="feature scale-in">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                        </div>
-                        <h4>Warm Atmosphere</h4>
-                        <p>Your home away from home</p>
-                    </div>
-                    <div class="feature scale-in">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
-                        </div>
-                        <h4>Free Parking</h4>
-                        <p>Convenient access, always</p>
-                    </div>
-                </div>
+            <div class="about-content animate-on-scroll">
+                <h3>A Place to Gather</h3>
+                <p>Since 2019, we've been serving the finest artisan coffees and handcrafted dishes in the heart of Pratap Nagar. Every cup is brewed with care, every dish prepared with passion.</p>
+                <p>Our cozy space welcomes you to slow down, savor the moment, and create memories with the people who matter most.</p>
+                <a href="contact.html" class="btn">Visit Our Cafe</a>
+            </div>
+        </div>
+        
+        <div class="about-stats">
+            <div class="stat animate-on-scroll">
+                <div class="stat-number">5+</div>
+                <div class="stat-label">Years of Excellence</div>
+            </div>
+            <div class="stat animate-on-scroll">
+                <div class="stat-number">4.5</div>
+                <div class="stat-label">Google Rating</div>
+            </div>
+            <div class="stat animate-on-scroll">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Menu Items</div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="menu-section">
+<section style="background: var(--cream);">
     <div class="container">
-        <div class="section-header fade-in-up">
-            <span class="section-tag">Culinary Excellence</span>
-            <h2 class="section-title">Signature Creations</h2>
-            <p class="section-subtitle">Discover our most beloved dishes, crafted with passion and served with pride</p>
+        <div class="section-header animate-on-scroll">
+            <h2>Gallery</h2>
+            <p>A glimpse into the Little Owl experience</p>
         </div>
-        <div class="menu-grid">
-            <div class="menu-card fade-in-up">
-                <div class="menu-card-image-wrapper">
-                    <img src="images/gallery/gallery-2.jpg" alt="Vietnamese Cold Brew" class="menu-card-image">
-                </div>
-                <div class="menu-card-content">
-                    <h3>Vietnamese Cold Brew</h3>
-                    <p>Slow-steeped perfection with sweet condensed milk — silky, bold, unforgettable</p>
-                    <div class="menu-card-price">₹199</div>
-                </div>
-            </div>
-            <div class="menu-card fade-in-up">
-                <div class="menu-card-image-wrapper">
-                    <img src="images/gallery/gallery-4.jpg" alt="Penne Pesto" class="menu-card-image">
-                </div>
-                <div class="menu-card-content">
-                    <h3>Penne Pesto</h3>
-                    <p>Al dente penne in house-made basil pesto, finished with aged Parmesan</p>
-                    <div class="menu-card-price">₹349</div>
-                </div>
-            </div>
-            <div class="menu-card fade-in-up">
-                <div class="menu-card-image-wrapper">
-                    <img src="images/gallery/gallery-7.jpg" alt="Green Thai Curry" class="menu-card-image">
-                </div>
-                <div class="menu-card-content">
-                    <h3>Chicken Green Thai Curry</h3>
-                    <p>Authentic Thai curry with tender chicken and fragrant jasmine rice</p>
-                    <div class="menu-card-price">₹509</div>
-                </div>
-            </div>
-            <div class="menu-card fade-in-up">
-                <div class="menu-card-image-wrapper">
-                    <img src="images/gallery/gallery-6.jpg" alt="Dark Chocolate Mocha" class="menu-card-image">
-                </div>
-                <div class="menu-card-content">
-                    <h3>Dark Chocolate Mocha</h3>
-                    <p>Rich dark chocolate meets bold espresso — comfort in every sip</p>
-                    <div class="menu-card-price">₹229</div>
-                </div>
-            </div>
-        </div>
-        <div class="menu-cta">
-            <a href="menu.html" class="btn">View Complete Menu</a>
-        </div>
-    </div>
-</section>
-
-<section class="gallery-section">
-    <div class="container">
-        <div class="section-header fade-in-up">
-            <span class="section-tag">Gallery</span>
-            <h2 class="section-title">Moments at Little Owl</h2>
-            <p class="section-subtitle">A glimpse into the experiences that make us special</p>
-        </div>
+        
         <div class="gallery-grid">
-            <div class="gallery-item scale-in"><img src="images/gallery/gallery-1.jpg" alt="Cafe Interior"></div>
-            <div class="gallery-item scale-in"><img src="images/gallery/gallery-3.jpg" alt="Signature Dish"></div>
-            <div class="gallery-item scale-in"><img src="images/gallery/gallery-5.jpg" alt="Ambiance"></div>
-            <div class="gallery-item scale-in"><img src="images/gallery/gallery-8.jpg" alt="Coffee Art"></div>
-            <div class="gallery-item scale-in"><img src="images/gallery/gallery-9.jpg" alt="Cozy Corner"></div>
-            <div class="gallery-item scale-in"><img src="images/gallery/gallery-13.jpg" alt="Cafe Culture"></div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-1.jpg" alt="Gallery 1">
+            </div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-2.jpg" alt="Gallery 2">
+            </div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-3.jpg" alt="Gallery 3">
+            </div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-4.jpg" alt="Gallery 4">
+            </div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-5.jpg" alt="Gallery 5">
+            </div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-6.jpg" alt="Gallery 6">
+            </div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-7.jpg" alt="Gallery 7">
+            </div>
+            <div class="gallery-item animate-on-scroll">
+                <img src="images/gallery/gallery-8.jpg" alt="Gallery 8">
+            </div>
         </div>
     </div>
 </section>
 
-<section class="testimonials">
+<section>
     <div class="container">
-        <div class="section-header fade-in-up">
-            <span class="section-tag">Testimonials</span>
-            <h2 class="section-title">What Our Guests Say</h2>
-            <p class="section-subtitle">Real experiences from our valued customers</p>
+        <div class="section-header animate-on-scroll">
+            <h2>Why Choose Us</h2>
+            <p>Experience the Little Owl difference</p>
         </div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card fade-in-up">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"I live in Manhattan, and my expectations from a café are rather high. This place not only meets them but exceeds them. I spent 4 hours working here — productive and pampered the entire time."</p>
-                <div class="testimonial-author">A Traveller</div>
-                <div class="testimonial-source">Google Review</div>
+        
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                </div>
+                <h3>Artisan Coffee</h3>
+                <p>Every cup is crafted with precision using premium beans sourced from the world's finest estates</p>
             </div>
-            <div class="testimonial-card fade-in-up">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"The Penne Pesto was exceptional — loaded with Parmesan and authentic basil pesto. The Dark Chocolate Mocha is pure indulgence. And the Vietnamese Cold Brew? An absolute must-try!"</p>
-                <div class="testimonial-author">Narayani M.</div>
-                <div class="testimonial-source">Zomato Review</div>
+            
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 11h18v2a8 8 0 0 1-8 8H11a8 8 0 0 1-8-8v-2z"></path><path d="M3 11V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v4"></path></svg>
+                </div>
+                <h3>Handcrafted Cuisine</h3>
+                <p>From hearty bowls to delicate desserts — every dish is prepared fresh with love and attention</p>
             </div>
-            <div class="testimonial-card fade-in-up">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">"A beautiful, immaculate cafe with courteous staff and exceptional food. Their hygiene standards are top-notch. The iced latte and Mushroom Crostini were absolutely delightful."</p>
-                <div class="testimonial-author">Shalini S.</div>
-                <div class="testimonial-source">District Review</div>
+            
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </div>
+                <h3>Warm Atmosphere</h3>
+                <p>A cozy sanctuary designed for connection, creativity, and unforgettable moments</p>
             </div>
         </div>
     </div>
@@ -1118,9 +896,9 @@
 
 <section class="cta">
     <div class="container">
-        <h2>Experience Little Owl Cafe</h2>
-        <p>Open daily from 11:00 AM to 11:00 PM in Pratap Nagar, Nagpur</p>
-        <a href="contact.html" class="btn">Plan Your Visit</a>
+        <h2>Ready for an Experience?</h2>
+        <p>Visit us today or reserve your table for a special occasion</p>
+        <a href="tel:+917350184965" class="btn">Call to Reserve</a>
     </div>
 </section>
 
@@ -1143,16 +921,11 @@
                 <h4>Order Online</h4>
                 <ul>
                     <li><a href="https://www.zomato.com/nagpur/little-owl-cafe-3-pratap-nagar/order" target="_blank">Zomato</a></li>
-                    <li><a href="https://linktr.ee/littleowlcafe" target="_blank">Linktree</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h4>Hours</h4>
-                <ul>
-                    <li>Monday – Sunday</li>
-                    <li>11:00 AM – 11:00 PM</li>
-                    <li>Open All Days</li>
-                </ul>
+                <ul><li>Mon – Sun: 11 AM – 11 PM</li></ul>
             </div>
         </div>
         <div class="footer-bottom">
@@ -1168,33 +941,19 @@
     });
     
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+        threshold: 0.15,
+        rootMargin: '0px 0px -80px 0px'
     };
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0) translateX(0) scale(1)';
+                entry.target.classList.add('visible');
             }
         });
     }, observerOptions);
     
-    document.querySelectorAll('.fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right, .scale-in').forEach(el => {
-        el.style.opacity = '0';
-        if (el.classList.contains('fade-in-left')) {
-            el.style.transform = 'translateX(-60px)';
-        } else if (el.classList.contains('fade-in-right')) {
-            el.style.transform = 'translateX(60px)';
-        } else if (el.classList.contains('scale-in')) {
-            el.style.transform = 'scale(0.85)';
-        } else {
-            el.style.transform = 'translateY(50px)';
-        }
-        el.style.transition = 'all 1s cubic-bezier(0.4, 0, 0.2, 1)';
-        observer.observe(el);
-    });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
 </script>
 
 </body>
